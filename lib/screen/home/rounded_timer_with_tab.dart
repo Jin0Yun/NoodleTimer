@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/screen/home/timer_circle_box.dart';
-import 'package:noodle_timer/screen/home/rounded_option_tab_container.dart';
+import 'package:noodle_timer/screen/option_selector/option_selector_container.dart';
 
 class RoundedTimerWithTab extends StatelessWidget {
   const RoundedTimerWithTab({super.key});
@@ -30,7 +30,7 @@ class RoundedTimerWithTab extends StatelessWidget {
           bottom: -10,
           left: 80,
           right: 80,
-          child: RoundedOptionTabContainer(),
+          child: OptionSelectorContainer(),
         ),
       ],
     );
