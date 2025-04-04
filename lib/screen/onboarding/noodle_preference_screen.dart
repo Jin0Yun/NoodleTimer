@@ -95,13 +95,13 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
                 Icon(
                   Icons.info_outline,
                   size: 16,
-                  color: NoodleColors.secondaryGray,
+                  color: NoodleColors.secondaryDarkGray,
                 ),
                 SizedBox(width: 4),
                 Text(
                   '선택에 따라 타이머가 자동으로 설정됩니다!',
                   style: NoodleTextStyles.titleSm.copyWith(
-                    color: NoodleColors.secondaryGray,
+                    color: NoodleColors.secondaryDarkGray,
                   ),
                 ),
               ],
@@ -133,7 +133,7 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
-              disabledBackgroundColor: NoodleColors.secondaryGray.withOpacity(
+              disabledBackgroundColor: NoodleColors.secondaryDarkGray.withOpacity(
                 0.2,
               ),
             ),

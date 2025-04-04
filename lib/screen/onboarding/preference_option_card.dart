@@ -34,7 +34,7 @@ class PreferenceOptionCard extends StatelessWidget {
                 child: ColorFiltered(
                   colorFilter: isSelected
                       ? const ColorFilter.mode(NoodleColors.backgroundWhite, BlendMode.dst)
-                      : const ColorFilter.mode(NoodleColors.secondaryGray, BlendMode.modulate),
+                      : const ColorFilter.mode(NoodleColors.secondaryDarkGray, BlendMode.modulate),
                   child: Image.asset(imagePath, height: 48),
                 ),
               ),
@@ -44,7 +44,7 @@ class PreferenceOptionCard extends StatelessWidget {
                   label,
                   textAlign: TextAlign.center,
                   style: NoodleTextStyles.titleSm.copyWith(
-                    color: isSelected ? NoodleColors.backgroundWhite : NoodleColors.secondaryGray,
+                    color: isSelected ? NoodleColors.backgroundWhite : NoodleColors.secondaryDarkGray,
                   ),
                 ),
               ),

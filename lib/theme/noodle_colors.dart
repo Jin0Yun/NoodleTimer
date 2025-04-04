@@ -6,8 +6,8 @@ class NoodleColors {
   static const Color primaryLight = Color(0xFFFFF2E7);
 
   // Secondary
-  static const Color secondaryBlue = Color(0xFFB3D4F1);
-  static const Color secondaryGray = Color(0xFF757575);
+  static const Color secondaryGray = Color(0xFFE8E8E8);
+  static const Color secondaryDarkGray = Color(0xFF9E9E9E);
 
   // 상태 강조
   static const Color error = Color(0xFFE53935);
@@ -15,12 +15,11 @@ class NoodleColors {
 
   // Background
   static const Color backgroundWhite = Color(0xFFFFFFFF);
-  static const Color backgroundLight = Color(0xFFF2F3F3);
+  static const Color backgroundLight = Color(0xFFF5F5F5);
   static const Color backgroundOverlay = Color(0xD9000000);
   static const Color selectedBackground = Color(0xFFFFE0B2);
 
   // Text
-  static const Color textDefault = Color(0xFF000000);
-  static const Color textPrimary = Color(0xDD000000);
-  static const Color textSecondary = Color(0x8A000000);
+  static const Color categoryTabText = Color(0xFF8D8D8D);
+  static const Color textDefault = Color(0xFF212121);
 }
