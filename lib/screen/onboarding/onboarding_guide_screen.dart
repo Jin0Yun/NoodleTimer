@@ -7,6 +7,9 @@ class OnboardingGuideScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallDevice = screenSize.height < 700;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -14,28 +17,37 @@ class OnboardingGuideScreen extends StatelessWidget {
           const HomeScreen(),
           Container(color: NoodleColors.backgroundOverlay),
           Positioned(
-            top: 360,
-            right: 20,
-            child: Image.asset('assets/image/guide_01.png', width: 200),
+            top: isSmallDevice ? screenSize.height * 0.45 : screenSize.height * 0.43,
+            right: screenSize.width * 0.03,
+            child: Image.asset('assets/image/guide_01.png',
+              width: screenSize.width * 0.5,
+            ),
           ),
           Positioned(
-            top: 440,
-            left: 10,
-            right: 10,
-            child: Image.asset('assets/image/guide_02.png', height: 65),
+            top: isSmallDevice ? screenSize.height * 0.57 : screenSize.height * 0.52,
+            left: screenSize.width * 0.1,
+            right: screenSize.width * 0.1,
+            child: Image.asset('assets/image/guide_02.png',
+              height: isSmallDevice ? 55 : 65,
+            ),
           ),
           Positioned(
-            bottom: 200,
-            left: 80,
-            child: Image.asset('assets/image/guide_03.png', width: 190),
+            bottom: isSmallDevice ? screenSize.height * 0.1 : screenSize.height * 0.2,
+            left: screenSize.width * 0.2,
+            child: Image.asset('assets/image/guide_03.png',
+              width: screenSize.width * 0.6,
+            ),
           ),
           Positioned(
-            bottom: 100,
-            left: 20,
-            child: Image.asset('assets/image/guide_04.png', width: 150),
+            bottom: isSmallDevice ? - 30 : screenSize.height * 0.12,
+            left: isSmallDevice ? screenSize.width * 0.06 : screenSize.width * 0.04,
+            child: Image.asset('assets/image/guide_04.png',
+              width: screenSize.width * 0.4,
+              height: screenSize.width * 0.4,
+            ),
           ),
           Positioned(
-            top: 40,
+            top: MediaQuery.of(context).padding.top + 10,
             right: 20,
             child: IconButton(
               icon: const Icon(
@@ -43,21 +55,24 @@ class OnboardingGuideScreen extends StatelessWidget {
                 size: 30,
                 color: NoodleColors.backgroundWhite,
               ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => const HomeScreen(),
-                    transitionsBuilder: (_, anim, __, child) {
-                      return FadeTransition(opacity: anim, child: child);
-                    },
-                    transitionDuration: Duration(milliseconds: 300),
-                  ),
-                );
-              },
+              onPressed: () => _navigateToHome(context),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _navigateToHome(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const HomeScreen(),
+        transitionsBuilder: (_, anim, __, child) => FadeTransition(
+          opacity: anim,
+          child: child,
+        ),
+        transitionDuration: const Duration(milliseconds: 300),
       ),
     );
   }
