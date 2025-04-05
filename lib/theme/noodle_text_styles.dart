@@ -13,6 +13,12 @@ class NoodleTextStyles {
     fontSize: 18
   );
 
+  static const TextStyle titleXSmBold = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 14
+  );
+
   static const TextStyle titleMd = TextStyle(
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w500,
