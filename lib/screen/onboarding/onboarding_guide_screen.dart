@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noodle_timer/screen/home_screen.dart';
+import 'package:noodle_timer/screen/home/home_screen.dart';
 import 'package:noodle_timer/theme/noodle_colors.dart';
 
 class OnboardingGuideScreen extends StatelessWidget {
