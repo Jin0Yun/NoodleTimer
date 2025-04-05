@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noodle_timer/screen/home_screen.dart';
+import 'package:noodle_timer/screen/home/home_screen.dart';
 import 'package:noodle_timer/screen/onboarding/noodle_preference_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:noodle_timer/screen/home/timer_circle_box.dart';
-import 'package:noodle_timer/screen/option_selector/option_selector_container.dart';
+import 'package:noodle_timer/screen/home/option_selector/option_selector_container.dart';
+import 'package:noodle_timer/screen/home/timer/timer_circle_box.dart';
 
-class RoundedTimerWithTab extends StatelessWidget {
-  const RoundedTimerWithTab({super.key});
+class TimerCardWithOptionSelectorContainer extends StatelessWidget {
+  const TimerCardWithOptionSelectorContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
