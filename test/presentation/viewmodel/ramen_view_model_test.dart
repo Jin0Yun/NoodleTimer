@@ -3,11 +3,10 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/core/exceptions/ramen_error.dart';
-import 'package:noodle_timer/data/model/ramen_data.dart';
+import 'package:noodle_timer/data/dto/ramen_data.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_provider.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_view_model.dart';
-
 import 'ramen_view_model_test.mocks.dart';
 
 @GenerateMocks([RamenRepository])
