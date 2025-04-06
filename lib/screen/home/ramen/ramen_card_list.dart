@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:noodle_timer/model/ramen.dart';
 import 'package:noodle_timer/theme/noodle_colors.dart';
 
 class RamenCardList extends StatelessWidget {
-  final int itemCount;
-  const RamenCardList({required this.itemCount, super.key});
+  final List<Ramen> ramens;
+
+  const RamenCardList({
+    required this.ramens,
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,17 +17,26 @@ class RamenCardList extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: itemCount,
+        itemCount: ramens.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
+          final ramen = ramens[index];
+
           return Container(
             width: 160,
             decoration: BoxDecoration(
               color: NoodleColors.secondaryGray,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Center(
-              child: Icon(Icons.image_not_supported, color: Colors.grey),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Transform.scale(
+                    scale: 0.8,
+                    child: Image.network(
+                      ramen.imageUrl,
+                      fit: BoxFit.cover,
+                    )
+                )
             ),
           );
         },
