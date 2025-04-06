@@ -1,5 +1,5 @@
-import 'package:noodle_timer/model/ramen_brand.dart';
+import 'package:noodle_timer/entity/ramen_brand_entity.dart';
 
 abstract class RamenRepository {
-  Future<List<RamenBrand>> loadBrands();
+  Future<List<RamenBrandEntity>> loadBrands();
 }

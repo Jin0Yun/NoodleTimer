@@ -1,10 +1,10 @@
+import 'package:noodle_timer/entity/ramen_brand_entity.dart';
+import 'package:noodle_timer/entity/ramen_entity.dart';
 import 'package:noodle_timer/exceptions/ramen_error.dart';
-import 'package:noodle_timer/model/ramen.dart';
-import 'package:noodle_timer/model/ramen_brand.dart';
 
 class RamenState {
-  final List<RamenBrand> brands;
-  final List<Ramen>? currentRamenList;
+  final List<RamenBrandEntity> brands;
+  final List<RamenEntity>? currentRamenList;
   final bool isLoading;
   final RamenError? error;
 
@@ -16,8 +16,8 @@ class RamenState {
   });
 
   RamenState copyWith({
-    List<RamenBrand>? brands,
-    List<Ramen>? currentRamenList,
+    List<RamenBrandEntity>? brands,
+    List<RamenEntity>? currentRamenList,
     bool? isLoading,
     RamenError? error,
   }) {
@@ -31,3 +31,4 @@ class RamenState {
 
   String? get errorMessage => error?.message;
 }
+
