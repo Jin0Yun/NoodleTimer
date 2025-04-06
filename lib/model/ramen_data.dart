@@ -1,3 +1,4 @@
+import 'package:noodle_timer/entity/ramen_data_entity.dart';
 import 'package:noodle_timer/model/ramen_brand.dart';
 
 class RamenData {
@@ -13,5 +14,11 @@ class RamenData {
             .toList();
 
     return RamenData(brands: brands);
+  }
+
+  RamenDataEntity toEntity() {
+    return RamenDataEntity(
+      brands: brands.map((e) => e.toEntity()).toList(),
+    );
   }
 }
