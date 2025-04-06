@@ -1,3 +1,5 @@
+import 'package:noodle_timer/entity/ramen_entity.dart';
+
 class Ramen {
   final int id;
   final String name;
@@ -26,6 +28,18 @@ class Ramen {
       description: json['ramenDescription'],
       recipe: json['ramenRecipe'],
       afterSeasoning: json['afterSeasoning'],
+    );
+  }
+
+  RamenEntity toEntity() {
+    return RamenEntity(
+      id: id,
+      name: name,
+      imageUrl: imageUrl,
+      spicyLevel: spicyLevel,
+      description: description,
+      recipe: recipe,
+      afterSeasoning: afterSeasoning,
     );
   }
 }
