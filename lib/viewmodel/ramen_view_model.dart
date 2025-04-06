@@ -1,0 +1,39 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/exceptions/ramen_error.dart';
+import 'package:noodle_timer/repository/ramen_repository.dart';
+import 'package:noodle_timer/viewmodel/ramen_state.dart';
+
+class RamenViewModel extends StateNotifier<RamenState> {
+  final RamenRepository _repository;
+
+  RamenViewModel(this._repository) : super(RamenState()) {
+    loadBrands();
+  }
+
+  Future<void> loadBrands() async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final brands = await _repository.loadBrands();
+      state = state.copyWith(brands: brands, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(
+        error:
+            e is RamenError
+                ? e : RamenError(RamenErrorType.unknownError, e.toString()),
+        isLoading: false,
+      );
+    }
+  }
+
+  void selectBrand(int brandId) {
+    try {
+      final brand = state.brands.firstWhere((b) => b.id == brandId);
+      state = state.copyWith(currentRamenList: brand.ramens, error: null);
+    } catch (e) {
+      state = state.copyWith(
+        error: RamenError(RamenErrorType.brandNotFound, "브랜드 ID: $brandId"),
+      );
+    }
+  }
+}
