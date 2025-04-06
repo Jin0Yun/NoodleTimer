@@ -78,8 +78,8 @@ void main() {
 
       // then
       final state = container.read(ramenViewModelProvider);
-      expect(state.brands.length, 1);
-      expect(state.brands[0].name, '농심');
+      expect(state.brands.length, 2);
+      expect(state.brands[0].name, '나의 라면 기록');
       expect(state.currentRamenList, isNull);
       expect(state.isLoading, false);
       expect(state.error, isNull);
