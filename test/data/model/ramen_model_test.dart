@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:noodle_timer/data/model/ramen.dart';
-import 'package:noodle_timer/data/model/ramen_brand.dart';
-import 'package:noodle_timer/data/model/ramen_data.dart';
+import 'package:noodle_timer/data/dto/ramen.dart';
+import 'package:noodle_timer/data/dto/ramen_brand.dart';
+import 'package:noodle_timer/data/dto/ramen_data.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

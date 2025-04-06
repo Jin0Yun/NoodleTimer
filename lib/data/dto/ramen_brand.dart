@@ -1,4 +1,4 @@
-import 'package:noodle_timer/data/model/ramen.dart';
+import 'package:noodle_timer/data/dto/ramen.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 
 class RamenBrand {
