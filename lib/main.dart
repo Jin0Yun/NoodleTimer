@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:noodle_timer/screen/home/home_screen.dart';
-import 'package:noodle_timer/screen/onboarding/noodle_preference_screen.dart';
+import 'package:noodle_timer/presentation/home/screen/home_screen.dart';
+import 'package:noodle_timer/presentation/onboarding/screen/noodle_preference_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
