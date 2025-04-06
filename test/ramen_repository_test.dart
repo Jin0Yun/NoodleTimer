@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:noodle_timer/data_loader.dart';
+import 'package:noodle_timer/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/exceptions/ramen_error.dart';
-import 'package:noodle_timer/model/ramen_brand.dart';
 import 'package:noodle_timer/repository/ramen_repository.dart';
 import 'package:noodle_timer/repository/ramen_repository_impl.dart';
 import 'ramen_repository_test.mocks.dart';
@@ -55,7 +55,7 @@ void main() {
       final result = await repository.loadBrands();
 
       // then
-      expect(result, isA<List<RamenBrand>>());
+      expect(result, isA<List<RamenBrandEntity>>());
       expect(result[0].ramens.length, 2);
       expect(result[0].name, '농심');
       expect(result[0].ramens[0].name, '신라면');
@@ -140,7 +140,7 @@ void main() {
       final result = await repository.loadBrands();
 
       // then
-      expect(result, isA<List<RamenBrand>>());
+      expect(result, isA<List<RamenBrandEntity>>());
       expect(result.length, greaterThan(0));
       expect(result[0].name, '농심');
       expect(result[0].ramens, isNotEmpty);

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/exceptions/ramen_error.dart';
-import 'package:noodle_timer/model/ramen_brand.dart';
 import 'package:noodle_timer/repository/ramen_repository.dart';
 import 'package:noodle_timer/viewmodel/ramen_state.dart';
 
@@ -19,7 +19,7 @@ class RamenViewModel extends StateNotifier<RamenState> {
 
       /// 임시 "나의 라면 기록" 추가
       final updatedBrands = [
-        RamenBrand(id: -1, name: "나의 라면 기록", ramens: []),
+        RamenBrandEntity(id: -1, name: "나의 라면 기록", ramens: []),
         ...brands,
       ];
 

@@ -119,4 +119,87 @@ void main() {
       expect(() => Ramen.fromJson(brokenJson), throwsA(isA<TypeError>()));
     });
   });
+
+  group('모델 → 엔티티 변환 테스트', () {
+    test('Ramen 모델에서 Entity로 정상적으로 변환되어야 한다', () {
+      // given
+      final ramenJson = {
+        'ramenIndex': 100,
+        'ramenName': '신라면',
+        'ramenImage': 'https://i.namu.wiki/i/...',
+        'ramenSpicy': '매운맛',
+        'ramenDescription': '한국을 대표하는 매운 라면',
+        'ramenRecipe': '1. 물 550ml에...',
+        'afterSeasoning': false,
+      };
+      final ramen = Ramen.fromJson(ramenJson);
+
+      // when
+      final entity = ramen.toEntity();
+
+      // then
+      expect(entity.name, '신라면');
+      expect(entity.afterSeasoning, false);
+    });
+
+    test('RamenBrand 모델에서 Entity로 정상적으로 변환되어야 한다', () {
+      // given
+      final brandJson = {
+        'brandId': 1,
+        'brandName': '농심',
+        'ramens': [
+          {
+            'ramenIndex': 100,
+            'ramenName': '신라면',
+            'ramenImage': 'https://i.namu.wiki/i/...',
+            'ramenSpicy': '매운맛',
+            'ramenDescription': '한국을 대표하는 매운 라면',
+            'ramenRecipe': '1. 물 550ml에...',
+            'afterSeasoning': false,
+          },
+        ],
+      };
+      final brand = RamenBrand.fromJson(brandJson);
+
+      // when
+      final entity = brand.toEntity();
+
+      // then
+      expect(entity.id, 1);
+      expect(entity.name, '농심');
+      expect(entity.ramens.first.name, '신라면');
+    });
+
+    test('RamenData 모델에서 Entity로 정상적으로 변환되어야 한다', () {
+      // given
+      final dataJson = {
+        'ramenData': [
+          {
+            'brandId': 1,
+            'brandName': '농심',
+            'ramens': [
+              {
+                'ramenIndex': 100,
+                'ramenName': '신라면',
+                'ramenImage': 'https://i.namu.wiki/i/...',
+                'ramenSpicy': '매운맛',
+                'ramenDescription': '한국을 대표하는 매운 라면',
+                'ramenRecipe': '1. 물 550ml에...',
+                'afterSeasoning': false,
+              },
+            ],
+          },
+        ],
+      };
+      final data = RamenData.fromJson(dataJson);
+
+      // when
+      final entity = data.toEntity();
+
+      // then
+      expect(entity.brands.length, 1);
+      expect(entity.brands.first.name, '농심');
+      expect(entity.brands.first.ramens.first.name, '신라면');
+    });
+  });
 }

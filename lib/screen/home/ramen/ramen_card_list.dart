@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:noodle_timer/model/ramen.dart';
+import 'package:noodle_timer/entity/ramen_entity.dart';
 import 'package:noodle_timer/theme/noodle_colors.dart';
 
 class RamenCardList extends StatelessWidget {
-  final List<Ramen> ramens;
+  final List<RamenEntity> ramens;
 
   const RamenCardList({
     required this.ramens,

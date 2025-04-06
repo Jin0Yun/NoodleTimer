@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:noodle_timer/model/ramen_brand.dart';
+import 'package:noodle_timer/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/theme/noodle_colors.dart';
 import 'package:noodle_timer/theme/noodle_text_styles.dart';
 
 class RamenCategoryFilter extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onTap;
-  final List<RamenBrand> ramenBrands;
+  final List<RamenBrandEntity> ramenBrands;
 
   const RamenCategoryFilter({
     required this.selectedIndex,

@@ -6,7 +6,7 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:noodle_timer/model/ramen_brand.dart' as _i4;
+import 'package:noodle_timer/entity/ramen_brand_entity.dart' as _i4;
 import 'package:noodle_timer/repository/ramen_repository.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -32,12 +32,12 @@ class MockRamenRepository extends _i1.Mock implements _i2.RamenRepository {
   }
 
   @override
-  _i3.Future<List<_i4.RamenBrand>> loadBrands() =>
+  _i3.Future<List<_i4.RamenBrandEntity>> loadBrands() =>
       (super.noSuchMethod(
             Invocation.method(#loadBrands, []),
-            returnValue: _i3.Future<List<_i4.RamenBrand>>.value(
-              <_i4.RamenBrand>[],
+            returnValue: _i3.Future<List<_i4.RamenBrandEntity>>.value(
+              <_i4.RamenBrandEntity>[],
             ),
           )
-          as _i3.Future<List<_i4.RamenBrand>>);
+          as _i3.Future<List<_i4.RamenBrandEntity>>);
 }

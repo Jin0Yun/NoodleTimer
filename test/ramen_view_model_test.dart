@@ -41,7 +41,7 @@ void main() {
       }
     ]
   };
-  final testRamenData = RamenData.fromJson(ramenDataJson);
+  final testBrands = RamenData.fromJson(ramenDataJson).toEntity().brands;
 
   group('RamenViewModel 테스트', () {
     late MockRamenRepository mockRepository;
@@ -60,17 +60,17 @@ void main() {
       addTearDown(() => container.dispose());
     });
 
-    test('초기 상태는 빈 목록과 로딩 중 상태', () {
+    test('초기 상태는 빈 목록과 로딩 중이어야 한다', () {
       final state = container.read(ramenViewModelProvider);
       expect(state.brands, isEmpty);
       expect(state.currentRamenList, isNull);
       expect(state.isLoading, true);
     });
 
-    test('브랜드 목록 로드 성공', () async {
+    test('브랜드 로드 성공 시 정상적으로 업데이트되어야 한다', () async {
       // given
       when(mockRepository.loadBrands())
-          .thenAnswer((_) => Future.value(testRamenData.brands));
+          .thenAnswer((_) => Future.value(testBrands));
       final viewModel = container.read(ramenViewModelProvider.notifier);
 
       // when
@@ -85,9 +85,9 @@ void main() {
       expect(state.error, isNull);
     });
 
-    test('브랜드 선택 시 라면 목록 업데이트', () async {
+    test('브랜드 선택 시 해당 라면 목록이 currentRamenList에 업데이트되어야 한다', () async {
       // given
-      when(mockRepository.loadBrands()).thenAnswer((_) async => testRamenData.brands);
+      when(mockRepository.loadBrands()).thenAnswer((_) async => testBrands);
 
       final viewModel = container.read(ramenViewModelProvider.notifier);
       await viewModel.loadBrands();
@@ -104,9 +104,9 @@ void main() {
       expect(state.error, isNull);
     });
 
-    test('존재하지 않는 브랜드 선택 시 에러 반환', () async {
+    test('없는 브랜드를 선택하면 brandNotFound 에러가 발생해야 한다', () async {
       // given
-      when(mockRepository.loadBrands()).thenAnswer((_) async => testRamenData.brands);
+      when(mockRepository.loadBrands()).thenAnswer((_) async => testBrands);
 
       final viewModel = container.read(ramenViewModelProvider.notifier);
       await viewModel.loadBrands();
@@ -122,7 +122,7 @@ void main() {
       expect(state.errorMessage, contains('브랜드 데이터를 찾을 수 없습니다'));
     });
 
-    test('브랜드 로드 실패 처리 - 에셋 없음', () async {
+    test('에셋 로드 실패 시 assetNotFound 에러가 발생해야 한다', () async {
       // given
       when(mockRepository.loadBrands())
           .thenThrow(RamenError(RamenErrorType.assetNotFound));
@@ -138,7 +138,7 @@ void main() {
       expect(state.isLoading, false);
     });
 
-    test('브랜드 로드 실패 처리 - 파싱 에러', () async {
+    test('파싱 실패 시 parsingError 에러가 발생해야 한다', () async {
       // given
       when(mockRepository.loadBrands())
           .thenThrow(RamenError(RamenErrorType.parsingError, 'JSON 구문 오류'));
@@ -156,7 +156,7 @@ void main() {
       expect(state.isLoading, false);
     });
 
-    test('일반 예외 발생 시 unknownError로 변환', () async {
+    test('알 수 없는 예외 발생 시 unknownError 로 처리되어야 한다', () async {
       // given
       when(mockRepository.loadBrands())
           .thenThrow(Exception('테스트 예외'));
