@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/exceptions/ramen_error.dart';
+import 'package:noodle_timer/model/ramen_brand.dart';
 import 'package:noodle_timer/repository/ramen_repository.dart';
 import 'package:noodle_timer/viewmodel/ramen_state.dart';
 
@@ -15,7 +16,14 @@ class RamenViewModel extends StateNotifier<RamenState> {
 
     try {
       final brands = await _repository.loadBrands();
-      state = state.copyWith(brands: brands, isLoading: false);
+
+      /// 임시 "나의 라면 기록" 추가
+      final updatedBrands = [
+        RamenBrand(id: -1, name: "나의 라면 기록", ramens: []),
+        ...brands,
+      ];
+
+      state = state.copyWith(brands: updatedBrands, isLoading: false);
     } catch (e) {
       state = state.copyWith(
         error:
