@@ -21,7 +21,10 @@ class RamenCardList extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final ramen = ramens[index];
-          return RamenCard(ramen: ramen);
+          return RamenCard(
+            key: ValueKey(ramen.id),
+            ramen: ramen,
+          );
         },
       ),
     );
