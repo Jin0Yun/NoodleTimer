@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
-import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
+import 'package:noodle_timer/presentation/home/widget/ramen/ramen_card.dart';
 
 class RamenCardList extends StatelessWidget {
   final List<RamenEntity> ramens;
@@ -21,23 +21,9 @@ class RamenCardList extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final ramen = ramens[index];
-
-          return Container(
-            width: 160,
-            decoration: BoxDecoration(
-              color: NoodleColors.secondaryGray,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Transform.scale(
-                    scale: 0.8,
-                    child: Image.network(
-                      ramen.imageUrl,
-                      fit: BoxFit.cover,
-                    )
-                )
-            ),
+          return RamenCard(
+            key: ValueKey(ramen.id),
+            ramen: ramen,
           );
         },
       ),
