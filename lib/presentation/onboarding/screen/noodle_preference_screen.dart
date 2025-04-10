@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noodle_timer/presentation/common/custom_button.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/onboarding/screen/onboarding_guide_screen.dart';
@@ -111,39 +112,21 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
       ),
       bottomNavigationBar: SafeArea(
         minimum: const EdgeInsets.all(16),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed:
-                isKkodulSelected == null
-                    ? null
-                    : () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setBool('isFirstLaunch', false);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const OnboardingGuideScreen(),
-                        ),
-                      );
-                    },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: NoodleColors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        child: CustomButton(
+          buttonText: '다음',
+          isEnabled: isKkodulSelected != null,
+          onPressed: isKkodulSelected == null
+              ? null
+              : () async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isFirstLaunch', false);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const OnboardingGuideScreen(),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              disabledBackgroundColor: NoodleColors.neutral800.withOpacity(
-                0.2,
-              ),
-            ),
-            child: Text(
-              '다음',
-              style: NoodleTextStyles.titleSmBold.copyWith(
-                color: NoodleColors.neutral100,
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
