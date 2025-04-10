@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 
-class RamenCategoryFilter extends StatelessWidget {
+class SelectableTagList<T> extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onTap;
-  final List<RamenBrandEntity> ramenBrands;
+  final List<T> items;
+  final String Function(T) labelBuilder;
 
-  const RamenCategoryFilter({
+  const SelectableTagList({
+    super.key,
     required this.selectedIndex,
     required this.onTap,
-    required this.ramenBrands,
-    super.key,
+    required this.items,
+    required this.labelBuilder,
   });
 
   @override
@@ -22,10 +23,11 @@ class RamenCategoryFilter extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: ramenBrands.length,
+        itemCount: items.length,
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final isSelected = index == selectedIndex;
+          final label = labelBuilder(items[index]);
 
           return GestureDetector(
             onTap: () => onTap(index),
@@ -33,17 +35,15 @@ class RamenCategoryFilter extends StatelessWidget {
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color:
-                isSelected
+                color: isSelected
                     ? NoodleColors.primaryLight
-                    : NoodleColors.secondaryGray,
+                    : NoodleColors.backgroundSearchBar,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                ramenBrands[index].name,
+                label,
                 style: NoodleTextStyles.titleXSmBold.copyWith(
-                  color:
-                  isSelected
+                  color: isSelected
                       ? NoodleColors.primary
                       : NoodleColors.categoryTabText,
                 ),
