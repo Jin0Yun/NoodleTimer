@@ -31,6 +31,8 @@ class RamenViewModel extends StateNotifier<RamenState> {
     }
   }
 
+  void loadBrands() => _init();
+
   void selectBrand(int brandId) {
     try {
       final brand = state.brands.firstWhere((b) => b.id == brandId);
