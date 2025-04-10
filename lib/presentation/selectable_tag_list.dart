@@ -37,7 +37,7 @@ class SelectableTagList<T> extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? NoodleColors.primaryLight
-                    : NoodleColors.backgroundSearchBar,
+                    : NoodleColors.neutral300,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -45,7 +45,7 @@ class SelectableTagList<T> extends StatelessWidget {
                 style: NoodleTextStyles.titleXSmBold.copyWith(
                   color: isSelected
                       ? NoodleColors.primary
-                      : NoodleColors.categoryTabText,
+                      : NoodleColors.neutral900,
                 ),
               ),
             ),

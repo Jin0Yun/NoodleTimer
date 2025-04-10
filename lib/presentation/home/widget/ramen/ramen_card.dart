@@ -16,7 +16,7 @@ class RamenCard extends StatelessWidget {
     return Container(
       width: 160,
       decoration: BoxDecoration(
-        color: NoodleColors.secondaryGray,
+        color: NoodleColors.neutral400,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ClipRRect(

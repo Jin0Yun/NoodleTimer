@@ -25,9 +25,9 @@ class CustomSearchBar extends StatelessWidget {
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: NoodleColors.backgroundSearchBar,
+        color: NoodleColors.neutral300,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: NoodleColors.borderLightGray),
+        border: Border.all(color: NoodleColors.neutral500),
       ),
       child: Row(
         children: [
@@ -40,18 +40,18 @@ class CustomSearchBar extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hintText,
-                hintStyle: const TextStyle(color: NoodleColors.secondaryDarkGray),
+                hintStyle: const TextStyle(color: NoodleColors.neutral800),
               ),
             ),
           ),
           if (showClear && onClear != null)
             IconButton(
               onPressed: onClear,
-              icon: const Icon(Icons.close, size: 16, color: NoodleColors.backgroundWhite),
+              icon: const Icon(Icons.close, size: 16, color: NoodleColors.neutral100),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
               style: IconButton.styleFrom(
-                backgroundColor: NoodleColors.buttonLightGray,
+                backgroundColor: NoodleColors.neutral600,
                 shape: const CircleBorder(),
               ),
             ),

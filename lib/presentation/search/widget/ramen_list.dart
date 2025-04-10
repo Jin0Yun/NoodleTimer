@@ -24,7 +24,7 @@ class RamenList extends StatelessWidget {
         child: Text(
           '표시할 라면이 없습니다.',
           style: NoodleTextStyles.titleMd.copyWith(
-            color: NoodleColors.secondaryDarkGray,
+            color: NoodleColors.neutral800,
           )
         ),
       );

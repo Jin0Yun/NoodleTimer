@@ -58,7 +58,7 @@ class _RamenCardImageState extends State<RamenCardImage> {
   @override
   Widget build(BuildContext context) {
     if (_hasError) {
-      return const Center(child: Icon(Icons.broken_image, color: NoodleColors.secondaryGray, size: 40));
+      return const Center(child: Icon(Icons.broken_image, color: NoodleColors.neutral400, size: 40));
     }
 
     if (_isLoading || _imageProvider == null) {

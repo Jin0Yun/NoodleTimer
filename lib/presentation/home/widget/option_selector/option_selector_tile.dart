@@ -31,7 +31,7 @@ class OptionSelectorTile extends StatelessWidget {
           Text(
             label,
             style: NoodleTextStyles.titleXSmBold.copyWith(
-              color: NoodleColors.textDefault,
+              color: NoodleColors.neutral1000,
             ),
           ),
         ],

@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: NoodleColors.backgroundWhite,
+      backgroundColor: NoodleColors.neutral100,
       body: Column(
         children: [
           const CustomRoundedHeader(),
