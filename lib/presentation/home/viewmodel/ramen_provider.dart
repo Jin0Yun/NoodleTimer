@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/core/logger/app_logger.dart';
+import 'package:noodle_timer/core/logger/console_logger.dart';
 import 'package:noodle_timer/data/data_loader.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/data/repository/ramen_repository_impl.dart';
@@ -14,6 +16,11 @@ final ramenRepositoryProvider = Provider<RamenRepository>((ref) {
   return RamenRepositoryImpl(dataLoader);
 });
 
-final ramenViewModelProvider = StateNotifierProvider<RamenViewModel, RamenState>((ref) {
-  return RamenViewModel(ref.read(ramenRepositoryProvider));
+final loggerProvider = Provider<AppLogger>((ref) => ConsoleLogger());
+
+final ramenViewModelProvider =
+StateNotifierProvider<RamenViewModel, RamenState>((ref) {
+  final repo = ref.read(ramenRepositoryProvider);
+  final logger = ref.read(loggerProvider);
+  return RamenViewModel(repo, logger);
 });
