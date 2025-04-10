@@ -11,10 +11,10 @@ class RamenViewModel extends StateNotifier<RamenState> {
   final AppLogger _logger;
 
   RamenViewModel(this._repository, this._logger) : super(RamenState()) {
-    _init();
+    loadBrands();
   }
 
-  Future<void> _init() async {
+  Future<void> loadBrands() async {
     try {
       final brands = await _repository.loadBrands();
 
@@ -30,8 +30,6 @@ class RamenViewModel extends StateNotifier<RamenState> {
       _logger.e('브랜드 불러오기 실패', e, st);
     }
   }
-
-  void loadBrands() => _init();
 
   void selectBrand(int brandId) {
     try {

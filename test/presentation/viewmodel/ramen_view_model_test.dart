@@ -62,10 +62,9 @@ void main() {
       final viewModel = container.read(ramenViewModelProvider.notifier);
 
       // when
-      viewModel.loadBrands();
+      await viewModel.loadBrands();
 
       // then
-      await Future.delayed(Duration.zero);
       final state = container.read(ramenViewModelProvider);
       expect(state.brands.length, 2);
       expect(state.brands[0].name, '나의 라면 기록');
@@ -77,10 +76,9 @@ void main() {
       final viewModel = container.read(ramenViewModelProvider.notifier);
 
       // when
-      viewModel.loadBrands();
+      await viewModel.loadBrands();
 
       // then
-      await Future.delayed(Duration.zero);
       final state = container.read(ramenViewModelProvider);
       expect(state.currentRamenList, isNull);
     });
@@ -91,10 +89,9 @@ void main() {
       final viewModel = container.read(ramenViewModelProvider.notifier);
 
       // when
-      viewModel.loadBrands();
+      await viewModel.loadBrands();
 
       // then
-      await Future.delayed(Duration.zero);
       viewModel.selectBrand(1);
       final state = container.read(ramenViewModelProvider);
       expect(state.currentRamenList, isNotNull);

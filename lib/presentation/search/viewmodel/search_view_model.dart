@@ -10,13 +10,13 @@ class SearchViewModel extends StateNotifier<SearchState> {
   final AppLogger _logger;
 
   SearchViewModel(this._repository, this._logger) : super(SearchState()) {
-    _init();
+    loadRames();
   }
 
-  Future<void> _init() async {
+  Future<void> loadRames() async {
     try {
-      final all = await _repository.loadAllRamen();
-      state = state.copyWith(allRamen: all);
+      final allRamen = await _repository.loadAllRamen();
+      state = state.copyWith(allRamen: allRamen);
       _logger.d('라면 데이터 로딩 완료');
     } catch (e, st) {
       _logger.e('라면 로딩 실패', e, st);
