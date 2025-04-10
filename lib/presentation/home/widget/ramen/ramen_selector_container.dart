@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_provider.dart';
 import 'package:noodle_timer/presentation/home/widget/ramen/ramen_card_list.dart';
-import 'package:noodle_timer/presentation/home/widget/ramen/ramen_category_filter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/presentation/selectable_tag_list.dart';
 
 class RamenSelectorContainer extends ConsumerWidget {
   final int selectedCategoryIndex;
@@ -32,15 +33,16 @@ class RamenSelectorContainer extends ConsumerWidget {
           child: Text(
             "라면을 선택해주세요!",
             style: NoodleTextStyles.titleSmBold.copyWith(
-              color: NoodleColors.textDefault,
+              color: NoodleColors.neutral1000,
             ),
           ),
         ),
         const SizedBox(height: 8),
-        RamenCategoryFilter(
+        SelectableTagList<RamenBrandEntity>(
           selectedIndex: selectedCategoryIndex,
-          ramenBrands: ramenBrands,
           onTap: onCategoryTap,
+          items: ramenBrands,
+          labelBuilder: (brand) => brand.name,
         ),
         const SizedBox(height: 12),
         if (selectedBrand != null)

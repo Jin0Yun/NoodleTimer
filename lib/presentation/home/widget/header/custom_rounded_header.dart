@@ -32,7 +32,7 @@ class CustomRoundedHeader extends StatelessWidget {
                 Text(
                   "K-라면타이머",
                   style: NoodleTextStyles.titleSmBold.copyWith(
-                    color: NoodleColors.backgroundWhite,
+                    color: NoodleColors.neutral100,
                   ),
                 ),
               ],
@@ -45,7 +45,7 @@ class CustomRoundedHeader extends StatelessWidget {
                   child: const Icon(
                     Icons.person_outline,
                     size: 25,
-                    color: NoodleColors.backgroundWhite,
+                    color: NoodleColors.neutral100,
                   ),
                 ),
                 const SizedBox(width: 6),
@@ -54,7 +54,7 @@ class CustomRoundedHeader extends StatelessWidget {
                   child: const Icon(
                     Icons.settings_outlined,
                     size: 25,
-                    color: NoodleColors.backgroundWhite,
+                    color: NoodleColors.neutral100,
                   ),
                 ),
               ],
