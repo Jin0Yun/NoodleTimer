@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noodle_timer/presentation/common/custom_button.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/onboarding/screen/onboarding_guide_screen.dart';
@@ -18,13 +19,13 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: NoodleColors.backgroundWhite,
+      backgroundColor: NoodleColors.neutral100,
       appBar: AppBar(
-        backgroundColor: NoodleColors.backgroundWhite,
+        backgroundColor: NoodleColors.neutral100,
         title: Text(
           '라면 취향 선택',
           style: NoodleTextStyles.titleSmBold.copyWith(
-            color: NoodleColors.textDefault,
+            color: NoodleColors.neutral1000,
           ),
         ),
         centerTitle: true,
@@ -42,19 +43,19 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
                   TextSpan(
                     text: '원하는 ',
                     style: NoodleTextStyles.titleMd.copyWith(
-                      color: NoodleColors.textDefault,
+                      color: NoodleColors.neutral1000,
                     ),
                     children: [
                       TextSpan(
                         text: '면발',
                         style: NoodleTextStyles.titleMdBold.copyWith(
-                          color: NoodleColors.textDefault,
+                          color: NoodleColors.neutral1000,
                         ),
                       ),
                       TextSpan(
                         text: '을\n선택해 주세요!',
                         style: NoodleTextStyles.titleMd.copyWith(
-                          color: NoodleColors.textDefault,
+                          color: NoodleColors.neutral1000,
                         ),
                       ),
                     ],
@@ -95,13 +96,13 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
                 Icon(
                   Icons.info_outline,
                   size: 16,
-                  color: NoodleColors.secondaryDarkGray,
+                  color: NoodleColors.neutral800,
                 ),
                 SizedBox(width: 4),
                 Text(
                   '선택에 따라 타이머가 자동으로 설정됩니다!',
                   style: NoodleTextStyles.titleSm.copyWith(
-                    color: NoodleColors.secondaryDarkGray,
+                    color: NoodleColors.neutral800,
                   ),
                 ),
               ],
@@ -111,39 +112,21 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
       ),
       bottomNavigationBar: SafeArea(
         minimum: const EdgeInsets.all(16),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed:
-                isKkodulSelected == null
-                    ? null
-                    : () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setBool('isFirstLaunch', false);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const OnboardingGuideScreen(),
-                        ),
-                      );
-                    },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: NoodleColors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        child: CustomButton(
+          buttonText: '다음',
+          isEnabled: isKkodulSelected != null,
+          onPressed: isKkodulSelected == null
+              ? null
+              : () async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isFirstLaunch', false);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const OnboardingGuideScreen(),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              disabledBackgroundColor: NoodleColors.secondaryDarkGray.withOpacity(
-                0.2,
-              ),
-            ),
-            child: Text(
-              '다음',
-              style: NoodleTextStyles.titleSmBold.copyWith(
-                color: NoodleColors.backgroundWhite,
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

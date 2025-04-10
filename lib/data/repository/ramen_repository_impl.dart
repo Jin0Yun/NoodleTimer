@@ -4,6 +4,7 @@ import 'package:noodle_timer/core/exceptions/ramen_error.dart';
 import 'package:noodle_timer/data/data_loader.dart';
 import 'package:noodle_timer/data/dto/ramen_data.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
+import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import '../../domain/repository/ramen_repository.dart';
 
 class RamenRepositoryImpl implements RamenRepository {
@@ -25,5 +26,14 @@ class RamenRepositoryImpl implements RamenRepository {
     } catch (e) {
       throw RamenError(RamenErrorType.unknownError, e.toString());
     }
+  }
+
+  @override
+  Future<List<RamenEntity>> loadAllRamen() async {
+    final brands = await loadBrands();
+    if (brands.isEmpty) {
+      throw RamenError(RamenErrorType.brandNotFound);
+    }
+    return brands.expand((brand) => brand.ramens).toList();
   }
 }

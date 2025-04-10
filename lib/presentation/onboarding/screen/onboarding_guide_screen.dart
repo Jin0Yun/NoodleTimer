@@ -15,7 +15,7 @@ class OnboardingGuideScreen extends StatelessWidget {
       body: Stack(
         children: [
           const HomeScreen(),
-          Container(color: NoodleColors.backgroundOverlay),
+          Container(color: NoodleColors.overlay),
           Positioned(
             top: isSmallDevice ? screenSize.height * 0.45 : screenSize.height * 0.43,
             right: screenSize.width * 0.03,
@@ -53,7 +53,7 @@ class OnboardingGuideScreen extends StatelessWidget {
               icon: const Icon(
                 Icons.close,
                 size: 30,
-                color: NoodleColors.backgroundWhite,
+                color: NoodleColors.neutral100,
               ),
               onPressed: () => _navigateToHome(context),
             ),
