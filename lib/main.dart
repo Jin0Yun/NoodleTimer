@@ -15,7 +15,7 @@ void main() async {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          scaffoldBackgroundColor: NoodleColors.backgroundWhite
+          scaffoldBackgroundColor: NoodleColors.neutral100
         ),
         home: isFirstLaunch ? const NoodlePreferenceScreen() : const TabBarController(),
       ),

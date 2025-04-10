@@ -81,7 +81,7 @@ class _OptionSelectorContainerState extends State<OptionSelectorContainer> {
     return Container(
       width: 1,
       height: 36,
-      color: NoodleColors.secondaryGray,
+      color: NoodleColors.neutral400,
     );
   }
 

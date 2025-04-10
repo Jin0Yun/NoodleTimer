@@ -32,7 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
             title: Text(
               '라면찾기',
               style: NoodleTextStyles.titleSmBold.copyWith(
-                color: NoodleColors.textDefault,
+                color: NoodleColors.neutral1000,
               )
             ),
           ),

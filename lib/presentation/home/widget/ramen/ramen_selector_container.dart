@@ -33,7 +33,7 @@ class RamenSelectorContainer extends ConsumerWidget {
           child: Text(
             "라면을 선택해주세요!",
             style: NoodleTextStyles.titleSmBold.copyWith(
-              color: NoodleColors.textDefault,
+              color: NoodleColors.neutral1000,
             ),
           ),
         ),

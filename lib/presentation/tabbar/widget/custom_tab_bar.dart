@@ -42,13 +42,13 @@ class CustomTabBar extends StatelessWidget {
       child: Container(
         height: TabBarConstants.containerHeight,
         decoration: BoxDecoration(
-          color: NoodleColors.backgroundWhite,
+          color: NoodleColors.neutral100,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(TabBarConstants.borderRadius),
           ),
           border: Border(
             top: BorderSide(
-              color: NoodleColors.secondaryDarkGray.withValues(alpha: 0.2),
+              color: NoodleColors.neutral800.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
@@ -91,11 +91,11 @@ class CustomTabBar extends StatelessWidget {
               width: TabBarConstants.centerButtonSize,
               height: TabBarConstants.centerButtonSize,
               decoration: BoxDecoration(
-                color: selectedIndex == 1 ? NoodleColors.primary : NoodleColors.disabled,
+                color: selectedIndex == 1 ? NoodleColors.primary : NoodleColors.neutral700,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: NoodleColors.textDefault.withValues(alpha: 0.3),
+                    color: NoodleColors.neutral1000.withValues(alpha: 0.3),
                     spreadRadius: 2,
                     blurRadius: 12,
                     offset: const Offset(0, 5),
@@ -108,14 +108,14 @@ class CustomTabBar extends StatelessWidget {
                   children: [
                     Icon(
                       centerTab.icon,
-                      color: NoodleColors.backgroundWhite,
+                      color: NoodleColors.neutral100,
                       size: TabBarConstants.centerButtonIconSize,
                     ),
                     const SizedBox(height: 2),
                     Text(
                       centerTab.label,
                       style: NoodleTextStyles.titleXsm.copyWith(
-                        color: NoodleColors.backgroundWhite,
+                        color: NoodleColors.neutral100,
                         decoration: TextDecoration.none,
                       ),
                     ),
@@ -136,7 +136,7 @@ class CustomTabBar extends StatelessWidget {
     required String label,
   }) {
     final isSelected = selectedIndex == index;
-    final color = isSelected ? NoodleColors.primary : NoodleColors.textDefault;
+    final color = isSelected ? NoodleColors.primary : NoodleColors.neutral1000;
 
     return Semantics(
       label: '$label 탭',

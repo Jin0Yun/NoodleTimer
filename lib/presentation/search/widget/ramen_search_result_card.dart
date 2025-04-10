@@ -22,11 +22,11 @@ class RamenSearchResultCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: NoodleColors.backgroundWhite,
+          color: NoodleColors.neutral100,
           borderRadius: BorderRadius.circular(12),
           boxShadow: const [
             BoxShadow(
-              color: NoodleColors.secondaryGray,
+              color: NoodleColors.neutral400,
               blurRadius: 4,
               offset: Offset(0, 2),
             )
@@ -53,14 +53,14 @@ class RamenSearchResultCard extends StatelessWidget {
               Text(
                 ramen.name,
                 style: NoodleTextStyles.titleXSmBold.copyWith(
-                  color: NoodleColors.textDefault,
+                  color: NoodleColors.neutral1000,
                 )
               ),
               const SizedBox(height: 4),
               Text(
                 ramen.description,
                 style: NoodleTextStyles.titleSm.copyWith(
-                  color: NoodleColors.secondaryDarkGray,
+                  color: NoodleColors.neutral800,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

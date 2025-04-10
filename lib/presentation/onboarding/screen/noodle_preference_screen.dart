@@ -18,13 +18,13 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: NoodleColors.backgroundWhite,
+      backgroundColor: NoodleColors.neutral100,
       appBar: AppBar(
-        backgroundColor: NoodleColors.backgroundWhite,
+        backgroundColor: NoodleColors.neutral100,
         title: Text(
           '라면 취향 선택',
           style: NoodleTextStyles.titleSmBold.copyWith(
-            color: NoodleColors.textDefault,
+            color: NoodleColors.neutral1000,
           ),
         ),
         centerTitle: true,
@@ -42,19 +42,19 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
                   TextSpan(
                     text: '원하는 ',
                     style: NoodleTextStyles.titleMd.copyWith(
-                      color: NoodleColors.textDefault,
+                      color: NoodleColors.neutral1000,
                     ),
                     children: [
                       TextSpan(
                         text: '면발',
                         style: NoodleTextStyles.titleMdBold.copyWith(
-                          color: NoodleColors.textDefault,
+                          color: NoodleColors.neutral1000,
                         ),
                       ),
                       TextSpan(
                         text: '을\n선택해 주세요!',
                         style: NoodleTextStyles.titleMd.copyWith(
-                          color: NoodleColors.textDefault,
+                          color: NoodleColors.neutral1000,
                         ),
                       ),
                     ],
@@ -95,13 +95,13 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
                 Icon(
                   Icons.info_outline,
                   size: 16,
-                  color: NoodleColors.secondaryDarkGray,
+                  color: NoodleColors.neutral800,
                 ),
                 SizedBox(width: 4),
                 Text(
                   '선택에 따라 타이머가 자동으로 설정됩니다!',
                   style: NoodleTextStyles.titleSm.copyWith(
-                    color: NoodleColors.secondaryDarkGray,
+                    color: NoodleColors.neutral800,
                   ),
                 ),
               ],
@@ -133,14 +133,14 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
-              disabledBackgroundColor: NoodleColors.secondaryDarkGray.withOpacity(
+              disabledBackgroundColor: NoodleColors.neutral800.withOpacity(
                 0.2,
               ),
             ),
             child: Text(
               '다음',
               style: NoodleTextStyles.titleSmBold.copyWith(
-                color: NoodleColors.backgroundWhite,
+                color: NoodleColors.neutral100,
               ),
             ),
           ),
