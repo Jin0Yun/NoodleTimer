@@ -21,4 +21,12 @@ class NoodleColors {
   static const Color error = Color(0xFFE53935);
   static const Color overlay = Color(0xD9000000);
   static const Color selected = Color(0xFFFFE0B2);
+
+  // 태그 컬러
+  static const Color spicyHot = Color(0xFFFF7043);
+  static const Color spicyHotLight = Color(0xFFFFEBE6);
+  static const Color spicyMedium = Color(0xFFFFB74D);
+  static const Color spicyMediumLight = Color(0xFFFFF3E0);
+  static const Color spicyMild = Color(0xFF81C784);
+  static const Color spicyMildLight = Color(0xFFE8F5E9);
 }
