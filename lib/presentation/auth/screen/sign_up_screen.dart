@@ -85,40 +85,58 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   void _onSignUpPressed() {
     ref.read(signUpViewModelProvider.notifier).signUp(
       onSuccess: () {
-        showDialog(
-          context: context,
-          builder: (_) => CustomAlertDialog(
-            message: '회원가입이 완료되었습니다! 🎉',
-            confirmText: '확인',
-            isSuccess: true,
-            onConfirm: () {
-              Navigator.of(context).pop();
-              Navigator.pushReplacementNamed(context, AppRoutes.login);
-            },
-          ),
+        _showAlert(
+          '회원가입이 완료되었습니다! 🎉',
+          isSuccess: true,
+          onConfirm: () {
+            Navigator.of(context).pop();
+            Navigator.pushReplacementNamed(context, AppRoutes.login);
+          },
         );
       },
       onError: (message) {
-        showDialog(
-          context: context,
-          builder: (_) => CustomAlertDialog(
-            message: message.contains('email-already-in-use')
-                ? '이미 존재하는 이메일입니다.\n로그인하시겠습니까?'
-                : '회원가입에 실패했습니다. 다시 시도해주세요.',
-            confirmText: message.contains('email-already-in-use') ? '로그인' : '확인',
-            cancelText: message.contains('email-already-in-use') ? '닫기' : null,
-            hasCancel: message.contains('email-already-in-use'),
-            isSuccess: false,
-            onConfirm: () {
-              Navigator.of(context).pop();
+        final isEmailAlreadyInUse = message.contains('email-already-in-use');
+
+        _showAlert(
+          isEmailAlreadyInUse
+              ? '이미 존재하는 이메일입니다.\n로그인하시겠습니까?'
+              : '회원가입에 실패했습니다. 다시 시도해주세요.',
+          confirmText: isEmailAlreadyInUse ? '로그인' : '확인',
+          cancelText: isEmailAlreadyInUse ? '닫기' : null,
+          hasCancel: isEmailAlreadyInUse,
+          isSuccess: false,
+          onConfirm: () {
+            Navigator.of(context).pop();
+            if (isEmailAlreadyInUse) {
               Navigator.pushReplacementNamed(context, AppRoutes.login);
-            },
-            onCancel: () {
-              Navigator.of(context).pop();
-            },
-          ),
+            }
+          },
+          onCancel: isEmailAlreadyInUse ? () => Navigator.of(context).pop() : null,
         );
       },
+    );
+  }
+
+  void _showAlert(
+      String message, {
+        String confirmText = '확인',
+        String? cancelText,
+        bool hasCancel = false,
+        bool isSuccess = true,
+        VoidCallback? onConfirm,
+        VoidCallback? onCancel,
+      }) {
+    showDialog(
+      context: context,
+      builder: (_) => CustomAlertDialog(
+        message: message,
+        confirmText: confirmText,
+        cancelText: cancelText,
+        hasCancel: hasCancel,
+        isSuccess: isSuccess,
+        onConfirm: onConfirm ?? () => Navigator.of(context).pop(),
+        onCancel: onCancel,
+      ),
     );
   }
 }
