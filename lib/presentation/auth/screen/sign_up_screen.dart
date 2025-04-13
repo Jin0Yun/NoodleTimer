@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/auth_provider.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_text_field.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_alert_dialog.dart';
@@ -92,7 +93,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             isSuccess: true,
             onConfirm: () {
               Navigator.of(context).pop();
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.pushReplacementNamed(context, AppRoutes.login);
             },
           ),
         );
@@ -110,7 +111,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             isSuccess: false,
             onConfirm: () {
               Navigator.of(context).pop();
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.pushReplacementNamed(context, AppRoutes.login);
             },
             onCancel: () {
               Navigator.of(context).pop();

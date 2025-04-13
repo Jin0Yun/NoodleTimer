@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
@@ -120,12 +121,7 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
               : () async {
             final prefs = await SharedPreferences.getInstance();
             await prefs.setBool('isFirstLaunch', false);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const OnboardingGuideScreen(),
-              ),
-            );
+            Navigator.pushNamed(context, AppRoutes.onboardingGuide);;
           },
         ),
       ),
