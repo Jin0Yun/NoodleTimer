@@ -1,121 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/presentation/auth/screen/sign_up_view_model.dart';
 import 'package:noodle_timer/presentation/auth/widget/custom_text_field.dart';
 import 'package:noodle_timer/presentation/common/custom_alert_dialog.dart';
 import 'package:noodle_timer/presentation/common/custom_button.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  String? _emailError;
-  String? _passwordError;
-  String? _confirmError;
-
-  void _validateEmail(String value) {
-    final isValid = value.contains('@') && value.contains('.');
-    setState(() {
-      _emailError = isValid ? null : '이메일 형식이 올바르지 않습니다.';
-    });
-  }
-
-  void _validatePassword(String value) {
-    final isValid = value.length >= 8;
-    setState(() {
-      _passwordError = isValid ? null : '8자 이상 입력해주세요.';
-    });
-
-    _validateConfirmPassword(_confirmPasswordController.text);
-  }
-
-  void _validateConfirmPassword(String value) {
-    final confirmText = value.trim();
-    final original = _passwordController.text.trim();
-
-    setState(() {
-      if (confirmText.isEmpty) {
-        _confirmError = null;
-      } else {
-        _confirmError = confirmText == original ? null : '비밀번호가 일치하지 않습니다.';
-      }
-    });
-  }
-
-  Future<void> _signUp() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-    final confirm = _confirmPasswordController.text;
-
-    _validateEmail(email);
-    _validatePassword(password);
-    _validateConfirmPassword(confirm);
-
-    final isValid = email.isNotEmpty &&
-        password.isNotEmpty &&
-        confirm.isNotEmpty &&
-        _emailError == null &&
-        _passwordError == null &&
-        _confirmError == null;
-
-    if (!isValid) return;
-
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      if (!mounted) return;
-
-      showDialog(
-        context: context,
-        builder: (_) => CustomAlertDialog(
-          message: '회원가입이 완료되었습니다! 🎉',
-          confirmText: '확인',
-          isSuccess: true,
-          onConfirm: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/login');
-          },
-        ),
-      );
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) return;
-
-      if (e.code == 'email-already-in-use') {
-        showDialog(
-          context: context,
-          builder: (_) => CustomAlertDialog(
-            message: '이미 존재하는 이메일입니다.\n로그인하시겠습니까?',
-            confirmText: '로그인',
-            cancelText: '닫기',
-            hasCancel: true,
-            isSuccess: false,
-            onConfirm: () {
-              Navigator.of(context).pop();
-              Navigator.pushReplacementNamed(context, '/login');
-            },
-            onCancel: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(signUpViewModelProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: NoodleColors.neutral100,
@@ -135,8 +42,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 label: '이메일(아이디)',
                 hint: 'example@email.com',
                 controller: _emailController,
-                errorMessage: _emailError,
-                onChanged: _validateEmail,
+                errorMessage: state.emailError,
+                onChanged: (value) {
+                  ref.read(signUpViewModelProvider.notifier).updateEmail(value);
+                },
               ),
               const SizedBox(height: 24),
               CustomTextField(
@@ -144,8 +53,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 hint: '••••••••',
                 controller: _passwordController,
                 obscureText: true,
-                errorMessage: _passwordError,
-                onChanged: _validatePassword,
+                errorMessage: state.passwordError,
+                onChanged: (value) {
+                  ref.read(signUpViewModelProvider.notifier).updatePassword(value);
+                },
               ),
               const SizedBox(height: 24),
               CustomTextField(
@@ -153,18 +64,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 hint: '••••••••',
                 controller: _confirmPasswordController,
                 obscureText: true,
-                errorMessage: _confirmError,
-                onChanged: _validateConfirmPassword,
+                errorMessage: state.confirmError,
+                onChanged: (value) {
+                  ref.read(signUpViewModelProvider.notifier).updateConfirmPassword(value);
+                },
               ),
               const Spacer(),
               CustomButton(
                 buttonText: '회원가입',
-                onPressed: _signUp,
+                onPressed: _onSignUpPressed,
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void _onSignUpPressed() {
+    ref.read(signUpViewModelProvider.notifier).signUp(
+      onSuccess: () {
+        showDialog(
+          context: context,
+          builder: (_) => CustomAlertDialog(
+            message: '회원가입이 완료되었습니다! 🎉',
+            confirmText: '확인',
+            isSuccess: true,
+            onConfirm: () {
+              Navigator.of(context).pop();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+          ),
+        );
+      },
+      onError: (message) {
+        showDialog(
+          context: context,
+          builder: (_) => CustomAlertDialog(
+            message: message.contains('email-already-in-use')
+                ? '이미 존재하는 이메일입니다.\n로그인하시겠습니까?'
+                : '회원가입에 실패했습니다. 다시 시도해주세요.',
+            confirmText: message.contains('email-already-in-use') ? '로그인' : '확인',
+            cancelText: message.contains('email-already-in-use') ? '닫기' : null,
+            hasCancel: message.contains('email-already-in-use'),
+            isSuccess: false,
+            onConfirm: () {
+              Navigator.of(context).pop();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            onCancel: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        );
+      },
     );
   }
 }
