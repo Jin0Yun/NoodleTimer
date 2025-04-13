@@ -35,3 +35,7 @@ Thumbs.db
 
 # dotenv environment variables file
 .env*
+
+# Firebase
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist

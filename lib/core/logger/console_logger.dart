@@ -5,7 +5,14 @@ class ConsoleLogger implements AppLogger {
   @override
   void d(String message) {
     if (kDebugMode) {
-      debugPrint('🟢 $message');
+      debugPrint('⚠️[DEBUG] $message');
+    }
+  }
+
+  @override
+  void i(String message) {
+    if (kDebugMode) {
+      debugPrint('🟢[INFO] $message');
     }
   }
 
