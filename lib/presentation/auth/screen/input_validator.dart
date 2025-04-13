@@ -1,6 +1,6 @@
 class InputValidator {
   static String? validateEmail(String email) {
-    final isValid = RegExp(r'^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,}$');
+    final isValid = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return isValid.hasMatch(email) ? null : '이메일 형식이 올바르지 않습니다.';
   }
   
