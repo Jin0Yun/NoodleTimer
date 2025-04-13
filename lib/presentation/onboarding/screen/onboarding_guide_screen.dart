@@ -18,31 +18,47 @@ class OnboardingGuideScreen extends StatelessWidget {
           const HomeScreen(),
           Container(color: NoodleColors.overlay),
           Positioned(
-            top: isSmallDevice ? screenSize.height * 0.45 : screenSize.height * 0.43,
+            top:
+                isSmallDevice
+                    ? screenSize.height * 0.45
+                    : screenSize.height * 0.43,
             right: screenSize.width * 0.03,
-            child: Image.asset('assets/image/guide_01.png',
+            child: Image.asset(
+              'assets/image/guide_01.png',
               width: screenSize.width * 0.5,
             ),
           ),
           Positioned(
-            top: isSmallDevice ? screenSize.height * 0.57 : screenSize.height * 0.52,
+            top:
+                isSmallDevice
+                    ? screenSize.height * 0.57
+                    : screenSize.height * 0.52,
             left: screenSize.width * 0.1,
             right: screenSize.width * 0.1,
-            child: Image.asset('assets/image/guide_02.png',
+            child: Image.asset(
+              'assets/image/guide_02.png',
               height: isSmallDevice ? 55 : 65,
             ),
           ),
           Positioned(
-            bottom: isSmallDevice ? screenSize.height * 0.1 : screenSize.height * 0.2,
+            bottom:
+                isSmallDevice
+                    ? screenSize.height * 0.1
+                    : screenSize.height * 0.2,
             left: screenSize.width * 0.2,
-            child: Image.asset('assets/image/guide_03.png',
+            child: Image.asset(
+              'assets/image/guide_03.png',
               width: screenSize.width * 0.6,
             ),
           ),
           Positioned(
-            bottom: isSmallDevice ? - 30 : screenSize.height * 0.12,
-            left: isSmallDevice ? screenSize.width * 0.06 : screenSize.width * 0.04,
-            child: Image.asset('assets/image/guide_04.png',
+            bottom: isSmallDevice ? -30 : screenSize.height * 0.12,
+            left:
+                isSmallDevice
+                    ? screenSize.width * 0.06
+                    : screenSize.width * 0.04,
+            child: Image.asset(
+              'assets/image/guide_04.png',
               width: screenSize.width * 0.4,
               height: screenSize.width * 0.4,
             ),
@@ -65,6 +81,10 @@ class OnboardingGuideScreen extends StatelessWidget {
   }
 
   void _navigateToHome(BuildContext context) {
-    Navigator.pushReplacementNamed(context, AppRoutes.home);
+    Navigator.of(context).pop();
+
+    Navigator.of(
+      context,
+    ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
   }
 }
