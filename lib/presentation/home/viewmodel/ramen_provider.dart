@@ -4,9 +4,9 @@ import 'package:noodle_timer/core/logger/console_logger.dart';
 import 'package:noodle_timer/data/data_loader.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/data/repository/ramen_repository_impl.dart';
-import 'package:noodle_timer/presentation/home/viewmodel/ramen_state.dart';
+import 'package:noodle_timer/presentation/home/state/ramen_state.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_view_model.dart';
-import 'package:noodle_timer/presentation/search/viewmodel/search_state.dart';
+import 'package:noodle_timer/presentation/search/state/search_state.dart';
 import 'package:noodle_timer/presentation/search/viewmodel/search_view_model.dart';
 
 final dataLoaderProvider = Provider<IDataLoader>((ref) {

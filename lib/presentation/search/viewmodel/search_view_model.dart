@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
-import 'package:noodle_timer/presentation/search/hangul_utils.dart';
-import 'package:noodle_timer/presentation/search/viewmodel/search_state.dart';
+import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
+import 'package:noodle_timer/presentation/search/state/search_state.dart';
 
 class SearchViewModel extends StateNotifier<SearchState> {
   final RamenRepository _repository;

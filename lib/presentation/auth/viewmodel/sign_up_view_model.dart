@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:noodle_timer/data/repository/auth_repository_impl.dart';
 import 'package:noodle_timer/domain/repository/auth_repository.dart';
-import 'package:noodle_timer/presentation/auth/screen/input_validator.dart';
-import 'package:noodle_timer/presentation/auth/screen/sign_up_state.dart';
-
-final signUpViewModelProvider =
-    StateNotifierProvider<SignUpViewModel, SignUpState>(
-      (ref) => SignUpViewModel(AuthRepositoryImpl()),
-    );
+import 'package:noodle_timer/presentation/common/utils/input_validator.dart';
+import 'package:noodle_timer/presentation/auth/state/sign_up_state.dart';
 
 class SignUpViewModel extends StateNotifier<SignUpState> {
   final AuthRepository _repository;
