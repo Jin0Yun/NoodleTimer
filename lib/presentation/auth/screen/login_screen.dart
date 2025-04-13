@@ -9,6 +9,7 @@ import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_text_field.dart';
 import 'package:noodle_timer/presentation/auth/screen/sign_up_screen.dart';
 import 'package:noodle_timer/presentation/tabbar/screen/tabbar_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -92,10 +93,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         isSuccess: true,
         onConfirm: () {
           Navigator.of(context).pop();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const TabBarController()),
-          );
+          Navigator.pushReplacementNamed(context, AppRoutes.onboardingPreference);
         },
       );
     }
