@@ -9,6 +9,7 @@ import 'package:noodle_timer/presentation/auth/screen/sign_up_screen.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/onboarding/screen/noodle_preference_screen.dart';
 import 'package:noodle_timer/presentation/onboarding/screen/onboarding_guide_screen.dart';
+import 'package:noodle_timer/presentation/setting/screen/setting_screen.dart';
 import 'package:noodle_timer/presentation/tabbar/screen/tabbar_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +39,7 @@ void main() async {
           AppRoutes.signup: (_) => const SignUpScreen(),
           AppRoutes.onboardingPreference: (_) => const NoodlePreferenceScreen(),
           AppRoutes.onboardingGuide: (_) => const OnboardingGuideScreen(),
+          AppRoutes.settings: (_) => const SettingScreen(),
         },
       ),
     ),
