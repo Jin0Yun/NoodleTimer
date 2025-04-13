@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
-import 'package:noodle_timer/presentation/common/custom_button.dart';
-import 'package:noodle_timer/presentation/common/ramen_card_image.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
+import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
+import 'package:noodle_timer/presentation/common/widget/ramen_card_image.dart';
 import 'package:noodle_timer/presentation/search/widget/spicy_tag.dart';
 
 class RamenDetailScreen extends StatelessWidget {
