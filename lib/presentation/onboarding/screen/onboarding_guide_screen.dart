@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/home/screen/home_screen.dart';
 
@@ -64,16 +65,6 @@ class OnboardingGuideScreen extends StatelessWidget {
   }
 
   void _navigateToHome(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (_, __, ___) => const HomeScreen(),
-        transitionsBuilder: (_, anim, __, child) => FadeTransition(
-          opacity: anim,
-          child: child,
-        ),
-        transitionDuration: const Duration(milliseconds: 300),
-      ),
-    );
+    Navigator.pushReplacementNamed(context, AppRoutes.home);
   }
 }

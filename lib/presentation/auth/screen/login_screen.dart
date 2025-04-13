@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/auth_provider.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_alert_dialog.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
@@ -55,12 +56,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(height: 4),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignUpScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, AppRoutes.signup);
                 },
                 child: Text(
                   '회원가입',
