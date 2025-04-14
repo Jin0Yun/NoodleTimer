@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 
@@ -50,7 +51,9 @@ class CustomRoundedHeader extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.settings);
+                  },
                   child: const Icon(
                     Icons.settings_outlined,
                     size: 25,
