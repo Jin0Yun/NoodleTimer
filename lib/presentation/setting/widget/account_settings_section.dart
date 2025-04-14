@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/app_routes.dart';
-import 'package:noodle_timer/presentation/auth/viewmodel/auth_provider.dart';
+import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/setting/widget/text_button_with_action.dart';

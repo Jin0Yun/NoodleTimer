@@ -8,7 +8,7 @@ class AuthRepositoryImpl implements AuthRepository {
     : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   @override
-  Future<void> signUp(String email, String password) {
+  Future<UserCredential> signUp(String email, String password) {
     return _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
