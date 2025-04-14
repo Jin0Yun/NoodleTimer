@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:noodle_timer/core/exceptions/ramen_error.dart';
-import 'package:noodle_timer/data/data_loader.dart';
+import 'package:noodle_timer/data/service/data_loader.dart';
 import 'package:noodle_timer/data/dto/ramen_data.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
