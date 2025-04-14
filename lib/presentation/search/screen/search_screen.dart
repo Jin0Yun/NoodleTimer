@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:noodle_timer/presentation/home/viewmodel/ramen_provider.dart';
+import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/search/screen/ramen_detail_screen.dart';
