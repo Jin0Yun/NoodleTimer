@@ -82,9 +82,6 @@ class OnboardingGuideScreen extends StatelessWidget {
 
   void _navigateToHome(BuildContext context) {
     Navigator.of(context).pop();
-
-    Navigator.of(
-      context,
-    ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+    Navigator.pushReplacementNamed(context, AppRoutes.home);
   }
 }

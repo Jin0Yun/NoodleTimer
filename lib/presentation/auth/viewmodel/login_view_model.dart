@@ -53,4 +53,14 @@ class LoginViewModel extends StateNotifier<LoginState> {
       return '로그인에 실패했습니다.';
     }
   }
+
+  Future<void> logout() async {
+    try {
+      await _authRepository.signOut();
+      _logger.i('로그아웃 성공');
+      state = state.copyWith(isLoggedIn: false);
+    } catch (e, st) {
+      _logger.e('로그아웃 실패', e, st);
+    }
+  }
 }
