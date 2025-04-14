@@ -22,4 +22,9 @@ class AuthRepositoryImpl implements AuthRepository {
       password: password,
     );
   }
+
+  @override
+  Future<void> signOut() {
+    return _firebaseAuth.signOut();
+  }
 }
