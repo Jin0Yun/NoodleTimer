@@ -16,9 +16,9 @@ class NoodlePreferenceViewModel extends StateNotifier<NoodlePreferenceState> {
     final preferenceString = preference.toShortString();
     state = state.copyWith(status: AsyncValue.loading());
     try {
-      _logger.i('면발 취향 업데이트 시작: $_userId, $preferenceString');
       await _firestoreService.updateUserNoodlePreference(_userId, preference);
 
+      if (!mounted) return;
       state = state.copyWith(status: const AsyncValue.data(null));
       _logger.i('면발 취향 업데이트 성공: $_userId, $preferenceString');
     } catch (e, st) {
