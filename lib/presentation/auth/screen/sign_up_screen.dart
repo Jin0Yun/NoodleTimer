@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/app_routes.dart';
-import 'package:noodle_timer/presentation/auth/viewmodel/auth_provider.dart';
+import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_text_field.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_alert_dialog.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';

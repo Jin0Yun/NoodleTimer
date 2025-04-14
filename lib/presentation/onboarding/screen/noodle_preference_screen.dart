@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/app_routes.dart';
+import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
-import 'package:noodle_timer/presentation/onboarding/screen/onboarding_guide_screen.dart';
 import 'package:noodle_timer/presentation/onboarding/widget/preference_option_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 
-class NoodlePreferenceScreen extends StatefulWidget {
+class NoodlePreferenceScreen extends ConsumerStatefulWidget {
   const NoodlePreferenceScreen({super.key});
 
   @override
-  State<NoodlePreferenceScreen> createState() => _NoodlePreferenceScreenState();
+  ConsumerState<NoodlePreferenceScreen> createState() =>
+      _NoodlePreferenceScreenState();
 }
 
-class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
+class _NoodlePreferenceScreenState
+    extends ConsumerState<NoodlePreferenceScreen> {
   bool? isKkodulSelected;
 
   @override
@@ -116,13 +120,24 @@ class _NoodlePreferenceScreenState extends State<NoodlePreferenceScreen> {
         child: CustomButton(
           buttonText: '다음',
           isEnabled: isKkodulSelected != null,
-          onPressed: isKkodulSelected == null
-              ? null
-              : () async {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setBool('isFirstLaunch', false);
-            Navigator.pushNamed(context, AppRoutes.onboardingGuide);;
-          },
+          onPressed:
+              isKkodulSelected == null
+                  ? null
+                  : () async {
+                    final noodlePreference =
+                        isKkodulSelected == true
+                            ? NoodlePreference.kodul
+                            : NoodlePreference.peojin;
+
+                    await ref
+                        .read(noodlePreferenceProvider.notifier)
+                        .updateNoodlePreference(noodlePreference);
+
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('isFirstLaunch', false);
+
+                    Navigator.pushNamed(context, AppRoutes.onboardingGuide);
+                  },
         ),
       ),
     );
