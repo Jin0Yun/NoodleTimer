@@ -11,7 +11,9 @@ import 'package:noodle_timer/domain/repository/auth_repository.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/login_view_model.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/sign_up_view_model.dart';
+import 'package:noodle_timer/presentation/home/state/timer_state.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_view_model.dart';
+import 'package:noodle_timer/presentation/home/viewmodel/timer_view_model.dart';
 import 'package:noodle_timer/presentation/search/state/search_state.dart';
 import 'package:noodle_timer/presentation/search/viewmodel/search_view_model.dart';
 import 'package:noodle_timer/presentation/onboarding/viewmodel/noodle_preference_view_model.dart';
@@ -86,4 +88,10 @@ final noodlePreferenceProvider = StateNotifierProvider.autoDispose<NoodlePrefere
   final userId = firebaseAuth.currentUser?.uid ?? '';
   final logger = ref.read(loggerProvider);
   return NoodlePreferenceViewModel(firestoreService, userId, logger);
+});
+
+/// Timer ViewModel
+final timerViewModelProvider = StateNotifierProvider<TimerViewModel, TimerState>((ref) {
+  final logger = ref.read(loggerProvider);
+  return TimerViewModel(logger);
 });
