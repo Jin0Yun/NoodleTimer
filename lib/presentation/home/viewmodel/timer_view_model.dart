@@ -11,38 +11,33 @@ class TimerViewModel extends StateNotifier<TimerState> {
   TimerViewModel(this._logger) : super(TimerState.initial());
 
   void initialize({int? cookingTimeInSeconds, String? ramenName}) {
-    _timer?.cancel();
-
-    final totalSeconds = cookingTimeInSeconds ?? 0;
+    _cancelTimer();
+    final seconds = cookingTimeInSeconds ?? 0;
 
     state = TimerState(
-      totalSeconds: totalSeconds,
-      remainingSeconds: totalSeconds,
+      totalSeconds: seconds,
+      remainingSeconds: seconds,
       isRunning: false,
       ramenName: ramenName,
       isCompleted: false,
     );
 
-    _logger.i('타이머 초기화: $totalSeconds초, 라면: $ramenName');
+    _logger.i('타이머 초기화: $seconds초 ($ramenName)');
   }
 
   void updateRamen(RamenEntity? ramen) {
     if (ramen == null) return;
 
-    final cookTime = ramen.cookTime;
-    final ramenName = ramen.name;
-
-    _timer?.cancel();
-
+    _cancelTimer();
     state = TimerState(
-      totalSeconds: cookTime,
-      remainingSeconds: cookTime,
+      totalSeconds: ramen.cookTime,
+      remainingSeconds: ramen.cookTime,
       isRunning: false,
-      ramenName: ramenName,
+      ramenName: ramen.name,
       isCompleted: false,
     );
 
-    _logger.i('라면 변경: $ramenName, 조리시간: $cookTime초');
+    _logger.i('라면 변경: ${ramen.name} (${ramen.cookTime}초)');
   }
 
   void start() {
@@ -61,15 +56,13 @@ class TimerViewModel extends StateNotifier<TimerState> {
   }
 
   void stop() {
-    _timer?.cancel();
-    _timer = null;
+    _cancelTimer();
     state = state.copyWith(isRunning: false);
-    _logger.i('타이머 중지: ${state.remainingSeconds}초 남음');
+    _logger.i('타이머 중지됨. 남은 시간: ${state.remainingSeconds}초');
   }
 
   void complete() {
-    _timer?.cancel();
-    _timer = null;
+    _cancelTimer();
     state = state.copyWith(
       remainingSeconds: 0,
       isRunning: false,
@@ -84,13 +77,25 @@ class TimerViewModel extends StateNotifier<TimerState> {
       remainingSeconds: state.totalSeconds,
       isCompleted: false,
     );
-    start();
     _logger.i('타이머 재시작: ${state.totalSeconds}초');
+    start();
+  }
+
+  String formatTime(int seconds) {
+    final min = seconds ~/ 60;
+    final sec = seconds % 60;
+    return '$min:${sec.toString().padLeft(2, '0')}';
+  }
+
+  void _cancelTimer() {
+    _timer?.cancel();
+    _timer = null;
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _cancelTimer();
+    _logger.i('타이머 해제 및 dispose 완료');
     super.dispose();
   }
 }
