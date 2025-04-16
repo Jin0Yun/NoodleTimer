@@ -14,10 +14,12 @@ class RamenViewModel extends StateNotifier<RamenState> {
   RamenViewModel(this._repository, this._logger) : super(const RamenState());
 
   Future<void> initialize([int initialBrandIndex = 0]) async {
+    _logger.i('라면 뷰모델 초기화 시작');
     await loadBrands();
     if (state.brands.isNotEmpty) {
       selectBrand(initialBrandIndex);
     }
+    _logger.i('라면 뷰모델 초기화 완료');
   }
 
   Future<void> loadBrands() async {
@@ -33,47 +35,63 @@ class RamenViewModel extends StateNotifier<RamenState> {
       _logger.i('라면 브랜드 불러오기 성공: (${updatedBrands.length}개)');
     } on RamenError catch (e, st) {
       _logger.e('브랜드 불러오기 실패', e, st);
+    } catch (e, st) {
+      _logger.e('브랜드 불러오기 중 예상치 못한 오류', e, st);
     }
   }
 
   void selectBrand(int index) {
     try {
-      if (index >= 0 && index < state.brands.length) {
-        final selected = state.brands[index];
-        state = state.copyWith(
-          currentRamenList: selected.ramens,
-          selectedBrandIndex: index,
-          clearSelectedRamen: true,
-        );
-        _logger.i('라면 불러오기 성공: ${selected.name} (${selected.ramens.length}개)');
+      if (index < 0 || index >= state.brands.length) {
+        _logger.d('유효하지 않은 브랜드 인덱스: $index');
+        return;
       }
+
+      final selected = state.brands[index];
+      state = state.copyWith(
+        currentRamenList: selected.ramens,
+        selectedBrandIndex: index,
+        clearSelectedRamen: true,
+        clearTemporarySelected: true,
+      );
+      _logger.i('브랜드 선택: ${selected.name} (${selected.ramens.length}개 라면)');
     } catch (e, st) {
       _logger.e('브랜드 선택 실패: index $index', e, st);
     }
   }
 
-  void toggleRamenSelection(RamenEntity ramen) {
-    if (state.selectedRamen?.id == ramen.id) {
-      state = state.copyWith(clearSelectedRamen: true);
-    } else {
-      state = state.copyWith(
-        temporarySelectedRamen: ramen,
-      );
-    }
+  void selectRamen(RamenEntity ramen) {
+    _logger.i('라면 임시 선택: ${ramen.name}');
+    final isAlreadySelected = state.temporarySelectedRamen?.id == ramen.id;
+
+    state = state.copyWith(
+      temporarySelectedRamen: isAlreadySelected ? null : ramen,
+    );
+  }
+
+  void confirmRamenSelection(RamenEntity ramen) {
+    _logger.i('라면 선택 확정: ${ramen.name}, 조리시간: ${ramen.cookTime}초');
+    state = state.copyWith(
+        selectedRamen: ramen,
+        clearTemporarySelected: true
+    );
   }
 
   void handleRamenAction(RamenEntity ramen, RamenActionType actionType) {
     switch (actionType) {
       case RamenActionType.select:
-        toggleRamenSelection(ramen);
+        selectRamen(ramen);
         break;
       case RamenActionType.cook:
-        _logger.i("라면 선택 완료 - ${ramen.name}");
-        state = state.copyWith(selectedRamen: ramen, clearTemporarySelected: true);
+        confirmRamenSelection(ramen);
         break;
       case RamenActionType.detail:
-        _logger.i("상세 보기: ${ramen.name}");
+        showRamenDetail(ramen);
         break;
     }
+  }
+
+  void showRamenDetail(RamenEntity ramen) {
+    _logger.i("라면 상세 정보 보기: ${ramen.name}");
   }
 }
