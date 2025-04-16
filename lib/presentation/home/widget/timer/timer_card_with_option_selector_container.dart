@@ -11,22 +11,19 @@ class TimerCardWithOptionSelectorContainer extends ConsumerWidget {
   final int? cookingTimeInSeconds;
 
   const TimerCardWithOptionSelectorContainer({
-    super.key,
     this.selectedRamen,
     this.cookingTimeInSeconds,
+    super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timerViewModel = ref.read(timerViewModelProvider.notifier);
-    final timerState = ref.watch(timerViewModelProvider);
-
     _listenForRamenChanges(ref);
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _buildTimerCard(context, timerState, timerViewModel),
+        _buildTimerCard(context, ref),
         _buildOptionSelector(),
       ],
     );
@@ -41,11 +38,10 @@ class TimerCardWithOptionSelectorContainer extends ConsumerWidget {
     });
   }
 
-  Widget _buildTimerCard(
-      BuildContext context,
-      dynamic timerState,
-      dynamic timerViewModel
-      ) {
+  Widget _buildTimerCard(BuildContext context, WidgetRef ref) {
+    final timerState = ref.watch(timerViewModelProvider);
+    final timerViewModel = ref.read(timerViewModelProvider.notifier);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
       padding: const EdgeInsets.all(32),
