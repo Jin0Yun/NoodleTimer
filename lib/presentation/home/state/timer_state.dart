@@ -44,4 +44,9 @@ class TimerState {
   bool get isInitial => ramenName == null || ramenName!.isEmpty;
   bool get isFinished => isCompleted || remainingSeconds <= 0;
   bool get isEggTime => remainingSeconds <= 30 && remainingSeconds > 0 && isRunning;
+
+  double get progress {
+    if (totalSeconds == 0) return 0.0;
+    return 1.0 - (remainingSeconds / totalSeconds);
+  }
 }
