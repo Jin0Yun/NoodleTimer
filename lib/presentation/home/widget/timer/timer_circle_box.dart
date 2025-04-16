@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/home/state/timer_state.dart';
 
-class TimerCircleBox extends StatelessWidget {
+class TimerCircleBox extends ConsumerWidget {
   final TimerState timerState;
   final VoidCallback? onStart;
   final VoidCallback? onStop;
@@ -14,17 +16,11 @@ class TimerCircleBox extends StatelessWidget {
     this.onStart,
     this.onStop,
     this.onRestart,
-    super.key
+    super.key,
   });
 
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final sec = seconds % 60;
-    return '$minutes:${sec.toString().padLeft(2, '0')}';
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AspectRatio(
       aspectRatio: 1,
       child: Stack(
@@ -32,7 +28,7 @@ class TimerCircleBox extends StatelessWidget {
         children: [
           _buildProgressIndicators(),
           _buildCenterContent(),
-          if (!timerState.isInitial) _buildTimerText(),
+          if (!timerState.isInitial) _buildTimerText(ref),
         ],
       ),
     );
@@ -51,6 +47,8 @@ class TimerCircleBox extends StatelessWidget {
         ),
       );
     } else {
+      final progress = timerState.progress;
+
       return Stack(
         children: [
           SizedBox(
@@ -66,23 +64,22 @@ class TimerCircleBox extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: double.infinity,
-            child: CircularProgressIndicator(
-              value: _getProgressValue(),
-              strokeWidth: 10,
-              backgroundColor: NoodleColors.transparent,
-              color: NoodleColors.primary,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: progress, end: progress),
+              duration: const Duration(milliseconds: 1000),
+              builder: (context, value, child) {
+                return CircularProgressIndicator(
+                  value: value,
+                  strokeWidth: 10,
+                  backgroundColor: NoodleColors.transparent,
+                  color: NoodleColors.primary,
+                );
+              },
             ),
           ),
         ],
       );
     }
-  }
-
-  double _getProgressValue() {
-    if (timerState.isRunning || timerState.isFinished) {
-      return 1.0 - (timerState.remainingSeconds / timerState.totalSeconds);
-    }
-    return 0.0;
   }
 
   Widget _buildCenterContent() {
@@ -150,13 +147,8 @@ class TimerCircleBox extends StatelessWidget {
       onPressed: onRestart,
       style: ElevatedButton.styleFrom(
         backgroundColor: NoodleColors.neutral100,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 28,
-          vertical: 10,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 2,
       ),
       child: Text(
@@ -173,35 +165,34 @@ class TimerCircleBox extends StatelessWidget {
     return ElevatedButton(
       onPressed: timerState.isRunning ? onStop : onStart,
       style: ElevatedButton.styleFrom(
-        backgroundColor: timerState.isRunning
-            ? NoodleColors.neutral100
-            : NoodleColors.orange,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 18,
-          vertical: 10,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        backgroundColor:
+            timerState.isRunning
+                ? NoodleColors.neutral100
+                : NoodleColors.orange,
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 2,
       ),
       child: Text(
         timerState.isRunning ? 'STOP!' : 'START!',
         style: NoodleTextStyles.titleSmBold.copyWith(
-          color: timerState.isRunning
-              ? NoodleColors.accent
-              : NoodleColors.neutral100,
+          color:
+              timerState.isRunning
+                  ? NoodleColors.accent
+                  : NoodleColors.neutral100,
           letterSpacing: 1.0,
         ),
       ),
     );
   }
 
-  Widget _buildTimerText() {
+  Widget _buildTimerText(WidgetRef ref) {
+    final timerViewModel = ref.read(timerViewModelProvider.notifier);
+
     return Positioned(
       bottom: 20,
       child: Text(
-        _formatTime(timerState.remainingSeconds),
+        timerViewModel.formatTime(timerState.remainingSeconds),
         style: NoodleTextStyles.titleMdBold.copyWith(
           color: NoodleColors.neutral800,
           letterSpacing: 1.0,
