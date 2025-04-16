@@ -50,7 +50,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       height: PlatformUtils.getPadding(ios: 4, android: 18),
                     ),
                     TimerCardWithOptionSelectorContainer(
-                      selectedRamen: selectedRamen
+                      selectedRamen: selectedRamen,
+                      cookingTimeInSeconds: selectedRamen?.cookTime,
                     ),
                     SizedBox(
                       height: PlatformUtils.getPadding(ios: 22, android: 52),
