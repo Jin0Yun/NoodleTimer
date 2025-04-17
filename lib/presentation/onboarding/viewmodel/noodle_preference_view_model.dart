@@ -13,7 +13,7 @@ class NoodlePreferenceViewModel extends StateNotifier<NoodlePreferenceState> {
       : super(NoodlePreferenceState.initial());
 
   Future<void> updateNoodlePreference(NoodlePreference preference) async {
-    final preferenceString = preference.toShortString();
+    final preferenceString = preference.toString();
     state = state.copyWith(status: AsyncValue.loading());
     try {
       await _firestoreService.updateUserNoodlePreference(_userId, preference);
