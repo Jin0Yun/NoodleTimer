@@ -3,6 +3,7 @@ import 'package:noodle_timer/domain/entity/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 
 class CookHistoryEntity {
+  final String id;
   final String ramenId;
   final DateTime cookedAt;
   final NoodlePreference noodleState;
@@ -10,6 +11,7 @@ class CookHistoryEntity {
   final Duration cookTime;
 
   const CookHistoryEntity({
+    this.id = '',
     required this.ramenId,
     required this.cookedAt,
     required this.noodleState,
@@ -19,6 +21,7 @@ class CookHistoryEntity {
 
   factory CookHistoryEntity.fromMap(Map<String, dynamic> map) {
     return CookHistoryEntity(
+      id: map['id'] ?? '',
       ramenId: map['ramenId'],
       cookedAt: (map['cookedAt'] as Timestamp).toDate(),
       noodleState: NoodlePreferenceX.from(map['noodleState']),
