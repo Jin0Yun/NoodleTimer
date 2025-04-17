@@ -25,8 +25,8 @@ class UserEntity {
       uid: data['uid'] ?? '',
       email: data['email'] ?? '',
       favoriteRamenIds: List<String>.from(data['favoriteRamenIds'] ?? []),
-      noodlePreference: NoodlePreferenceMapper.from(data['noodlePreference'] ?? 'peojin'),
-      eggPreference: EggPreferenceMapper.from(data['eggPreference'] ?? 'none'),
+      noodlePreference: NoodlePreferenceX.from(data['noodlePreference'] ?? 'peojin'),
+      eggPreference: EggPreferenceX.from(data['eggPreference'] ?? 'none'),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
     );
   }
@@ -36,8 +36,8 @@ class UserEntity {
       'uid': uid,
       'email': email,
       'favoriteRamenIds': favoriteRamenIds,
-      'noodlePreference': noodlePreference.toShortString(),
-      'eggPreference': eggPreference.toShortString(),
+      'noodlePreference': noodlePreference.toString(),
+      'eggPreference': eggPreference.toString(),
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
