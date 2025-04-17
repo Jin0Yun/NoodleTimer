@@ -1,16 +1,23 @@
 enum NoodlePreference { kodul, peojin, none }
 
-extension NoodlePreferenceMapper on NoodlePreference {
+extension NoodlePreferenceX on NoodlePreference {
   static NoodlePreference from(String? value) {
-    switch (value) {
-      case 'peojin':
-        return NoodlePreference.peojin;
-      case 'kodul':
-        return NoodlePreference.kodul;
-      default:
-        return NoodlePreference.none;
-    }
+    return NoodlePreference.values.firstWhere(
+          (e) => e.name == value,
+      orElse: () => NoodlePreference.none,
+    );
   }
 
-  String toShortString() => name;
+  String get short => name;
+
+  String get displayText {
+    switch (this) {
+      case NoodlePreference.kodul:
+        return '꼬들면';
+      case NoodlePreference.peojin:
+        return '퍼진면';
+      case NoodlePreference.none:
+        return '기본';
+    }
+  }
 }
