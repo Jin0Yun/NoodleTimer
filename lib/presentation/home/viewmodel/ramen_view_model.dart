@@ -78,7 +78,7 @@ class RamenViewModel extends StateNotifier<RamenState> {
   }
 
   void selectRamen(RamenEntity ramen) {
-    final isAlreadySelected = state.temporarySelectedRamen?.id == ramen.id;
+    final isAlreadySelected = state.temporarySelectedRamen == ramen;
     state = state.copyWith(
       temporarySelectedRamen: isAlreadySelected ? null : ramen,
     );
