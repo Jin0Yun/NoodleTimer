@@ -21,7 +21,7 @@ class _TabBarControllerState extends State<TabBarController> {
     _pages = [
       const SearchScreen(),
       const HomeScreen(),
-      const RecipeHistoryScreen(),
+      RecipeHistoryScreen(),
     ];
   }
 
