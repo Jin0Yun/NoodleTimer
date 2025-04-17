@@ -1,17 +1,23 @@
 enum EggPreference { none, half, full }
 
-extension EggPreferenceMapper on EggPreference {
+extension EggPreferenceX on EggPreference {
   static EggPreference from(String? value) {
-    switch (value) {
-      case 'half':
-        return EggPreference.half;
-      case 'full':
-        return EggPreference.full;
-      case 'none':
-      default:
-        return EggPreference.none;
-    }
+    return EggPreference.values.firstWhere(
+          (e) => e.name == value,
+      orElse: () => EggPreference.none,
+    );
   }
 
-  String toShortString() => name;
+  String get short => name;
+
+  String get displayText {
+    switch (this) {
+      case EggPreference.half:
+        return '반숙';
+      case EggPreference.full:
+        return '완숙';
+      case EggPreference.none:
+        return '없음';
+    }
+  }
 }
