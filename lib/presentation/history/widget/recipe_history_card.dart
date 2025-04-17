@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
+import 'package:noodle_timer/presentation/common/widget/ramen_card_image.dart';
+import 'package:noodle_timer/presentation/history/widget/tag.dart';
 
 class RecipeHistoryCard extends StatelessWidget {
+  final String date;
   final String imageUrl;
   final String name;
   final String cookedTime;
@@ -12,7 +15,7 @@ class RecipeHistoryCard extends StatelessWidget {
   final VoidCallback onDelete;
 
   const RecipeHistoryCard({
-    super.key,
+    required this.date,
     required this.imageUrl,
     required this.name,
     required this.cookedTime,
@@ -20,6 +23,7 @@ class RecipeHistoryCard extends StatelessWidget {
     required this.eggState,
     required this.onCookAgain,
     required this.onDelete,
+    super.key,
   });
 
   @override
@@ -29,7 +33,7 @@ class RecipeHistoryCard extends StatelessWidget {
       children: [
         const SizedBox(height: 16),
         Text(
-          '2025.04.17',
+          date,
           style: NoodleTextStyles.titleSm.copyWith(
             color: NoodleColors.neutral900,
           ),
@@ -56,11 +60,10 @@ class RecipeHistoryCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/icons/app_icon.png',
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
+                    child: RamenCardImage(
+                      imageUrl: imageUrl,
+                      width: 90,
+                      height: 90,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -70,20 +73,28 @@ class RecipeHistoryCard extends StatelessWidget {
                       children: [
                         Text(name, style: NoodleTextStyles.titleXSmBold),
                         const SizedBox(height: 4),
-                        Text(cookedTime, style: NoodleTextStyles.titleSm.copyWith(color: NoodleColors.neutral900)),
+                        Text(
+                          cookedTime,
+                          style: NoodleTextStyles.titleSm.copyWith(
+                            color: NoodleColors.neutral900,
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            _Tag(noodleState),
+                            Tag(noodleState),
                             const SizedBox(width: 8),
-                            _Tag(eggState),
+                            Tag(eggState),
                           ],
                         ),
                       ],
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete_outline, color: NoodleColors.neutral900),
+                    icon: Icon(
+                      Icons.delete_outline,
+                      color: NoodleColors.neutral900,
+                    ),
                     onPressed: onDelete,
                   ),
                 ],
@@ -107,28 +118,8 @@ class RecipeHistoryCard extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
-    );
-  }
-}
-
-class _Tag extends StatelessWidget {
-  final String text;
-  const _Tag(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border.all(color: NoodleColors.primary),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        text,
-        style: NoodleTextStyles.titleSm.copyWith(color: NoodleColors.primary),
-      ),
     );
   }
 }
