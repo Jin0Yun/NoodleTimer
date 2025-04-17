@@ -73,4 +73,15 @@ class UserRepositoryImpl implements UserRepository {
       throw UserError(UserErrorType.loadFailed, '조리 기록 목록 조회 실패: $e');
     }
   }
+
+  @override
+  Future<void> deleteCookHistory(String uid, String historyId) async {
+    try {
+      await _firestoreService.deleteCookHistory(uid, historyId);
+      _logger.d('조리 기록 삭제: $uid, 히스토리ID: $historyId');
+    } catch (e) {
+      _logger.e('조리 기록 삭제 실패: $uid', e);
+      throw UserError(UserErrorType.deleteFailed, '조리 기록 삭제 실패: $e');
+    }
+  }
 }
