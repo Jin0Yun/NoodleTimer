@@ -40,7 +40,7 @@ class TimerCircleBox extends ConsumerWidget {
           if (timerState.phase != TimerPhase.initial)
             Positioned(
               bottom: 20,
-              child: TimerDisplay(timerState: timerState),
+              child: TimerDisplay(),
             ),
         ],
       ),
