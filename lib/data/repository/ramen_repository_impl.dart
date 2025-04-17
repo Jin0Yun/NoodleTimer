@@ -36,4 +36,18 @@ class RamenRepositoryImpl implements RamenRepository {
     }
     return brands.expand((brand) => brand.ramens).toList();
   }
+
+  @override
+  Future<RamenEntity> findRamenById(int id) async {
+    final allRamen = await loadAllRamen();
+
+    try {
+      return allRamen.firstWhere((ramen) => ramen.id == id);
+    } on StateError catch (_) {
+      throw RamenError(
+        RamenErrorType.ramenNotFound,
+        '해당 ID의 라면을 찾을 수 없습니다: id=$id',
+      );
+    }
+  }
 }

@@ -9,7 +9,6 @@ class UserEntity {
   final List<String> favoriteRamenIds;
   final NoodlePreference noodlePreference;
   final EggPreference eggPreference;
-  final List<CookHistoryEntity> cookHistories;
   final DateTime createdAt;
 
   UserEntity({
@@ -18,7 +17,6 @@ class UserEntity {
     required this.favoriteRamenIds,
     required this.noodlePreference,
     required this.eggPreference,
-    required this.cookHistories,
     required this.createdAt,
   });
 
@@ -29,8 +27,6 @@ class UserEntity {
       favoriteRamenIds: List<String>.from(data['favoriteRamenIds'] ?? []),
       noodlePreference: NoodlePreferenceMapper.from(data['noodlePreference'] ?? 'peojin'),
       eggPreference: EggPreferenceMapper.from(data['eggPreference'] ?? 'none'),
-      cookHistories: List<CookHistoryEntity>.from(
-          (data['cookHistories'] ?? []).map((item) => CookHistoryEntity.fromMap(item))),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
     );
   }
@@ -42,7 +38,6 @@ class UserEntity {
       'favoriteRamenIds': favoriteRamenIds,
       'noodlePreference': noodlePreference.toShortString(),
       'eggPreference': eggPreference.toShortString(),
-      'cookHistories': cookHistories.map((e) => e.toMap()).toList(),
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }

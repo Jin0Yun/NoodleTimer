@@ -5,13 +5,17 @@ import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/core/logger/console_logger.dart';
 import 'package:noodle_timer/data/repository/auth_repository_impl.dart';
 import 'package:noodle_timer/data/repository/ramen_repository_impl.dart';
+import 'package:noodle_timer/data/repository/user_repository_impl.dart';
 import 'package:noodle_timer/data/service/data_loader.dart';
 import 'package:noodle_timer/data/service/firestore_service.dart';
 import 'package:noodle_timer/domain/repository/auth_repository.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
+import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/login_view_model.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/sign_up_view_model.dart';
+import 'package:noodle_timer/presentation/home/state/timer_state.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_view_model.dart';
+import 'package:noodle_timer/presentation/home/viewmodel/timer_view_model.dart';
 import 'package:noodle_timer/presentation/search/state/search_state.dart';
 import 'package:noodle_timer/presentation/search/viewmodel/search_view_model.dart';
 import 'package:noodle_timer/presentation/onboarding/viewmodel/noodle_preference_view_model.dart';
@@ -37,7 +41,11 @@ final firestoreServiceProvider = Provider<FirestoreService>((ref) {
 /// Auth Repository
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final firebaseAuth = ref.read(firebaseAuthProvider);
-  return AuthRepositoryImpl(firebaseAuth: firebaseAuth);
+  final logger = ref.read(loggerProvider);
+  return AuthRepositoryImpl(
+    firebaseAuth: firebaseAuth,
+    logger: logger,
+  );
 });
 
 /// Ramen Repository
@@ -48,6 +56,18 @@ final dataLoaderProvider = Provider<IDataLoader>((ref) {
 final ramenRepositoryProvider = Provider<RamenRepository>((ref) {
   final dataLoader = ref.read(dataLoaderProvider);
   return RamenRepositoryImpl(dataLoader);
+});
+
+/// User Repository
+final userRepositoryProvider = Provider<UserRepository>((ref) {
+  final firebaseAuth = ref.read(firebaseAuthProvider);
+  final firestoreService = ref.read(firestoreServiceProvider);
+  final logger = ref.read(loggerProvider);
+  return UserRepositoryImpl(
+    auth: firebaseAuth,
+    firestoreService: firestoreService,
+    logger: logger,
+  );
 });
 
 /// SignUp ViewModel
@@ -68,8 +88,9 @@ final loginViewModelProvider = StateNotifierProvider<LoginViewModel, LoginState>
 /// Ramen ViewModel
 final ramenViewModelProvider = StateNotifierProvider<RamenViewModel, RamenState>((ref) {
   final repo = ref.read(ramenRepositoryProvider);
+  final userRepo = ref.read(userRepositoryProvider);
   final logger = ref.read(loggerProvider);
-  return RamenViewModel(repo, logger);
+  return RamenViewModel(repo, userRepo, logger);
 });
 
 /// Search ViewModel
@@ -86,4 +107,11 @@ final noodlePreferenceProvider = StateNotifierProvider.autoDispose<NoodlePrefere
   final userId = firebaseAuth.currentUser?.uid ?? '';
   final logger = ref.read(loggerProvider);
   return NoodlePreferenceViewModel(firestoreService, userId, logger);
+});
+
+/// Timer ViewModel
+final timerViewModelProvider = StateNotifierProvider<TimerViewModel, TimerState>((ref) {
+  final userRepo = ref.read(userRepositoryProvider);
+  final logger = ref.read(loggerProvider);
+  return TimerViewModel(userRepo, logger, ref);
 });

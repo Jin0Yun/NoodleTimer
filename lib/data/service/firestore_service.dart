@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
+import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/entity/user_entity.dart';
 
@@ -8,7 +9,7 @@ class FirestoreService {
   final AppLogger _logger;
 
   FirestoreService(this._logger, {FirebaseFirestore? firestore})
-      : _db = firestore ?? FirebaseFirestore.instance;
+    : _db = firestore ?? FirebaseFirestore.instance;
 
   Future<void> saveUser(UserEntity user) async {
     try {
@@ -38,12 +39,20 @@ class FirestoreService {
   }
 
   Stream<UserEntity?> getUserStream(String uid) {
-    return _db.collection('users').doc(uid)
+    return _db
+        .collection('users')
+        .doc(uid)
         .snapshots()
-        .map((snapshot) => snapshot.exists ? UserEntity.fromMap(snapshot.data()!) : null);
+        .map(
+          (snapshot) =>
+              snapshot.exists ? UserEntity.fromMap(snapshot.data()!) : null,
+        );
   }
 
-  Future<void> updateUserNoodlePreference(String uid, NoodlePreference preference) async {
+  Future<void> updateUserNoodlePreference(
+    String uid,
+    NoodlePreference preference,
+  ) async {
     try {
       await _db.collection('users').doc(uid).update({
         'noodlePreference': preference.toShortString(),
@@ -51,6 +60,40 @@ class FirestoreService {
       _logger.i('유저 면발 취향 업데이트 성공: $uid, ${preference.toShortString()}');
     } catch (e, st) {
       _logger.e('유저 면발 취향 업데이트 중 오류 발생: $e', e, st);
+      rethrow;
+    }
+  }
+
+  Future<String> addCookHistory(String uid, CookHistoryEntity history) async {
+    try {
+      final docRef = await _db
+          .collection('users')
+          .doc(uid)
+          .collection('cookHistories')
+          .add(history.toMap());
+      _logger.i('조리 기록 추가 성공: $uid / ${docRef.id}');
+      return docRef.id;
+    } catch (e, st) {
+      _logger.e('조리 기록 추가 중 오류 발생', e, st);
+      rethrow;
+    }
+  }
+
+  Future<List<CookHistoryEntity>> getCookHistories(String uid) async {
+    try {
+      final snapshot =
+          await _db
+              .collection('users')
+              .doc(uid)
+              .collection('cookHistories')
+              .orderBy('cookedAt', descending: true)
+              .get();
+
+      return snapshot.docs
+          .map((doc) => CookHistoryEntity.fromMap(doc.data()))
+          .toList();
+    } catch (e, st) {
+      _logger.e('조리 기록 조회 중 오류 발생', e, st);
       rethrow;
     }
   }

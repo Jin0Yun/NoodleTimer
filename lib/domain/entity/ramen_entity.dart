@@ -6,6 +6,7 @@ class RamenEntity {
   final String description;
   final String recipe;
   final bool afterSeasoning;
+  final int cookTime;
 
   const RamenEntity({
     required this.id,
@@ -15,5 +16,6 @@ class RamenEntity {
     required this.description,
     required this.recipe,
     required this.afterSeasoning,
+    required this.cookTime
   });
 }

@@ -62,7 +62,6 @@ class SignUpViewModel extends StateNotifier<SignUpState> {
           favoriteRamenIds: [],
           noodlePreference: NoodlePreference.none,
           eggPreference: EggPreference.none,
-          cookHistories: [],
           createdAt: DateTime.now(),
         );
 
