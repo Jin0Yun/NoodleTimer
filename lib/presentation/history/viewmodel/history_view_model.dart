@@ -64,7 +64,7 @@ class RecipeHistoryViewModel extends StateNotifier<RecipeHistoryState> {
         }
 
         return HistoryItem(
-          id: history.ramenId,
+          id: history.id,
           ramenId: history.ramenId,
           name: ramen?.name ?? '알 수 없는 라면',
           imageUrl: ramen?.imageUrl ?? '',
