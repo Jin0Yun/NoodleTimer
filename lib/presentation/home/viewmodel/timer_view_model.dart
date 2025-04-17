@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
+import 'package:noodle_timer/domain/entity/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
@@ -88,6 +89,7 @@ class TimerViewModel extends StateNotifier<TimerState> {
       ramenId: ramen.id.toString(),
       cookedAt: DateTime.now(),
       noodleState: NoodlePreference.kodul,
+      eggPreference: EggPreference.none,
       cookTime: Duration(seconds: ramen.cookTime),
     );
 
