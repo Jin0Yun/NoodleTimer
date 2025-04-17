@@ -11,7 +11,8 @@
           "ramenSpicy": "매운맛",
           "ramenDescription": "한국을 대표하는 매운 라면",
           "ramenRecipe": "1. 물 550ml에 면과 스프, 후레이크를 넣고 4분 30초 끓인다.",
-          "afterSeasoning": false
+          "afterSeasoning": false,
+          "cookTime": 270
         },
         {
           "ramenIndex": 101,
@@ -20,7 +21,8 @@
           "ramenSpicy": "순한맛",
           "ramenDescription": "담백한 맛의 전통적인 라면",
           "ramenRecipe": "1. 물 550ml에 면과 스프, 후레이크를 넣고 4분 30초 끓인다.",
-          "afterSeasoning": false
+          "afterSeasoning": false,
+          "cookTime": 270
         },
         {
           "ramenIndex": 102,
@@ -29,7 +31,8 @@
           "ramenSpicy": "중간맛",
           "ramenDescription": "달콤짭짤한 짜장 라면",
           "ramenRecipe": "1. 물 600ml를 끓인 후 면과 후레이크를 넣고 5분 더 끓인다. \n2. 물 8스푼 정도만 남기고 따라 버린 후 과립스프와 올리브조미유를 넣는다.",
-          "afterSeasoning": true
+          "afterSeasoning": true,
+          "cookTime": 300
         },
         {
           "ramenIndex": 103,
@@ -38,7 +41,8 @@
           "ramenSpicy": "중간맛",
           "ramenDescription": "탱글탱글한 면발의 라면",
           "ramenRecipe": "1. 물 550ml에 면과 스프를 넣고 4분 30초 끓인다.",
-          "afterSeasoning": false
+          "afterSeasoning": false,
+          "cookTime": 270
         },
         {
           "ramenIndex": 104,
@@ -47,7 +51,8 @@
           "ramenSpicy": "순한맛",
           "ramenDescription": "고소한 참깨 맛의 라면",
           "ramenRecipe": "1. 물 500ml에 면과 스프를 넣고 4분 끓인다.\n2. 후첨 스프는 취향에 맞게 조절하여 넣는다.",
-          "afterSeasoning": true
+          "afterSeasoning": true,
+          "cookTime": 240
         }
       ]
     },
@@ -62,7 +67,8 @@
           "ramenSpicy": "순한맛",
           "ramenDescription": "한국 최초의 라면",
           "ramenRecipe": "1. 물 500ml에 면과 스프를 넣고 4분 끓인다.\n2. 후첨 스프는 취향에 맞게 조절하여 넣는다.",
-          "afterSeasoning": false
+          "afterSeasoning": false,
+          "cookTime": 240
         },
         {
           "ramenIndex": 201,
@@ -71,7 +77,8 @@
           "ramenSpicy": "매운맛",
           "ramenDescription": "극한의 매운맛을 자랑하는 볶음면",
           "ramenRecipe": "1. 물 550ml에 면을 3분 끓인 후 물을 버리고 양념을 넣는다.\n2. 양념과 면을 잘 섞어준다.",
-          "afterSeasoning": true
+          "afterSeasoning": true,
+          "cookTime": 180
         }
       ]
     },
@@ -85,8 +92,9 @@
           "ramenImage": "https://i.namu.wiki/i/CG9KgmpMvctJC9jU6Yw82-ZjE_oa2iTRvZg0EObxce5zLtuy4ngW58OmiCyj_cwFBtPbhh9NJXsgYyZcev3jNDCZjnJN4k7-j7w4MFxhpPaOeSL8Q1ukmsD7SZkvmWKY66b6BFsbMZJQWQoCqqRWUA.webp",
           "ramenSpicy": "매운맛",
           "ramenDescription": "매콤한 비빔면",
-          "ramenRecipe": "1. 물 500ml이상의 끓는 물에 면을 넣고 2분 30초간 더 끓인다. \n2. 찬물에 면을 행구고 물기를 완전히 빼낸다. \n3. 액상스프를 넣고 섞어준다.",
-          "afterSeasoning": true
+          "ramenRecipe": "1. 물 500ml 이상의 끓는 물에 면을 넣고 2분 30초간 더 끓인다.\n2. 찬물에 면을 행구고 물기를 완전히 빼낸다.\n3. 액상스프를 넣고 섞어준다.",
+          "afterSeasoning": true,
+          "cookTime": 150
         }
       ]
     },
@@ -101,7 +109,8 @@
           "ramenSpicy": "매운맛",
           "ramenDescription": "매운맛이 강한 라면",
           "ramenRecipe": "1. 물 500ml에 건더기스프를 넣고 물을 끓인다.\n2. 분말스프와 면을 넣은 후 4분간 더 끓인다.",
-          "afterSeasoning": false
+          "afterSeasoning": false,
+          "cookTime": 240
         },
         {
           "ramenIndex": 401,
@@ -110,7 +119,8 @@
           "ramenSpicy": "매운맛",
           "ramenDescription": "매운 해물 라면",
           "ramenRecipe": "1. 물 600ml에 면과 스프를 넣고 5분 끓인다.\n2. 후첨 스프는 취향에 맞게 조절하여 넣는다.",
-          "afterSeasoning": false
+          "afterSeasoning": false,
+          "cookTime": 300
         }
       ]
     }

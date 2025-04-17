@@ -1,4 +1,3 @@
-
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 
 class Ramen {
@@ -9,6 +8,7 @@ class Ramen {
   final String description;
   final String recipe;
   final bool afterSeasoning;
+  final int cookTime;
 
   Ramen({
     required this.id,
@@ -18,6 +18,7 @@ class Ramen {
     required this.description,
     required this.recipe,
     required this.afterSeasoning,
+    required this.cookTime,
   });
 
   factory Ramen.fromJson(Map<String, dynamic> json) {
@@ -29,6 +30,7 @@ class Ramen {
       description: json['ramenDescription'],
       recipe: json['ramenRecipe'],
       afterSeasoning: json['afterSeasoning'],
+      cookTime: json['cookTime'],
     );
   }
 
@@ -41,6 +43,7 @@ class Ramen {
       description: description,
       recipe: recipe,
       afterSeasoning: afterSeasoning,
+      cookTime: cookTime,
     );
   }
 }

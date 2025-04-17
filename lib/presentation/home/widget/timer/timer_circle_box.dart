@@ -1,28 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
-import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:noodle_timer/presentation/home/state/timer_state.dart';
+import 'package:noodle_timer/presentation/home/state/timer_phase.dart';
+import 'package:noodle_timer/presentation/home/widget/timer/timer_content_section.dart';
+import 'package:noodle_timer/presentation/home/widget/timer/timer_display.dart';
+import 'package:noodle_timer/presentation/home/widget/timer/timer_progress_indicator.dart';
 
-class TimerCircleBox extends StatelessWidget {
-  final String text;
-  const TimerCircleBox({super.key, required this.text});
+class TimerCircleBox extends ConsumerWidget {
+  final TimerState timerState;
+  final VoidCallback? onStart;
+  final VoidCallback? onStop;
+  final VoidCallback? onRestart;
+
+  const TimerCircleBox({
+    required this.timerState,
+    this.onStart,
+    this.onStop,
+    this.onRestart,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AspectRatio(
       aspectRatio: 1,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: NoodleColors.primary, width: 10),
-        ),
+      child: Stack(
         alignment: Alignment.center,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: NoodleTextStyles.titleSmBold.copyWith(
-            color: NoodleColors.primary,
+        children: [
+          TimerProgressIndicator(
+            phase: timerState.phase,
+            progress: timerState.progress,
           ),
-        ),
+          TimerContentSection(
+            timerState: timerState,
+            onStart: onStart,
+            onStop: onStop,
+            onRestart: onRestart,
+          ),
+          if (timerState.phase != TimerPhase.initial)
+            Positioned(
+              bottom: 20,
+              child: TimerDisplay(),
+            ),
+        ],
       ),
     );
   }
