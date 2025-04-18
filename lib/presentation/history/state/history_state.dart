@@ -1,9 +1,9 @@
-import 'package:noodle_timer/presentation/history/model/history_item.dart';
+import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
 
 class RecipeHistoryState {
   final bool isLoading;
-  final List<HistoryItem> histories;
-  final List<HistoryItem> filteredHistories;
+  final List<CookHistoryEntity> histories;
+  final List<CookHistoryEntity> filteredHistories;
 
   const RecipeHistoryState({
     this.isLoading = false,
@@ -13,8 +13,8 @@ class RecipeHistoryState {
 
   RecipeHistoryState copyWith({
     bool? isLoading,
-    List<HistoryItem>? histories,
-    List<HistoryItem>? filteredHistories,
+    List<CookHistoryEntity>? histories,
+    List<CookHistoryEntity>? filteredHistories,
   }) {
     return RecipeHistoryState(
       isLoading: isLoading ?? this.isLoading,

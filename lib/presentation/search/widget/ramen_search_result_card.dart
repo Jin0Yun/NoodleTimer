@@ -41,7 +41,7 @@ class RamenSearchResultCard extends StatelessWidget {
     return Row(
       children: [
         RamenCardImage(
-          imageUrl: ramen.imageUrl,
+          image: ramen.imageUrl,
           width: 70,
           height: 70,
         ),

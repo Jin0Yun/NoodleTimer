@@ -6,7 +6,7 @@ import 'package:noodle_timer/presentation/history/widget/tag.dart';
 
 class RecipeHistoryCard extends StatelessWidget {
   final String date;
-  final String imageUrl;
+  final String image;
   final String name;
   final String cookedTime;
   final String noodleState;
@@ -16,7 +16,7 @@ class RecipeHistoryCard extends StatelessWidget {
 
   const RecipeHistoryCard({
     required this.date,
-    required this.imageUrl,
+    required this.image,
     required this.name,
     required this.cookedTime,
     required this.noodleState,
@@ -61,7 +61,7 @@ class RecipeHistoryCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: RamenCardImage(
-                      imageUrl: imageUrl,
+                      image: image,
                       width: 90,
                       height: 90,
                     ),
