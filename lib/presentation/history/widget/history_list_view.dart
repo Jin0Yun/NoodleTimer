@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
+import 'package:noodle_timer/domain/entity/cook_history_entity.dart'; // 추가
 import 'package:noodle_timer/domain/entity/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
-import 'package:noodle_timer/presentation/history/model/history_item.dart';
 import 'package:noodle_timer/presentation/history/state/history_state.dart';
 import 'package:noodle_timer/presentation/history/widget/recipe_history_card.dart';
 
@@ -29,25 +29,25 @@ class HistoryListView extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ...historyItems.map((item) => RecipeHistoryCard(
+            ...historyItems.map((history) => RecipeHistoryCard(
               date: date,
-              imageUrl: item.imageUrl,
-              name: item.name,
+              image: history.ramenImage ?? '',
+              name: history.ramenName ?? '알 수 없는 라면',
               cookedTime:
-              '${item.cookTime.inMinutes}분 ${item.cookTime.inSeconds % 60}초 간 조리',
-              noodleState: NoodlePreferenceX.from(item.noodleState).displayText,
-              eggState: EggPreferenceX.from(item.eggPreference).displayText,
+              '${history.cookTime.inMinutes}분 ${history.cookTime.inSeconds % 60}초 간 조리',
+              noodleState: history.noodleState.displayText,
+              eggState: history.eggPreference.displayText,
               onCookAgain: () async {
                 final viewModel =
                 ref.read(recipeHistoryViewModelProvider.notifier);
-                await viewModel.cookAgain(item);
+                await viewModel.cookAgain(history);
                 if (context.mounted) {
                   Navigator.pushReplacementNamed(context, AppRoutes.home);
                 }
               },
               onDelete: () => ref
                   .read(recipeHistoryViewModelProvider.notifier)
-                  .deleteHistory(item.id),
+                  .deleteHistory(history.id),
             )),
           ],
         );
@@ -55,9 +55,9 @@ class HistoryListView extends ConsumerWidget {
     );
   }
 
-  Map<String, List<HistoryItem>> _groupHistoriesByDate(
-      List<HistoryItem> histories) {
-    final groupedHistories = <String, List<HistoryItem>>{};
+  Map<String, List<CookHistoryEntity>> _groupHistoriesByDate(
+      List<CookHistoryEntity> histories) {
+    final groupedHistories = <String, List<CookHistoryEntity>>{};
 
     for (var history in histories) {
       final dateStr = DateFormat('yyyy.MM.dd').format(history.cookedAt);

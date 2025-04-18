@@ -37,7 +37,7 @@ class RamenDetailScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: RamenCardImage(
-                    imageUrl: ramen.imageUrl,
+                    image: ramen.imageUrl,
                     width: 220,
                     height: 220,
                   ),

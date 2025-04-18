@@ -6,7 +6,6 @@ import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
-import 'package:noodle_timer/presentation/history/model/history_item.dart';
 import 'package:noodle_timer/presentation/history/state/history_state.dart';
 
 class RecipeHistoryViewModel extends StateNotifier<RecipeHistoryState> {
@@ -34,22 +33,37 @@ class RecipeHistoryViewModel extends StateNotifier<RecipeHistoryState> {
       }
 
       final cookHistories = await _userRepository.getCookHistories(userId);
-      final historyItems = await _mapCookHistoriesToHistoryItems(cookHistories);
+      final updatedHistories = await Future.wait(
+        cookHistories.map((history) async {
+          if (history.ramenId.isNotEmpty) {
+            final ramenId = int.tryParse(history.ramenId) ?? 0;
+            try {
+              final ramen = await _ramenRepository.findRamenById(ramenId);
+              if (ramen != null) {
+                return history.withRamenInfo(ramen.name, ramen.imageUrl);
+              }
+            } catch (e) {
+              _logger.e('라면 정보를 찾을 수 없습니다: ${history.ramenId}', e);
+            }
+          }
+          return history;
+        }).toList(),
+      );
 
       state = state.copyWith(
         isLoading: false,
-        histories: historyItems,
-        filteredHistories: historyItems,
+        histories: updatedHistories,
+        filteredHistories: updatedHistories,
       );
 
-      _logger.d('조리 내역 불러오기 완료 (${historyItems.length}건)');
+      _logger.d('조리 내역 불러오기 완료 (${updatedHistories.length}건)');
     } catch (e) {
       _logger.e('조리 내역 로드 중 오류 발생', e);
       state = state.copyWith(isLoading: false);
     }
   }
 
-  Future<List<HistoryItem>> _mapCookHistoriesToHistoryItems(
+  Future<List<CookHistoryEntity>> _mapCookHistoriesToHistoryItems(
       List<CookHistoryEntity> cookHistories,
       ) async {
     return Future.wait(
@@ -63,15 +77,15 @@ class RecipeHistoryViewModel extends StateNotifier<RecipeHistoryState> {
           _logger.e('라면 정보를 찾을 수 없습니다: ${history.ramenId}', e);
         }
 
-        return HistoryItem(
+        return CookHistoryEntity(
           id: history.id,
           ramenId: history.ramenId,
-          name: ramen?.name ?? '알 수 없는 라면',
-          imageUrl: ramen?.imageUrl ?? '',
+          ramenName: ramen?.name ?? '알 수 없는 라면',
+          ramenImage: ramen?.imageUrl ?? '',
           cookedAt: history.cookedAt,
           cookTime: history.cookTime,
-          noodleState: history.noodleState.toString(),
-          eggPreference: history.eggPreference.toString(),
+          noodleState: history.noodleState,
+          eggPreference: history.eggPreference,
         );
       }).toList(),
     );
@@ -86,8 +100,9 @@ class RecipeHistoryViewModel extends StateNotifier<RecipeHistoryState> {
 
     final lowerQuery = trimmed.toLowerCase();
     final filtered = state.histories.where((item) {
-      return item.name.toLowerCase().contains(lowerQuery) ||
-          HangulUtils.matchesChoSung(item.name, lowerQuery);
+      final name = item.displayName;
+      return name.toLowerCase().contains(lowerQuery) ||
+          HangulUtils.matchesChoSung(name, lowerQuery);
     }).toList();
 
     state = state.copyWith(filteredHistories: filtered);
@@ -97,7 +112,7 @@ class RecipeHistoryViewModel extends StateNotifier<RecipeHistoryState> {
     state = state.copyWith(filteredHistories: state.histories);
   }
 
-  Future<void> cookAgain(HistoryItem item) async {
+  Future<void> cookAgain(CookHistoryEntity item) async {
     try {
       final ramenId = int.tryParse(item.ramenId);
       if (ramenId == null) {
