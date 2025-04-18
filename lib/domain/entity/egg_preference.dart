@@ -2,10 +2,9 @@ enum EggPreference { none, half, full }
 
 extension EggPreferenceX on EggPreference {
   static EggPreference from(String? value) {
-    return EggPreference.values.firstWhere(
-          (e) => e.name == value,
-      orElse: () => EggPreference.none,
-    );
+    final parsed = value?.split('.').last;
+    return EggPreference.values.firstWhere((e) => e.name == parsed,
+        orElse: () => EggPreference.none);
   }
 
   String get short => name;
