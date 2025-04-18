@@ -34,8 +34,8 @@ class CookHistoryEntity {
     return {
       'ramenId': ramenId,
       'cookedAt': cookedAt,
-      'noodleState': noodleState.toString(),
-      'eggPreference': eggPreference.toString(),
+      'noodleState': noodleState.name,
+      'eggPreference': eggPreference.name,
       'cookTime': cookTime.inSeconds,
     };
   }

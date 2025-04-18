@@ -36,8 +36,8 @@ class UserEntity {
       'uid': uid,
       'email': email,
       'favoriteRamenIds': favoriteRamenIds,
-      'noodlePreference': noodlePreference.toString(),
-      'eggPreference': eggPreference.toString(),
+      'noodlePreference': noodlePreference.name,
+      'eggPreference': eggPreference.name,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
