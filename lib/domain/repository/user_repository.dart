@@ -9,4 +9,5 @@ abstract class UserRepository {
   Future<void> updateNoodlePreference(String uid, NoodlePreference preference);
   Future<void> saveCookHistory(String uid, CookHistoryEntity history);
   Future<List<CookHistoryEntity>> getCookHistories(String uid);
+  Future<void> deleteCookHistory(String uid, String historyId);
 }

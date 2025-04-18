@@ -13,6 +13,8 @@ import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/login_view_model.dart';
 import 'package:noodle_timer/presentation/auth/viewmodel/sign_up_view_model.dart';
+import 'package:noodle_timer/presentation/history/state/history_state.dart';
+import 'package:noodle_timer/presentation/history/viewmodel/history_view_model.dart';
 import 'package:noodle_timer/presentation/home/state/timer_state.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_view_model.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/timer_view_model.dart';
@@ -114,4 +116,12 @@ final timerViewModelProvider = StateNotifierProvider<TimerViewModel, TimerState>
   final userRepo = ref.read(userRepositoryProvider);
   final logger = ref.read(loggerProvider);
   return TimerViewModel(userRepo, logger, ref);
+});
+
+/// Recipe History ViewModel
+final recipeHistoryViewModelProvider = StateNotifierProvider<RecipeHistoryViewModel, RecipeHistoryState>((ref) {
+  final userRepo = ref.read(userRepositoryProvider);
+  final ramenRepo = ref.read(ramenRepositoryProvider);
+  final logger = ref.read(loggerProvider);
+  return RecipeHistoryViewModel(userRepo, ramenRepo, logger, ref);
 });

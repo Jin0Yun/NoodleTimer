@@ -47,7 +47,7 @@ class RamenCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           child: Stack(
             children: [
-              RamenCardImage(imageUrl: ramen.imageUrl),
+              RamenCardImage(image: ramen.imageUrl),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 200),
                 crossFadeState:
