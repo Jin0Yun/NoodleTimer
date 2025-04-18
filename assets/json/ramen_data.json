@@ -7,7 +7,7 @@
         {
           "ramenIndex": 100,
           "ramenName": "신라면",
-          "ramenImage": "https://i.namu.wiki/i/uJunOv3WH6HMiZNfXvat0KPkjQ0xCBoN87JTdmq-cHsvhzj8-4Y-FFxtAwvgsV5lkX_O4yFkLLkz-jGItQ7fqoA0GcGAyD846B5GXKSVhm0lRybZL1t63KATxaM5knSxKLVxPOi_XwKi7ggzHHAllQ.webp",
+          "ramenImage": "assets/image/shin_ramen.png",
           "ramenSpicy": "매운맛",
           "ramenDescription": "한국을 대표하는 매운 라면",
           "ramenRecipe": "1. 물 550ml에 면과 스프, 후레이크를 넣고 4분 30초 끓인다.",
@@ -17,7 +17,7 @@
         {
           "ramenIndex": 101,
           "ramenName": "안성탕면",
-          "ramenImage": "https://i.namu.wiki/i/Oh5pIrxzZrBZlKdpmO2Jy7aBeHC6KXxNexy2QW6NbWw9vwKzbwcWRT8ujTVXHJgCET1fjXujTw0HzKBemIuBKRMWJX7VmQIXpY91arTh2jrCZv3oG_a-CYiGXXseRAuqOnGHMbAlttbC-e5NXyWEXg.webp",
+          "ramenImage": "assets/image/anseong_tangmyun.png",
           "ramenSpicy": "순한맛",
           "ramenDescription": "담백한 맛의 전통적인 라면",
           "ramenRecipe": "1. 물 550ml에 면과 스프, 후레이크를 넣고 4분 30초 끓인다.",
@@ -27,7 +27,7 @@
         {
           "ramenIndex": 102,
           "ramenName": "짜파게티",
-          "ramenImage": "https://i.namu.wiki/i/HK1iBN_-QQh_qE0Eps1CSCiGM54ITG3-6Y4KHddeUPgsrM7fanXKm131K2FpByy1XkO078gHCQu1UW5X5Alo7npsOt60xia2Ajk9kYxdzi5DnPTU_ltbzUv_DDr05r_p-o1HFyHt2bVd0lXljamQ-w.webp",
+          "ramenImage": "assets/image/jjapagetti.png",
           "ramenSpicy": "중간맛",
           "ramenDescription": "달콤짭짤한 짜장 라면",
           "ramenRecipe": "1. 물 600ml를 끓인 후 면과 후레이크를 넣고 5분 더 끓인다. \n2. 물 8스푼 정도만 남기고 따라 버린 후 과립스프와 올리브조미유를 넣는다.",
@@ -37,7 +37,7 @@
         {
           "ramenIndex": 103,
           "ramenName": "너구리",
-          "ramenImage": "https://i.namu.wiki/i/js0sH4m_EHf7I4VJjDXcqhhU7g9gb5bPcWjNqGi9iJVoGI0t6BnUVfgTQ2zhcVoJLniMkL3WuG8D4G_o7JM5mCl66DH4rFbTVHcMR2utWuQicLQ0RaEbos3XvHW7wZTc6TrzvN-wWcDcOd0ezB2pkg.webp",
+          "ramenImage": "assets/image/neoguri_ramen.png",
           "ramenSpicy": "중간맛",
           "ramenDescription": "탱글탱글한 면발의 라면",
           "ramenRecipe": "1. 물 550ml에 면과 스프를 넣고 4분 30초 끓인다.",
@@ -47,7 +47,7 @@
         {
           "ramenIndex": 104,
           "ramenName": "참깨라면",
-          "ramenImage": "https://i.namu.wiki/i/S_3fZZzDtB1bXSVHQ-d2VOOwrFW325KSrJ-8Pa2kYbHc25MfnIckV-bRe1ch6V66XGJ3RBGHKWFtTYIZYHgLFLNBmlX2uA6nlcEWpvIdeIVlF6kG_ehhNP1B8k7L6RMC_H6yrOpN3GC-82puS55vUA.webp",
+          "ramenImage": "assets/image/chamkkae_ramen.png",
           "ramenSpicy": "순한맛",
           "ramenDescription": "고소한 참깨 맛의 라면",
           "ramenRecipe": "1. 물 500ml에 면과 스프를 넣고 4분 끓인다.\n2. 후첨 스프는 취향에 맞게 조절하여 넣는다.",
@@ -63,7 +63,7 @@
         {
           "ramenIndex": 200,
           "ramenName": "삼양라면",
-          "ramenImage": "https://i.namu.wiki/i/d3qMUwTeldgOjthcV_MOmbKaD4ZxbeTmwFnRaiiT0FY2_QepTxZZUJwtjHQ5mm-ClkhF_05OOP3O7CjQ6GoE1cxLp9jrIWm__rs22k5wjh69CFfsdr7PxTzsSjds5gZ-xWICN2orjATbjlw3Ppnd7g.webp",
+          "ramenImage": "assets/image/samyang_ramen.png",
           "ramenSpicy": "순한맛",
           "ramenDescription": "한국 최초의 라면",
           "ramenRecipe": "1. 물 500ml에 면과 스프를 넣고 4분 끓인다.\n2. 후첨 스프는 취향에 맞게 조절하여 넣는다.",
@@ -73,7 +73,7 @@
         {
           "ramenIndex": 201,
           "ramenName": "불닭볶음면",
-          "ramenImage": "https://i.namu.wiki/i/R1unH25ec0cA4GdXureL_9kpTVoTcCuUySuwGuslLxYV5J448DaruG4AV0MiryQn_3-1FdvVkOO5g8fsa8kLLO4kkj6UONjLRB3mmtarl_i02s9KS1PlEXT3pPpjMBOYOIUhRGtxP_Y70Xc0WvTELQ.webp",
+          "ramenImage": "assets/image/buldak_bokkeum_myun.png",
           "ramenSpicy": "매운맛",
           "ramenDescription": "극한의 매운맛을 자랑하는 볶음면",
           "ramenRecipe": "1. 물 550ml에 면을 3분 끓인 후 물을 버리고 양념을 넣는다.\n2. 양념과 면을 잘 섞어준다.",
@@ -89,7 +89,7 @@
         {
           "ramenIndex": 300,
           "ramenName": "팔도비빔면",
-          "ramenImage": "https://i.namu.wiki/i/CG9KgmpMvctJC9jU6Yw82-ZjE_oa2iTRvZg0EObxce5zLtuy4ngW58OmiCyj_cwFBtPbhh9NJXsgYyZcev3jNDCZjnJN4k7-j7w4MFxhpPaOeSL8Q1ukmsD7SZkvmWKY66b6BFsbMZJQWQoCqqRWUA.webp",
+          "ramenImage": "assets/image/paldo_bibimramen.png",
           "ramenSpicy": "매운맛",
           "ramenDescription": "매콤한 비빔면",
           "ramenRecipe": "1. 물 500ml 이상의 끓는 물에 면을 넣고 2분 30초간 더 끓인다.\n2. 찬물에 면을 행구고 물기를 완전히 빼낸다.\n3. 액상스프를 넣고 섞어준다.",
@@ -105,7 +105,7 @@
         {
           "ramenIndex": 400,
           "ramenName": "열라면",
-          "ramenImage": "https://i.namu.wiki/i/jml0OeLQ1h-TqzUmkj3pIk3k1K5hu0vpfRZ8tphDdSV6BrJv4bsBP3Zhg6IZfWm3qWSM5zNCKR0JQDeSMH2DCdA9Yn2qNUoAWH6-cf1UfWhnL4tKkSwBalUE3cnKpX2KwVWwpp3S02HIz82HzzEZrA.webp",
+          "ramenImage": "assets/image/yeol_ramen.png",
           "ramenSpicy": "매운맛",
           "ramenDescription": "매운맛이 강한 라면",
           "ramenRecipe": "1. 물 500ml에 건더기스프를 넣고 물을 끓인다.\n2. 분말스프와 면을 넣은 후 4분간 더 끓인다.",
@@ -115,7 +115,7 @@
         {
           "ramenIndex": 401,
           "ramenName": "진짬뽕",
-          "ramenImage": "https://i.namu.wiki/i/kO4Scbez8Kx5Q2Bfblr2CwSorjKlUXn0sYhIxmlrKm_8rBWlgn7Q_qIgFZwbAmECEpK123Li0clfGZNoZ70USbpI620Zyh0RsGV5vIzREtzarZelEk9g_q3mh7JUe6tZRSAOycS5zrufV21egP8zQA.webp",
+          "ramenImage": "assets/image/jin_jjambbong.png",
           "ramenSpicy": "매운맛",
           "ramenDescription": "매운 해물 라면",
           "ramenRecipe": "1. 물 600ml에 면과 스프를 넣고 5분 끓인다.\n2. 후첨 스프는 취향에 맞게 조절하여 넣는다.",

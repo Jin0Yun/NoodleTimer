@@ -12,7 +12,7 @@ class RamenCardList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ramenState = ref.watch(ramenViewModelProvider);
-    final selectedRamenId = ramenState.selectedRamenId;
+    final selectedRamen = ramenState.temporarySelectedRamen;
     final viewModel = ref.read(ramenViewModelProvider.notifier);
 
     return SizedBox(
@@ -27,7 +27,7 @@ class RamenCardList extends ConsumerWidget {
           return RamenCard(
             key: ValueKey(ramen.id),
             ramen: ramen,
-            isSelected: selectedRamenId == ramen.id,
+            isSelected: identical(selectedRamen, ramen),
             onRamenAction: viewModel.handleRamenAction,
           );
         },
