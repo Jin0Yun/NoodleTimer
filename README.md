@@ -1,16 +1,43 @@
-# noodle_timer
 
-A new Flutter project.
+> 라면 타이머 🍜
+>
+> 팀 정보: 개인 프로젝트  
+> 프로젝트 기간: 2025.04.03 ~ 2025.04.18
 
-## Getting Started
+## 서비스 소개
 
-This project is a starting point for a Flutter application.
+**라면 타이머 앱**은 사용자가 라면을 끓일 때 필요한 정확한 조리 시간을 자동으로 설정해주는 앱입니다.  
+선택한 라면에 맞는 최적의 조리 시간이 설정되며, 타이머가 종료되면 알림을 통해 조리 완료를 알려줍니다.  
+이 앱을 통해 매번 라면 끓이기 시간을 걱정할 필요 없이, 간편하고 정확하게 라면을 완성할 수 있습니다.
 
-A few resources to get you started if this is your first Flutter project:
+## 주요 기능
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 앱 아키텍처
+
+> **MVVM + Riverpod**
+
+- **ViewModel**: `RamenViewModel` 클래스에서 타이머 상태(시작, 중지, 리셋)를 관리하고, **Riverpod**를 통해 상태를 처리합니다.
+- **Model**: 라면 브랜드와 조리 시간 등의 데이터를 관리합니다.
+- **View**: Flutter 기본 위젯을 사용하여 타이머 화면과 라면 브랜드 선택 화면을 구현했습니다.
+
+> **타이머 관리**
+
+- 타이머는 `Timer` 클래스를 사용하여 구현되었습니다.
+- 사용자가 선택한 라면의 조리 시간이 지나면 알림을 제공하며, 타이머 시작, 중지, 리셋 기능을 ViewModel에서 처리합니다.
+
+> **Firebase**
+
+- **Firebase Auth**: Firebase를 이용한 사용자 인증
+- **Cloud Firestore**: 사용자가 선택한 라면 정보를 Firebase에 저장하여 앱을 재시작 후에도 계속 사용할 수 있습니다.
+
+## 외부 라이브러리
+
+| 라이브러리 | 사용 목적 |
+| --- | --- |
+| **Riverpod** | 상태 관리 |
+| **firebase_auth** | Firebase 인증 |
+| **firebase_core** | Firebase 초기화 |
+| **cloud_firestore** | Firebase 데이터 저장 |
+| **shared_preferences** | 로컬 데이터 저장 |
+| **flutter_native_splash** | 앱 스플래시 화면 설정 |
