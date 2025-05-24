@@ -1,19 +1,29 @@
 class LoginState {
   final String email;
   final String password;
-  final bool isLoggedIn;
+  final bool isLoading;
+  final String? errorMessage;
 
   const LoginState({
     this.email = '',
     this.password = '',
-    this.isLoggedIn = false,
+    this.isLoading = false,
+    this.errorMessage,
   });
 
-  LoginState copyWith({String? email, String? password, bool? isLoggedIn}) {
+  LoginState copyWith({
+    String? email,
+    String? password,
+    bool? isLoading,
+    String? errorMessage,
+  }) {
     return LoginState(
       email: email ?? this.email,
       password: password ?? this.password,
-      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage,
     );
   }
+
+  bool get isFormValid => email.trim().isNotEmpty && password.isNotEmpty;
 }
