@@ -20,9 +20,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  bool _isFormValid() {
+    final state = ref.watch(signUpViewModelProvider);
+    return state.email.isNotEmpty &&
+        state.password.isNotEmpty &&
+        state.confirmPassword.isNotEmpty &&
+        state.emailError == null &&
+        state.passwordError == null &&
+        state.confirmError == null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(signUpViewModelProvider);
+    final isValid = _isFormValid();
 
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +67,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 obscureText: true,
                 errorMessage: state.passwordError,
                 onChanged: (value) {
-                  ref.read(signUpViewModelProvider.notifier).updatePassword(value);
+                  ref
+                      .read(signUpViewModelProvider.notifier)
+                      .updatePassword(value);
                 },
               ),
               const SizedBox(height: 24),
@@ -67,13 +80,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 obscureText: true,
                 errorMessage: state.confirmError,
                 onChanged: (value) {
-                  ref.read(signUpViewModelProvider.notifier).updateConfirmPassword(value);
+                  ref
+                      .read(signUpViewModelProvider.notifier)
+                      .updateConfirmPassword(value);
                 },
               ),
               const Spacer(),
               CustomButton(
                 buttonText: '회원가입',
                 onPressed: _onSignUpPressed,
+                isEnabled: isValid,
               ),
             ],
           ),
@@ -83,60 +99,64 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   void _onSignUpPressed() {
-    ref.read(signUpViewModelProvider.notifier).signUp(
-      onSuccess: () {
-        _showAlert(
-          '회원가입이 완료되었습니다! 🎉',
-          isSuccess: true,
-          onConfirm: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, AppRoutes.login);
+    ref
+        .read(signUpViewModelProvider.notifier)
+        .signUp(
+          onSuccess: () {
+            _showAlert(
+              '회원가입이 완료되었습니다! 🎉',
+              isSuccess: true,
+              onConfirm: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacementNamed(context, AppRoutes.login);
+              },
+            );
           },
-        );
-      },
-      onError: (message) {
-        final isEmailAlreadyInUse = message.contains('email-already-in-use');
+          onError: (message) {
+            final isEmailAlreadyInUse = message.contains('이미 사용 중인 이메일입니다');
 
-        _showAlert(
-          isEmailAlreadyInUse
-              ? '이미 존재하는 이메일입니다.\n로그인하시겠습니까?'
-              : '회원가입에 실패했습니다. 다시 시도해주세요.',
-          confirmText: isEmailAlreadyInUse ? '로그인' : '확인',
-          cancelText: isEmailAlreadyInUse ? '닫기' : null,
-          hasCancel: isEmailAlreadyInUse,
-          isSuccess: false,
-          onConfirm: () {
-            Navigator.of(context).pop();
-            if (isEmailAlreadyInUse) {
-              Navigator.pushReplacementNamed(context, AppRoutes.login);
-            }
+            _showAlert(
+              isEmailAlreadyInUse ? '이미 존재하는 이메일입니다.\n로그인하시겠습니까?' : message,
+              confirmText: isEmailAlreadyInUse ? '로그인' : '확인',
+              cancelText: isEmailAlreadyInUse ? '닫기' : null,
+              hasCancel: isEmailAlreadyInUse,
+              isSuccess: false,
+              onConfirm: () {
+                Navigator.of(context).pop();
+                if (isEmailAlreadyInUse) {
+                  Navigator.pushReplacementNamed(context, AppRoutes.login);
+                }
+              },
+              onCancel:
+                  isEmailAlreadyInUse
+                      ? () => Navigator.of(context).pop()
+                      : null,
+            );
           },
-          onCancel: isEmailAlreadyInUse ? () => Navigator.of(context).pop() : null,
         );
-      },
-    );
   }
 
   void _showAlert(
-      String message, {
-        String confirmText = '확인',
-        String? cancelText,
-        bool hasCancel = false,
-        bool isSuccess = true,
-        VoidCallback? onConfirm,
-        VoidCallback? onCancel,
-      }) {
+    String message, {
+    String confirmText = '확인',
+    String? cancelText,
+    bool hasCancel = false,
+    bool isSuccess = true,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) {
     showDialog(
       context: context,
-      builder: (_) => CustomAlertDialog(
-        message: message,
-        confirmText: confirmText,
-        cancelText: cancelText,
-        hasCancel: hasCancel,
-        isSuccess: isSuccess,
-        onConfirm: onConfirm ?? () => Navigator.of(context).pop(),
-        onCancel: onCancel,
-      ),
+      builder:
+          (_) => CustomAlertDialog(
+            message: message,
+            confirmText: confirmText,
+            cancelText: cancelText,
+            hasCancel: hasCancel,
+            isSuccess: isSuccess,
+            onConfirm: onConfirm ?? () => Navigator.of(context).pop(),
+            onCancel: onCancel,
+          ),
     );
   }
 }
