@@ -7,6 +7,7 @@ enum AuthErrorType {
   userNotFound("사용자를 찾을 수 없습니다."),
   weakPassword("비밀번호가 너무 약합니다."),
   signOutFailed("로그아웃에 실패했습니다."),
+  invalidCredential("이메일 또는 비밀번호가 잘못되었습니다."),
   unknown("알 수 없는 오류가 발생했습니다.");
 
   final String message;
@@ -37,6 +38,8 @@ class AuthError implements Exception {
         return AuthError(AuthErrorType.userNotFound);
       case 'weak-password':
         return AuthError(AuthErrorType.weakPassword);
+      case 'invalid-credential':
+        return AuthError(AuthErrorType.invalidCredential);
       default:
         return AuthError(AuthErrorType.unknown, e.message);
     }
