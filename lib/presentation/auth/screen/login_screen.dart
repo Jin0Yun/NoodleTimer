@@ -9,7 +9,8 @@ import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_text_field.dart';
 import 'package:noodle_timer/presentation/onboarding/screen/noodle_preference_screen.dart';
-import 'package:noodle_timer/presentation/onboarding/screen/onboarding_guide_screen.dart';
+import 'package:noodle_timer/presentation/tabbar/screen/tabbar_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -134,15 +135,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             message: '로그인 성공! 🎉',
             confirmText: '확인',
             isSuccess: true,
-            onConfirm: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => const NoodlePreferenceScreen(),
-                  transitionDuration: Duration.zero,
-                ),
-                (route) => false,
-              );
+            onConfirm: () async {
+              final prefs = await SharedPreferences.getInstance();
+              final needsOnboarding = prefs.getBool('needsOnboarding') ?? false;
+
+              if (needsOnboarding) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const NoodlePreferenceScreen(),
+                    transitionDuration: Duration.zero,
+                  ),
+                  (route) => false,
+                );
+              } else {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const TabBarController(),
+                    transitionDuration: Duration.zero,
+                  ),
+                  (route) => false,
+                );
+              }
             },
           ),
     );
