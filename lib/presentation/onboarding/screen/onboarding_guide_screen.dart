@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/home/screen/home_screen.dart';
+import 'package:noodle_timer/presentation/tabbar/screen/tabbar_controller.dart';
 
 class OnboardingGuideScreen extends StatelessWidget {
   const OnboardingGuideScreen({super.key});
@@ -81,7 +82,13 @@ class OnboardingGuideScreen extends StatelessWidget {
   }
 
   void _navigateToHome(BuildContext context) {
-    Navigator.of(context).pop();
-    Navigator.pushReplacementNamed(context, AppRoutes.home);
+    Navigator.pushAndRemoveUntil(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const TabBarController(),
+        transitionDuration: Duration.zero,
+      ),
+          (route) => false,
+    );
   }
 }
