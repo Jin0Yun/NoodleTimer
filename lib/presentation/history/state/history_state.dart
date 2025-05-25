@@ -1,25 +1,37 @@
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
+import 'package:noodle_timer/presentation/common/state/base_state.dart';
 
-class RecipeHistoryState {
-  final bool isLoading;
+class RecipeHistoryState implements BaseState {
   final List<CookHistoryEntity> histories;
   final List<CookHistoryEntity> filteredHistories;
+  final bool _isLoading;
+  final String? _error;
 
   const RecipeHistoryState({
-    this.isLoading = false,
     this.histories = const [],
     this.filteredHistories = const [],
-  });
+    bool isLoading = false,
+    String? error,
+  }) : _isLoading = isLoading,
+       _error = error;
+
+  @override
+  bool get isLoading => _isLoading;
+
+  @override
+  String? get error => _error;
 
   RecipeHistoryState copyWith({
-    bool? isLoading,
     List<CookHistoryEntity>? histories,
     List<CookHistoryEntity>? filteredHistories,
+    bool? isLoading,
+    String? error,
   }) {
     return RecipeHistoryState(
-      isLoading: isLoading ?? this.isLoading,
       histories: histories ?? this.histories,
       filteredHistories: filteredHistories ?? this.filteredHistories,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
     );
   }
 

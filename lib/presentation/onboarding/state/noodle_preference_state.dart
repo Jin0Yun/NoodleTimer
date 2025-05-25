@@ -1,29 +1,39 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/presentation/common/state/base_state.dart';
 
-class NoodlePreferenceState {
+class NoodlePreferenceState implements BaseState {
   final NoodlePreference noodlePreference;
-  final AsyncValue<void> status;
+  final bool _isLoading;
+  final String? _error;
 
-  NoodlePreferenceState({
+  const NoodlePreferenceState({
     required this.noodlePreference,
-    required this.status,
-  });
+    bool isLoading = false,
+    String? error,
+  }) : _isLoading = isLoading,
+        _error = error;
 
   factory NoodlePreferenceState.initial() {
-    return NoodlePreferenceState(
+    return const NoodlePreferenceState(
       noodlePreference: NoodlePreference.none,
-      status: const AsyncValue.data(null),
     );
   }
 
+  @override
+  bool get isLoading => _isLoading;
+
+  @override
+  String? get error => _error;
+
   NoodlePreferenceState copyWith({
     NoodlePreference? noodlePreference,
-    AsyncValue<void>? status,
+    bool? isLoading,
+    String? error,
   }) {
     return NoodlePreferenceState(
       noodlePreference: noodlePreference ?? this.noodlePreference,
-      status: status ?? this.status,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
     );
   }
 
