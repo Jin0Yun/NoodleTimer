@@ -7,6 +7,7 @@ import 'package:noodle_timer/presentation/common/widget/custom_alert_dialog.dart
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
+import 'package:noodle_timer/presentation/viewmodel/auth_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -21,20 +22,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _isFormValid() {
-    final state = ref.watch(signUpViewModelProvider);
-    return state.email.isNotEmpty &&
-        state.password.isNotEmpty &&
-        state.confirmPassword.isNotEmpty &&
-        state.emailError == null &&
-        state.passwordError == null &&
-        state.confirmError == null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(signUpViewModelProvider);
-    final isValid = _isFormValid();
+
+    ref.listen<AuthState>(signUpViewModelProvider, (previous, current) {
+      final error = current.error;
+      if (error != null && previous?.error != error) {
+        _showErrorAlert(error);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -57,7 +54,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 controller: _emailController,
                 errorMessage: state.emailError,
                 onChanged: (value) {
-                  ref.read(signUpViewModelProvider.notifier).updateEmail(value);
+                  ref
+                      .read(signUpViewModelProvider.notifier)
+                      .updateEmailWithValidation(value);
                 },
               ),
               const SizedBox(height: 24),
@@ -70,7 +69,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 onChanged: (value) {
                   ref
                       .read(signUpViewModelProvider.notifier)
-                      .updatePassword(value);
+                      .updatePasswordWithValidation(value);
                 },
               ),
               const SizedBox(height: 24),
@@ -90,7 +89,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               CustomButton(
                 buttonText: '회원가입',
                 onPressed: _onSignUpPressed,
-                isEnabled: isValid,
+                isEnabled: state.isFormValid,
               ),
             ],
           ),
@@ -99,67 +98,45 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     );
   }
 
-  void _onSignUpPressed() {
-    ref
-        .read(signUpViewModelProvider.notifier)
-        .signUp(
-          onSuccess: () async {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setBool('needsOnboarding', true);
+  void _onSignUpPressed() async {
+    final success = await ref.read(signUpViewModelProvider.notifier).signUp();
 
-            _showAlert(
-              '회원가입이 완료되었습니다! 🎉',
-              isSuccess: true,
-              onConfirm: () {
-                Navigator.of(context).pop();
-                Navigator.pushReplacementNamed(context, AppRoutes.login);
-              },
-            );
-          },
-          onError: (message) {
-            final isEmailAlreadyInUse = message.contains('이미 사용 중인 이메일입니다');
+    if (success) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('needsOnboarding', true);
 
-            _showAlert(
-              isEmailAlreadyInUse ? '이미 존재하는 이메일입니다.\n로그인하시겠습니까?' : message,
-              confirmText: isEmailAlreadyInUse ? '로그인' : '확인',
-              cancelText: isEmailAlreadyInUse ? '닫기' : null,
-              hasCancel: isEmailAlreadyInUse,
-              isSuccess: false,
-              onConfirm: () {
-                Navigator.of(context).pop();
-                if (isEmailAlreadyInUse) {
-                  Navigator.pushReplacementNamed(context, AppRoutes.login);
-                }
-              },
-              onCancel:
-                  isEmailAlreadyInUse
-                      ? () => Navigator.of(context).pop()
-                      : null,
-            );
-          },
-        );
+      _showSuccessAlert();
+    }
   }
 
-  void _showAlert(
-    String message, {
-    String confirmText = '확인',
-    String? cancelText,
-    bool hasCancel = false,
-    bool isSuccess = true,
-    VoidCallback? onConfirm,
-    VoidCallback? onCancel,
-  }) {
+  void _showErrorAlert(String message) {
     showDialog(
       context: context,
       builder:
           (_) => CustomAlertDialog(
             message: message,
-            confirmText: confirmText,
-            cancelText: cancelText,
-            hasCancel: hasCancel,
-            isSuccess: isSuccess,
-            onConfirm: onConfirm ?? () => Navigator.of(context).pop(),
-            onCancel: onCancel,
+            confirmText: '확인',
+            isSuccess: false,
+            onConfirm: () {
+              Navigator.of(context).pop();
+              ref.read(signUpViewModelProvider.notifier).resetError();
+            },
+          ),
+    );
+  }
+
+  void _showSuccessAlert() {
+    showDialog(
+      context: context,
+      builder:
+          (_) => CustomAlertDialog(
+            message: '회원가입이 완료되었습니다! 🎉',
+            confirmText: '확인',
+            isSuccess: true,
+            onConfirm: () {
+              Navigator.of(context).pop();
+              Navigator.pushReplacementNamed(context, AppRoutes.login);
+            },
           ),
     );
   }

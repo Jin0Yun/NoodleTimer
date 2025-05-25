@@ -12,7 +12,7 @@ class AccountSettingsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginViewModel = ref.read(loginViewModelProvider.notifier);
+    final authViewModel = ref.read(authViewModelProvider.notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +24,7 @@ class AccountSettingsSection extends ConsumerWidget {
           textColor: NoodleColors.neutral1000,
           onTap: () {
             _showActionDialog(context, '정말 로그아웃 하시겠습니까?', () async {
-              await loginViewModel.logout();
+              await authViewModel.logout();
               Navigator.pushReplacementNamed(context, AppRoutes.login);
             });
           },
@@ -35,7 +35,6 @@ class AccountSettingsSection extends ConsumerWidget {
           textColor: NoodleColors.error,
           onTap: () {
             _showActionDialog(context, '정말 회원 탈퇴 하시겠습니까?', () async {
-              // 회원 탈퇴
               Navigator.pushReplacementNamed(context, AppRoutes.login);
             });
           },
@@ -44,22 +43,27 @@ class AccountSettingsSection extends ConsumerWidget {
     );
   }
 
-  void _showActionDialog(BuildContext context, String message, VoidCallback onConfirm) {
+  void _showActionDialog(
+    BuildContext context,
+    String message,
+    VoidCallback onConfirm,
+  ) {
     showDialog(
       context: context,
-      builder: (_) => CustomAlertDialog(
-        message: message,
-        confirmText: '확인',
-        cancelText: '취소',
-        hasCancel: true,
-        onConfirm: () async {
-          Navigator.of(context).pop();
-          onConfirm();
-        },
-        onCancel: () {
-          Navigator.of(context).pop();
-        },
-      ),
+      builder:
+          (_) => CustomAlertDialog(
+            message: message,
+            confirmText: '확인',
+            cancelText: '취소',
+            hasCancel: true,
+            onConfirm: () async {
+              Navigator.of(context).pop();
+              onConfirm();
+            },
+            onCancel: () {
+              Navigator.of(context).pop();
+            },
+          ),
     );
   }
 }

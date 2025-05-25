@@ -21,7 +21,7 @@ class _RecipeHistoryScreenState extends ConsumerState<RecipeHistoryScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(recipeHistoryViewModelProvider.notifier).loadCookHistories();
+      ref.read(historyViewModelProvider.notifier).loadCookHistories();
     });
   }
 
@@ -56,13 +56,13 @@ class _RecipeHistoryScreenState extends ConsumerState<RecipeHistoryScreen> {
                 controller: _searchController,
                 onChanged: (value) {
                   ref
-                      .read(recipeHistoryViewModelProvider.notifier)
+                      .read(historyViewModelProvider.notifier)
                       .searchHistories(value);
                 },
                 onClear: () {
                   _searchController.clear();
                   ref
-                      .read(recipeHistoryViewModelProvider.notifier)
+                      .read(historyViewModelProvider.notifier)
                       .searchHistories('');
                 },
               ),

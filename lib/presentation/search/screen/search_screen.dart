@@ -21,8 +21,8 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, _) {
-        final searchState = ref.watch(searchViewModelProvider);
-        final searchNotifier = ref.read(searchViewModelProvider.notifier);
+        final ramenState = ref.watch(ramenViewModelProvider);
+        final ramenNotifier = ref.read(ramenViewModelProvider.notifier);
 
         return Scaffold(
           appBar: AppBar(
@@ -30,10 +30,10 @@ class _SearchScreenState extends State<SearchScreen> {
             centerTitle: true,
             elevation: 0,
             title: Text(
-                '라면찾기',
-                style: NoodleTextStyles.titleSmBold.copyWith(
-                  color: NoodleColors.neutral1000,
-                )
+              '라면찾기',
+              style: NoodleTextStyles.titleSmBold.copyWith(
+                color: NoodleColors.neutral1000,
+              ),
             ),
           ),
           body: SafeArea(
@@ -46,17 +46,17 @@ class _SearchScreenState extends State<SearchScreen> {
                     hintText: '라면을 검색해주세요!',
                     controller: _searchController,
                     onChanged: (value) {
-                      searchNotifier.updateSearchKeyword(value.trim());
+                      ramenNotifier.updateSearchKeyword(value.trim());
                     },
                     onClear: () {
                       _searchController.clear();
-                      searchNotifier.updateSearchKeyword('');
+                      ramenNotifier.updateSearchKeyword('');
                     },
                   ),
                   const SizedBox(height: 12),
                   Expanded(
                     child: RamenList(
-                      state: searchState,
+                      state: ramenState,
                       onTap: (context, selectedRamen) {
                         Navigator.push(
                           context,
@@ -66,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                         ).then((_) {
                           _searchController.clear();
-                          searchNotifier.updateSearchKeyword('');
+                          ramenNotifier.updateSearchKeyword('');
                         });
                       },
                     ),

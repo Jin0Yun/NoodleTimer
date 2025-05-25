@@ -8,7 +8,7 @@ class HistoryBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(recipeHistoryViewModelProvider);
+    final state = ref.watch(historyViewModelProvider);
 
     if (state.isLoading) {
       return const Center(child: CircularProgressIndicator());

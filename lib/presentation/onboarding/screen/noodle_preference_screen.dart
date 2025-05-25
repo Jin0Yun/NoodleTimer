@@ -130,7 +130,7 @@ class _NoodlePreferenceScreenState
                             : NoodlePreference.peojin;
 
                     await ref
-                        .read(noodlePreferenceProvider.notifier)
+                        .read(historyViewModelProvider.notifier)
                         .updateNoodlePreference(noodlePreference);
 
                     final prefs = await SharedPreferences.getInstance();

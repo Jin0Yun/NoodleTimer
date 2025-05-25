@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
-import 'package:noodle_timer/presentation/history/state/history_state.dart';
 import 'package:noodle_timer/presentation/history/widget/recipe_history_card.dart';
+import 'package:noodle_timer/presentation/viewmodel/history_state.dart';
 
 class HistoryListView extends ConsumerWidget {
-  final RecipeHistoryState state;
+  final HistoryState state;
 
   const HistoryListView({super.key, required this.state});
 
@@ -37,9 +37,7 @@ class HistoryListView extends ConsumerWidget {
                 noodleState: history.noodleState.name,
                 eggState: history.eggPreference.name,
                 onCookAgain: () async {
-                  final viewModel = ref.read(
-                    recipeHistoryViewModelProvider.notifier,
-                  );
+                  final viewModel = ref.read(historyViewModelProvider.notifier);
                   await viewModel.replayRecipe(history);
                   if (context.mounted) {
                     Navigator.pushReplacementNamed(context, AppRoutes.home);
@@ -47,7 +45,7 @@ class HistoryListView extends ConsumerWidget {
                 },
                 onDelete: () {
                   ref
-                      .read(recipeHistoryViewModelProvider.notifier)
+                      .read(historyViewModelProvider.notifier)
                       .deleteHistory(history.id);
                 },
               ),

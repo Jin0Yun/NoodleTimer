@@ -5,6 +5,7 @@ import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/home/widget/option_selector/option_selector_container.dart';
 import 'package:noodle_timer/presentation/home/widget/timer/timer_circle_box.dart';
+import 'package:noodle_timer/presentation/viewmodel/ramen_state.dart';
 
 class TimerCardWithOptionSelectorContainer extends ConsumerWidget {
   final RamenEntity? selectedRamen;
@@ -18,24 +19,19 @@ class TimerCardWithOptionSelectorContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    _listenForRamenChanges(ref);
+    ref.listen<RamenState>(ramenViewModelProvider, (previous, next) {
+      if (previous?.selectedRamen?.id != next.selectedRamen?.id &&
+          next.selectedRamen != null) {
+        ref
+            .read(timerViewModelProvider.notifier)
+            .updateRamen(next.selectedRamen!);
+      }
+    });
 
     return Stack(
       clipBehavior: Clip.none,
-      children: [
-        _buildTimerCard(context, ref),
-        _buildOptionSelector(),
-      ],
+      children: [_buildTimerCard(context, ref), _buildOptionSelector()],
     );
-  }
-
-  void _listenForRamenChanges(WidgetRef ref) {
-    ref.listen(ramenViewModelProvider, (previous, next) {
-      if (next.selectedRamen != null &&
-          (previous?.selectedRamen?.id != next.selectedRamen?.id)) {
-        ref.read(timerViewModelProvider.notifier).updateRamen(next.selectedRamen);
-      }
-    });
   }
 
   Widget _buildTimerCard(BuildContext context, WidgetRef ref) {
