@@ -14,15 +14,16 @@ import 'package:noodle_timer/presentation/auth/state/sign_up_state.dart';
 import 'package:noodle_timer/presentation/home/state/ramen_state.dart';
 import 'package:noodle_timer/presentation/onboarding/state/noodle_preference_state.dart';
 import 'core_providers.dart';
-import 'service_providers.dart';
 import 'repository_providers.dart';
 
 final signUpViewModelProvider =
     StateNotifierProvider<SignUpViewModel, SignUpState>((ref) {
       final authRepo = ref.read(authRepositoryProvider);
-      final firestoreService = ref.read(firestoreServiceProvider);
+      final userRepo = ref.read(
+        userRepositoryProvider,
+      );
       final logger = ref.read(loggerProvider);
-      return SignUpViewModel(authRepo, firestoreService, logger);
+      return SignUpViewModel(authRepo, userRepo, logger);
     });
 
 final loginViewModelProvider =
@@ -51,11 +52,13 @@ final noodlePreferenceProvider = StateNotifierProvider.autoDispose<
   NoodlePreferenceViewModel,
   NoodlePreferenceState
 >((ref) {
-  final firestoreService = ref.read(firestoreServiceProvider);
+  final userRepo = ref.read(
+    userRepositoryProvider,
+  );
   final firebaseAuth = ref.read(firebaseAuthProvider);
   final userId = firebaseAuth.currentUser?.uid ?? '';
   final logger = ref.read(loggerProvider);
-  return NoodlePreferenceViewModel(firestoreService, userId, logger);
+  return NoodlePreferenceViewModel(userRepo, userId, logger);
 });
 
 final timerViewModelProvider =
