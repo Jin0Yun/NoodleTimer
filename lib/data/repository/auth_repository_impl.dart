@@ -10,8 +10,8 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required FirebaseAuth firebaseAuth,
     required AppLogger logger,
-  })  : _firebaseAuth = firebaseAuth,
-        _logger = logger;
+  }) : _firebaseAuth = firebaseAuth,
+       _logger = logger;
 
   @override
   Future<UserCredential> signUp(String email, String password) async {
