@@ -7,6 +7,7 @@ import 'package:noodle_timer/presentation/common/widget/custom_alert_dialog.dart
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -102,7 +103,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     ref
         .read(signUpViewModelProvider.notifier)
         .signUp(
-          onSuccess: () {
+          onSuccess: () async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('needsOnboarding', true);
+
             _showAlert(
               '회원가입이 완료되었습니다! 🎉',
               isSuccess: true,
