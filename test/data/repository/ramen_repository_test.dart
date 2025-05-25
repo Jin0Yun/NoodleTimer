@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:noodle_timer/core/exceptions/ramen_error.dart';
-import 'package:noodle_timer/data/service/data_loader.dart';
+import 'package:noodle_timer/data/utils/data_loader.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/data/repository/ramen_repository_impl.dart';
