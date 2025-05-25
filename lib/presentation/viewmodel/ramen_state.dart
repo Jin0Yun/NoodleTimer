@@ -8,6 +8,9 @@ class RamenState implements BaseState {
   final RamenEntity? selectedRamen;
   final RamenEntity? temporarySelectedRamen;
   final int selectedBrandIndex;
+  final List<RamenEntity> allRamen;
+  final String searchKeyword;
+  final List<RamenEntity> searchResults;
   final bool _isLoading;
   final String? _error;
 
@@ -17,10 +20,13 @@ class RamenState implements BaseState {
     this.selectedRamen,
     this.temporarySelectedRamen,
     this.selectedBrandIndex = 0,
+    this.allRamen = const [],
+    this.searchKeyword = '',
+    this.searchResults = const [],
     bool isLoading = false,
     String? error,
   }) : _isLoading = isLoading,
-       _error = error;
+        _error = error;
 
   @override
   bool get isLoading => _isLoading;
@@ -28,12 +34,18 @@ class RamenState implements BaseState {
   @override
   String? get error => _error;
 
+  bool get hasSearchResults => searchResults.isNotEmpty;
+  bool get isSearching => searchKeyword.isNotEmpty;
+
   RamenState copyWith({
     List<RamenBrandEntity>? brands,
     List<RamenEntity>? currentRamenList,
     RamenEntity? selectedRamen,
     RamenEntity? temporarySelectedRamen,
     int? selectedBrandIndex,
+    List<RamenEntity>? allRamen,
+    String? searchKeyword,
+    List<RamenEntity>? searchResults,
     bool? isLoading,
     String? error,
     bool clearSelectedRamen = false,
@@ -42,18 +54,14 @@ class RamenState implements BaseState {
     return RamenState(
       brands: brands ?? this.brands,
       currentRamenList: currentRamenList ?? this.currentRamenList,
-      selectedRamen:
-          clearSelectedRamen ? null : (selectedRamen ?? this.selectedRamen),
-      temporarySelectedRamen:
-          clearTemporarySelected
-              ? null
-              : (temporarySelectedRamen ?? this.temporarySelectedRamen),
+      selectedRamen: clearSelectedRamen ? null : (selectedRamen ?? this.selectedRamen),
+      temporarySelectedRamen: clearTemporarySelected ? null : (temporarySelectedRamen ?? this.temporarySelectedRamen),
       selectedBrandIndex: selectedBrandIndex ?? this.selectedBrandIndex,
-      isLoading: isLoading ?? this.isLoading,
+      allRamen: allRamen ?? this.allRamen,
+      searchKeyword: searchKeyword ?? this.searchKeyword,
+      searchResults: searchResults ?? this.searchResults,
+      isLoading: isLoading ?? _isLoading,
       error: error,
     );
   }
-
-  bool get hasBrands => brands.isNotEmpty;
-  int? get selectedRamenId => temporarySelectedRamen?.id;
 }

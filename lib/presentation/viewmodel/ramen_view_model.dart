@@ -3,16 +3,19 @@ import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
-import 'package:noodle_timer/presentation/home/state/ramen_state.dart';
+import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
 import 'package:noodle_timer/presentation/home/viewmodel/ramen_action_type.dart';
 import 'package:noodle_timer/presentation/common/viewmodel/base_view_model.dart';
+import 'package:noodle_timer/presentation/viewmodel/ramen_state.dart';
 
 class RamenViewModel extends BaseViewModel<RamenState> {
   final RamenRepository _repository;
   final UserRepository _userRepository;
 
   RamenViewModel(this._repository, this._userRepository, AppLogger logger)
-    : super(logger, const RamenState());
+    : super(logger, const RamenState()) {
+    _loadInitialData();
+  }
 
   @override
   RamenState setLoadingState(bool isLoading) {
@@ -29,6 +32,10 @@ class RamenViewModel extends BaseViewModel<RamenState> {
     return state.copyWith(error: null);
   }
 
+  Future<void> _loadInitialData() async {
+    await loadRamens();
+  }
+
   Future<void> initialize([int initialBrandIndex = 0]) async {
     logger.i('라면 뷰모델 초기화 시작');
     await loadBrands();
@@ -39,12 +46,18 @@ class RamenViewModel extends BaseViewModel<RamenState> {
   }
 
   Future<void> loadBrands() async {
-    await runWithLoading(() async {
-      final brands = await _repository.loadBrands();
-      final updatedBrands = await _withUserCookHistory(brands);
-      state = state.copyWith(brands: updatedBrands);
-      logger.i('브랜드 + 나의 라면 기록 불러오기 성공');
-    }, showLoading: false);
+    final brands = await _repository.loadBrands();
+    final updatedBrands = await _withUserCookHistory(brands);
+    final allRamen = await _repository.loadAllRamen();
+
+    state = state.copyWith(brands: updatedBrands, allRamen: allRamen);
+    logger.i('브랜드 + 나의 라면 기록 불러오기 성공');
+  }
+
+  Future<void> loadRamens() async {
+    final allRamen = await _repository.loadAllRamen();
+    state = state.copyWith(allRamen: allRamen);
+    logger.i('라면 데이터 로딩 완료');
   }
 
   Future<List<RamenBrandEntity>> _withUserCookHistory(
@@ -122,5 +135,26 @@ class RamenViewModel extends BaseViewModel<RamenState> {
         logger.d("라면 상세 정보 보기: ${ramen.name}");
         break;
     }
+  }
+
+  void updateSearchKeyword(String keyword) {
+    state = state.copyWith(searchKeyword: keyword);
+    if (keyword.trim().isEmpty) {
+      state = state.copyWith(searchResults: []);
+    } else {
+      final results = _searchRamen(keyword.trim());
+      state = state.copyWith(searchResults: results);
+    }
+  }
+
+  List<RamenEntity> _searchRamen(String keyword) {
+    final lowerKeyword = keyword.toLowerCase();
+    return state.allRamen
+        .where(
+          (ramen) =>
+              ramen.name.toLowerCase().contains(lowerKeyword) ||
+              HangulUtils.matchesChoSung(ramen.name, lowerKeyword),
+        )
+        .toList();
   }
 }

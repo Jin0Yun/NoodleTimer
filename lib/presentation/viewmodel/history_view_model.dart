@@ -2,36 +2,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
+import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
-import 'package:noodle_timer/presentation/history/state/history_state.dart';
 import 'package:noodle_timer/presentation/common/viewmodel/base_view_model.dart';
+import 'package:noodle_timer/presentation/viewmodel/history_state.dart';
 
-class RecipeHistoryViewModel extends BaseViewModel<RecipeHistoryState> {
+class HistoryViewModel extends BaseViewModel<HistoryState> {
   final UserRepository _userRepository;
   final RamenRepository _ramenRepository;
   final Ref _ref;
+  final String _userId;
 
-  RecipeHistoryViewModel(
-    this._userRepository,
-    this._ramenRepository,
-    AppLogger logger,
-    this._ref,
-  ) : super(logger, RecipeHistoryState.initial());
+  HistoryViewModel(
+      this._userRepository,
+      this._ramenRepository,
+      this._userId,
+      AppLogger logger,
+      this._ref,
+      ) : super(logger, HistoryState.initial());
 
   @override
-  RecipeHistoryState setLoadingState(bool isLoading) {
+  HistoryState setLoadingState(bool isLoading) {
     return state.copyWith(isLoading: isLoading);
   }
 
   @override
-  RecipeHistoryState setErrorState(String? error) {
+  HistoryState setErrorState(String? error) {
     return state.copyWith(error: error);
   }
 
   @override
-  RecipeHistoryState clearErrorState() {
+  HistoryState clearErrorState() {
     return state.copyWith(error: null);
   }
 
@@ -80,11 +83,11 @@ class RecipeHistoryViewModel extends BaseViewModel<RecipeHistoryState> {
 
     final lowerQuery = trimmed.toLowerCase();
     final filtered =
-        state.histories.where((item) {
-          final name = item.displayName;
-          return name.toLowerCase().contains(lowerQuery) ||
-              HangulUtils.matchesChoSung(name, lowerQuery);
-        }).toList();
+    state.histories.where((item) {
+      final name = item.displayName;
+      return name.toLowerCase().contains(lowerQuery) ||
+          HangulUtils.matchesChoSung(name, lowerQuery);
+    }).toList();
 
     state = state.copyWith(filteredHistories: filtered);
   }
@@ -121,14 +124,28 @@ class RecipeHistoryViewModel extends BaseViewModel<RecipeHistoryState> {
       logger.d('조리 내역 삭제 완료: $historyId');
 
       final updatedHistories =
-          state.histories.where((item) => item.id != historyId).toList();
+      state.histories.where((item) => item.id != historyId).toList();
       state = state.copyWith(
         histories: updatedHistories,
         filteredHistories:
-            state.filteredHistories
-                .where((item) => item.id != historyId)
-                .toList(),
+        state.filteredHistories
+            .where((item) => item.id != historyId)
+            .toList(),
       );
+    });
+  }
+
+  void selectPreference(NoodlePreference preference) {
+    state = state.copyWith(noodlePreference: preference);
+  }
+
+  Future<void> updateNoodlePreference(NoodlePreference preference) async {
+    await runWithLoading(() async {
+      await _userRepository.updateNoodlePreference(_userId, preference);
+      logger.i('면발 취향 업데이트 성공: $_userId, ${preference.name}');
+      if (mounted) {
+        state = state.copyWith(noodlePreference: preference);
+      }
     });
   }
 }
