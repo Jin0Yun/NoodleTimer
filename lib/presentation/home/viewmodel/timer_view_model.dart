@@ -2,22 +2,37 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
-import 'package:noodle_timer/domain/entity/egg_preference.dart';
-import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
+import 'package:noodle_timer/domain/entity/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/home/state/timer_state.dart';
+import 'package:noodle_timer/presentation/common/viewmodel/base_view_model.dart';
 
-class TimerViewModel extends StateNotifier<TimerState> {
+class TimerViewModel extends BaseViewModel<TimerState> {
   final UserRepository _userRepository;
-  final AppLogger _logger;
   final Ref _ref;
   Timer? _timer;
   RamenEntity? _currentRamen;
 
-  TimerViewModel(this._userRepository, this._logger, this._ref)
-      : super(TimerState.initial());
+  TimerViewModel(this._userRepository, AppLogger logger, this._ref)
+      : super(logger, TimerState.initial());
+
+  @override
+  TimerState setLoadingState(bool isLoading) {
+    return state.copyWith(isLoading: isLoading);
+  }
+
+  @override
+  TimerState setErrorState(String? error) {
+    return state.copyWith(error: error);
+  }
+
+  @override
+  TimerState clearErrorState() {
+    return state.copyWith(error: null);
+  }
 
   void initialize({int? cookingTimeInSeconds, String? ramenName}) {
     _cancelTimer();
@@ -29,7 +44,7 @@ class TimerViewModel extends StateNotifier<TimerState> {
       ramenName: ramenName,
       isCompleted: false,
     );
-    _logger.i('타이머 초기화 완료: $seconds초 (${ramenName ?? "이름 없음"})');
+    logger.i('타이머 초기화 완료: $seconds초 (${ramenName ?? "이름 없음"})');
   }
 
   void updateRamen(RamenEntity? ramen) {
@@ -55,13 +70,13 @@ class TimerViewModel extends StateNotifier<TimerState> {
       }
     });
     state = state.copyWith(isRunning: true, isCompleted: false);
-    _logger.i('타이머 시작됨: ${state.remainingSeconds}초');
+    logger.i('타이머 시작됨: ${state.remainingSeconds}초');
   }
 
   void stop() {
     _cancelTimer();
     state = state.copyWith(isRunning: false);
-    _logger.d('타이머 중지됨. 남은 시간: ${state.remainingSeconds}초');
+    logger.d('타이머 중지됨. 남은 시간: ${state.remainingSeconds}초');
   }
 
   Future<void> complete() async {
@@ -71,36 +86,33 @@ class TimerViewModel extends StateNotifier<TimerState> {
       isRunning: false,
       isCompleted: true,
     );
-    _logger.i('타이머 완료 - 조리 완료됨');
+    logger.i('타이머 완료 - 조리 완료됨');
 
     final ramen = _currentRamen;
     if (ramen == null) {
-      _logger.w('조리 기록 저장 실패: 라면 정보 없음');
+      logger.w('조리 기록 저장 실패: 라면 정보 없음');
       return;
     }
 
-    final userId = _userRepository.getCurrentUserId();
-    if (userId == null) {
-      _logger.w('조리 기록 저장 실패: 유저 정보 없음');
-      return;
-    }
+    await runWithLoading(() async {
+      final userId = _userRepository.getCurrentUserId();
+      if (userId == null) {
+        throw Exception('조리 기록 저장 실패: 유저 정보 없음');
+      }
 
-    final history = CookHistoryEntity(
-      ramenId: ramen.id.toString(),
-      cookedAt: DateTime.now(),
-      noodleState: NoodlePreference.kodul,
-      eggPreference: EggPreference.none,
-      cookTime: Duration(seconds: ramen.cookTime),
-    );
+      final history = CookHistoryEntity(
+        ramenId: ramen.id.toString(),
+        cookedAt: DateTime.now(),
+        noodleState: NoodlePreference.kodul,
+        eggPreference: EggPreference.none,
+        cookTime: Duration(seconds: ramen.cookTime),
+      );
 
-    try {
       await _userRepository.saveCookHistory(userId, history);
-      _logger.i('조리 기록 저장 완료: ${ramen.name}');
+      logger.i('조리 기록 저장 완료: ${ramen.name}');
       await _ref.read(ramenViewModelProvider.notifier).loadBrands();
-      _logger.i('라면 브랜드 목록 새로고침 완료');
-    } catch (e, st) {
-      _logger.e('조리 기록 저장 실패', e, st);
-    }
+      logger.i('라면 브랜드 목록 새로고침 완료');
+    }, showLoading: false);
   }
 
   void restart() {
@@ -109,7 +121,7 @@ class TimerViewModel extends StateNotifier<TimerState> {
       remainingSeconds: state.totalSeconds,
       isCompleted: false,
     );
-    _logger.i('타이머 재시작: ${state.totalSeconds}초');
+    logger.i('타이머 재시작: ${state.totalSeconds}초');
     start();
   }
 
@@ -129,7 +141,7 @@ class TimerViewModel extends StateNotifier<TimerState> {
   @override
   void dispose() {
     _cancelTimer();
-    _logger.d('TimerViewModel dispose 완료');
+    logger.d('TimerViewModel dispose 완료');
     super.dispose();
   }
 }
