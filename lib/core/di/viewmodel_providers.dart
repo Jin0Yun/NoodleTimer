@@ -19,9 +19,7 @@ import 'repository_providers.dart';
 final signUpViewModelProvider =
     StateNotifierProvider<SignUpViewModel, SignUpState>((ref) {
       final authRepo = ref.read(authRepositoryProvider);
-      final userRepo = ref.read(
-        userRepositoryProvider,
-      );
+      final userRepo = ref.read(userRepositoryProvider);
       final logger = ref.read(loggerProvider);
       return SignUpViewModel(authRepo, userRepo, logger);
     });
@@ -48,18 +46,16 @@ final searchViewModelProvider =
       return SearchViewModel(repo, logger);
     });
 
-final noodlePreferenceProvider = StateNotifierProvider.autoDispose<
-  NoodlePreferenceViewModel,
-  NoodlePreferenceState
->((ref) {
-  final userRepo = ref.read(
-    userRepositoryProvider,
-  );
-  final firebaseAuth = ref.read(firebaseAuthProvider);
-  final userId = firebaseAuth.currentUser?.uid ?? '';
-  final logger = ref.read(loggerProvider);
-  return NoodlePreferenceViewModel(userRepo, userId, logger);
-});
+final noodlePreferenceProvider =
+    StateNotifierProvider<NoodlePreferenceViewModel, NoodlePreferenceState>((
+      ref,
+    ) {
+      final userRepo = ref.read(userRepositoryProvider);
+      final firebaseAuth = ref.read(firebaseAuthProvider);
+      final userId = firebaseAuth.currentUser?.uid ?? '';
+      final logger = ref.read(loggerProvider);
+      return NoodlePreferenceViewModel(userRepo, userId, logger);
+    });
 
 final timerViewModelProvider =
     StateNotifierProvider<TimerViewModel, TimerState>((ref) {

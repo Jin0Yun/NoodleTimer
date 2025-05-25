@@ -63,7 +63,7 @@ class _RecipeHistoryScreenState extends ConsumerState<RecipeHistoryScreen> {
                   _searchController.clear();
                   ref
                       .read(recipeHistoryViewModelProvider.notifier)
-                      .resetSearch();
+                      .searchHistories('');
                 },
               ),
               const SizedBox(height: 16),

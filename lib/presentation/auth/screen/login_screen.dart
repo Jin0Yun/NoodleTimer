@@ -35,8 +35,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(loginViewModelProvider);
 
     ref.listen<LoginState>(loginViewModelProvider, (previous, current) {
-      if (current.errorMessage != null) {
-        _showErrorAlert(current.errorMessage!);
+      final error = current.error;
+      if (error != null) {
+        _showErrorAlert(error);
       }
     });
 
@@ -82,7 +83,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               CustomButton(
                 buttonText: state.isLoading ? '로그인 중...' : '로그인',
                 onPressed: _login,
-                isEnabled: state.isFormValid && !state.isLoading,
+                isEnabled: state.canSubmit && !state.isLoading,
               ),
               const SizedBox(height: 4),
               TextButton(
@@ -121,7 +122,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             isSuccess: false,
             onConfirm: () {
               Navigator.of(context).pop();
-              ref.read(loginViewModelProvider.notifier).clearError();
+              ref.read(loginViewModelProvider.notifier).resetError();
               _passwordController.clear();
             },
           ),

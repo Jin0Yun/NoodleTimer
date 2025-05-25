@@ -11,12 +11,10 @@ class NoodlePreferenceState implements BaseState {
     bool isLoading = false,
     String? error,
   }) : _isLoading = isLoading,
-        _error = error;
+       _error = error;
 
   factory NoodlePreferenceState.initial() {
-    return const NoodlePreferenceState(
-      noodlePreference: NoodlePreference.none,
-    );
+    return const NoodlePreferenceState(noodlePreference: NoodlePreference.none);
   }
 
   @override
@@ -32,8 +30,8 @@ class NoodlePreferenceState implements BaseState {
   }) {
     return NoodlePreferenceState(
       noodlePreference: noodlePreference ?? this.noodlePreference,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
+      isLoading: isLoading ?? _isLoading,
+      error: error ?? _error,
     );
   }
 

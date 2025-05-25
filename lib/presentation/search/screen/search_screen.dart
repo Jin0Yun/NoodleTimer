@@ -30,10 +30,10 @@ class _SearchScreenState extends State<SearchScreen> {
             centerTitle: true,
             elevation: 0,
             title: Text(
-              '라면찾기',
-              style: NoodleTextStyles.titleSmBold.copyWith(
-                color: NoodleColors.neutral1000,
-              )
+                '라면찾기',
+                style: NoodleTextStyles.titleSmBold.copyWith(
+                  color: NoodleColors.neutral1000,
+                )
             ),
           ),
           body: SafeArea(
@@ -50,7 +50,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                     onClear: () {
                       _searchController.clear();
-                      searchNotifier.resetSearch();
+                      searchNotifier.updateSearchKeyword('');
                     },
                   ),
                   const SizedBox(height: 12),
@@ -66,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                         ).then((_) {
                           _searchController.clear();
-                          searchNotifier.resetSearch();
+                          searchNotifier.updateSearchKeyword('');
                         });
                       },
                     ),
