@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
+import 'package:noodle_timer/presentation/auth/state/login_state.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_alert_dialog.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_text_field.dart';
+import 'package:noodle_timer/presentation/onboarding/screen/noodle_preference_screen.dart';
+import 'package:noodle_timer/presentation/tabbar/screen/tabbar_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -20,7 +24,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final state = ref.watch(loginViewModelProvider);
+
+    ref.listen<LoginState>(loginViewModelProvider, (previous, current) {
+      if (current.errorMessage != null) {
+        _showErrorAlert(current.errorMessage!);
+      }
+    });
+
     return Scaffold(
       backgroundColor: NoodleColors.neutral100,
       body: SafeArea(
@@ -41,6 +60,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 label: '이메일(아이디)',
                 hint: 'example@email.com',
                 controller: _emailController,
+                onChanged: (value) {
+                  ref
+                      .read(loginViewModelProvider.notifier)
+                      .updateEmail(value.trim());
+                },
               ),
               const SizedBox(height: 16),
               CustomTextField(
@@ -48,9 +72,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 hint: '••••••••',
                 controller: _passwordController,
                 obscureText: true,
+                onChanged: (value) {
+                  ref
+                      .read(loginViewModelProvider.notifier)
+                      .updatePassword(value);
+                },
               ),
               const SizedBox(height: 32),
-              CustomButton(buttonText: '로그인', onPressed: _login),
+              CustomButton(
+                buttonText: state.isLoading ? '로그인 중...' : '로그인',
+                onPressed: _login,
+                isEnabled: state.isFormValid && !state.isLoading,
+              ),
               const SizedBox(height: 4),
               TextButton(
                 onPressed: () {
@@ -71,44 +104,62 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login() async {
-    ref
-        .read(loginViewModelProvider.notifier)
-        .updateEmail(_emailController.text.trim());
-    ref
-        .read(loginViewModelProvider.notifier)
-        .updatePassword(_passwordController.text);
+    final success = await ref.read(loginViewModelProvider.notifier).login();
 
-    final error = await ref.read(loginViewModelProvider.notifier).login();
-
-    if (!mounted) return;
-
-    if (error != null) {
-      _showAlert(error);
-    } else {
-      _showAlert(
-        '로그인 성공! 🎉',
-        isSuccess: true,
-        onConfirm: () {
-          Navigator.of(context).pop();
-          Navigator.pushReplacementNamed(context, AppRoutes.onboardingPreference);
-        },
-      );
+    if (success) {
+      _showSuccessAlert();
     }
   }
 
-  void _showAlert(
-    String message, {
-    bool isSuccess = false,
-    VoidCallback? onConfirm,
-  }) {
+  void _showErrorAlert(String message) {
     showDialog(
       context: context,
       builder:
           (_) => CustomAlertDialog(
             message: message,
             confirmText: '확인',
-            isSuccess: isSuccess,
-            onConfirm: onConfirm ?? () => Navigator.of(context).pop(),
+            isSuccess: false,
+            onConfirm: () {
+              Navigator.of(context).pop();
+              ref.read(loginViewModelProvider.notifier).clearError();
+              _passwordController.clear();
+            },
+          ),
+    );
+  }
+
+  void _showSuccessAlert() {
+    showDialog(
+      context: context,
+      builder:
+          (_) => CustomAlertDialog(
+            message: '로그인 성공! 🎉',
+            confirmText: '확인',
+            isSuccess: true,
+            onConfirm: () async {
+              final prefs = await SharedPreferences.getInstance();
+              final needsOnboarding = prefs.getBool('needsOnboarding') ?? false;
+
+              if (needsOnboarding) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const NoodlePreferenceScreen(),
+                    transitionDuration: Duration.zero,
+                  ),
+                  (route) => false,
+                );
+              } else {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const TabBarController(),
+                    transitionDuration: Duration.zero,
+                  ),
+                  (route) => false,
+                );
+              }
+            },
           ),
     );
   }
