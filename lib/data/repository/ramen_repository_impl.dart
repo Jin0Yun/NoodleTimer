@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-import 'package:noodle_timer/core/exceptions/ramen_error.dart';
+import 'package:noodle_timer/core/exceptions/ramen_exception.dart';
 import 'package:noodle_timer/data/utils/data_loader.dart';
 import 'package:noodle_timer/data/dto/ramen_data.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
-import '../../domain/repository/ramen_repository.dart';
+import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 
 class RamenRepositoryImpl implements RamenRepository {
   final IDataLoader _dataLoader;
@@ -19,12 +18,8 @@ class RamenRepositoryImpl implements RamenRepository {
       final jsonString = await _dataLoader.load(_ramenDataPath);
       final jsonData = json.decode(jsonString) as Map<String, dynamic>;
       return RamenData.fromJson(jsonData).toEntity().brands;
-    } on FlutterError catch (e) {
-      throw RamenError(RamenErrorType.assetNotFound, e.toString());
-    } on FormatException catch (e) {
-      throw RamenError(RamenErrorType.parsingError, e.toString());
     } catch (e) {
-      throw RamenError(RamenErrorType.unknownError, e.toString());
+      throw RamenException.fromException(e);
     }
   }
 
@@ -32,22 +27,24 @@ class RamenRepositoryImpl implements RamenRepository {
   Future<List<RamenEntity>> loadAllRamen() async {
     final brands = await loadBrands();
     if (brands.isEmpty) {
-      throw RamenError(RamenErrorType.brandNotFound);
+      throw RamenException(RamenErrorType.brandNotFound);
     }
     return brands.expand((brand) => brand.ramens).toList();
   }
 
   @override
-  Future<RamenEntity> findRamenById(int id) async {
+  Future<RamenEntity?> findRamenById(int id) async {
     final allRamen = await loadAllRamen();
-
     try {
       return allRamen.firstWhere((ramen) => ramen.id == id);
-    } on StateError catch (_) {
-      throw RamenError(
-        RamenErrorType.ramenNotFound,
-        '해당 ID의 라면을 찾을 수 없습니다: id=$id',
-      );
+    } catch (e) {
+      return null;
     }
+  }
+
+  @override
+  Future<List<RamenEntity>> findRamensByIds(List<int> ids) async {
+    final allRamen = await loadAllRamen();
+    return allRamen.where((ramen) => ids.contains(ramen.id)).toList();
   }
 }

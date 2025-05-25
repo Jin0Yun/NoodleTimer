@@ -5,4 +5,5 @@ abstract class RamenRepository {
   Future<List<RamenBrandEntity>> loadBrands();
   Future<List<RamenEntity>> loadAllRamen();
   Future<RamenEntity?> findRamenById(int id);
+  Future<List<RamenEntity>> findRamensByIds(List<int> ids);
 }

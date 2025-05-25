@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:noodle_timer/core/exceptions/user_error.dart';
+import 'package:noodle_timer/core/exceptions/user_exception.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
@@ -40,7 +40,11 @@ class UserRepositoryImpl implements UserRepository {
       }
     } catch (e) {
       _logger.e('사용자 정보 조회 실패: $uid', e);
-      throw UserError(UserErrorType.userNotFound, '사용자 정보를 찾을 수 없습니다: $uid');
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.userNotFound, e.toString());
+      }
     }
   }
 
@@ -64,7 +68,11 @@ class UserRepositoryImpl implements UserRepository {
       return user.uid;
     } catch (e) {
       _logger.e('유저 정보 저장 중 오류 발생: $e', e);
-      throw UserError(UserErrorType.saveFailed, '유저 정보 저장 실패: $e');
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.saveFailed, e.toString());
+      }
     }
   }
 
@@ -80,7 +88,11 @@ class UserRepositoryImpl implements UserRepository {
       _logger.i('유저 면발 취향 업데이트 성공: $uid, ${preference.toString()}');
     } catch (e) {
       _logger.e('면 취향 업데이트 실패: $uid', e);
-      throw UserError(UserErrorType.updateFailed, '면 취향 업데이트 실패: $e');
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.updateFailed, e.toString());
+      }
     }
   }
 
@@ -95,7 +107,11 @@ class UserRepositoryImpl implements UserRepository {
       _logger.i('조리 기록 추가 성공: $uid / ${docRef.id}');
     } catch (e) {
       _logger.e('조리 기록 저장 실패: $uid', e);
-      throw UserError(UserErrorType.saveFailed, '조리 기록 저장 실패: $e');
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.saveFailed, e.toString());
+      }
     }
   }
 
@@ -115,7 +131,11 @@ class UserRepositoryImpl implements UserRepository {
       }).toList();
     } catch (e) {
       _logger.e('조리 기록 목록 조회 실패: $uid', e);
-      throw UserError(UserErrorType.loadFailed, '조리 기록 목록 조회 실패: $e');
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.loadFailed, e.toString());
+      }
     }
   }
 
@@ -131,7 +151,11 @@ class UserRepositoryImpl implements UserRepository {
       _logger.i('조리 기록 삭제 성공: $uid / $historyId');
     } catch (e) {
       _logger.e('조리 기록 삭제 실패: $uid', e);
-      throw UserError(UserErrorType.deleteFailed, '조리 기록 삭제 실패: $e');
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.deleteFailed, e.toString());
+      }
     }
   }
 
@@ -143,7 +167,7 @@ class UserRepositoryImpl implements UserRepository {
       _logger.d('온보딩 플래그 설정: $needsOnboarding');
     } catch (e) {
       _logger.e('온보딩 플래그 설정 실패', e);
-      throw UserError(UserErrorType.updateFailed, '온보딩 플래그 설정 실패: $e');
+      throw UserException(UserErrorType.updateFailed, e.toString());
     }
   }
 
