@@ -122,6 +122,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             onConfirm: () {
               Navigator.of(context).pop();
               ref.read(loginViewModelProvider.notifier).clearError();
+              _passwordController.clear();
             },
           ),
     );
