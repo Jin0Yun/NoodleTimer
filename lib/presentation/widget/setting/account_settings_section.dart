@@ -12,8 +12,6 @@ class AccountSettingsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authViewModel = ref.read(authViewModelProvider.notifier);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -26,7 +24,7 @@ class AccountSettingsSection extends ConsumerWidget {
             DialogUtils.showConfirm(
               context,
               '정말 로그아웃 하시겠습니까?',
-              onConfirm: () => _logout(context, authViewModel),
+              onConfirm: () => _logout(context, ref),
             );
           },
         ),
@@ -46,8 +44,8 @@ class AccountSettingsSection extends ConsumerWidget {
     );
   }
 
-  Future<void> _logout(BuildContext context, dynamic authViewModel) async {
-    await authViewModel.logout();
+  Future<void> _logout(BuildContext context, WidgetRef ref) async {
+    await ref.read(authViewModelProvider.notifier).logout();
 
     if (context.mounted) {
       Navigator.pushReplacementNamed(context, AppRoutes.login);

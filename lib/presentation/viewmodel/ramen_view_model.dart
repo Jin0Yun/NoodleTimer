@@ -1,21 +1,18 @@
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
-import 'package:noodle_timer/domain/repository/ramen_repository.dart';
-import 'package:noodle_timer/domain/repository/user_repository.dart';
-import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
+import 'package:noodle_timer/domain/usecase/cook_history_use_case.dart';
+import 'package:noodle_timer/domain/usecase/ramen_usecase.dart';
 import 'package:noodle_timer/domain/enum/ramen_action_type.dart';
 import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/state/ramen_state.dart';
 
 class RamenViewModel extends BaseViewModel<RamenState> {
-  final RamenRepository _repository;
-  final UserRepository _userRepository;
+  final RamenUseCase _ramenUseCase;
+  final CookHistoryUseCase _cookHistoryUseCase;
 
-  RamenViewModel(this._repository, this._userRepository, AppLogger logger)
-    : super(logger, const RamenState()) {
-    _loadInitialData();
-  }
+  RamenViewModel(this._ramenUseCase, this._cookHistoryUseCase, AppLogger logger)
+    : super(logger, const RamenState());
 
   @override
   RamenState setLoadingState(bool isLoading) {
@@ -32,71 +29,51 @@ class RamenViewModel extends BaseViewModel<RamenState> {
     return state.copyWith(error: null);
   }
 
-  Future<void> _loadInitialData() async {
-    await loadRamens();
-  }
+  Future<bool> initialize([int initialBrandIndex = 0]) async {
+    if (state.brands.isNotEmpty) return true;
 
-  Future<void> initialize([int initialBrandIndex = 0]) async {
-    logger.i('라면 뷰모델 초기화 시작');
-    await loadBrands();
-    if (state.brands.isNotEmpty) {
-      selectBrand(initialBrandIndex);
-    }
-    logger.i('라면 뷰모델 초기화 완료');
-  }
+    state = setLoadingState(true);
+    try {
+      final brands = await _ramenUseCase.loadBrands();
+      final allRamen = brands.expand((brand) => brand.ramens).toList();
+      final ramenHistoryList = await _cookHistoryUseCase.getRamenHistoryList();
 
-  Future<void> loadBrands() async {
-    final brands = await _repository.loadBrands();
-    final updatedBrands = await _withUserCookHistory(brands);
-    final allRamen = await _repository.loadAllRamen();
+      final historyBrand = RamenBrandEntity(
+        id: 0,
+        name: '나의 라면 기록',
+        ramens: ramenHistoryList,
+      );
 
-    state = state.copyWith(brands: updatedBrands, allRamen: allRamen);
-    logger.i('브랜드 + 나의 라면 기록 불러오기 성공');
-  }
+      final brandsWithHistory = [historyBrand, ...brands];
 
-  Future<void> loadRamens() async {
-    final allRamen = await _repository.loadAllRamen();
-    state = state.copyWith(allRamen: allRamen);
-    logger.i('라면 데이터 로딩 완료');
-  }
+      state = state.copyWith(
+        brands: brandsWithHistory,
+        allRamen: allRamen,
+        isLoading: false,
+      );
 
-  Future<List<RamenBrandEntity>> _withUserCookHistory(
-    List<RamenBrandEntity> brands,
-  ) async {
-    final userId = _userRepository.getCurrentUserId();
-    if (userId == null) {
-      logger.w('로그인된 유저 없음');
-      return brands;
-    }
-
-    final histories = await _userRepository.getCookHistories(userId);
-    final ramenHistoryList = <RamenEntity>[];
-
-    for (final history in histories) {
-      final ramenId = int.tryParse(history.ramenId.trim());
-      if (ramenId == null) continue;
-      try {
-        final ramen = await _repository.findRamenById(ramenId);
-        if (ramen != null) {
-          ramenHistoryList.add(ramen);
-        }
-      } catch (e) {
-        logger.w('라면 정보 조회 실패: $ramenId');
+      if (state.brands.isNotEmpty) {
+        selectBrand(initialBrandIndex);
       }
+
+      return true;
+    } catch (e) {
+      state = setErrorState(e.toString());
+      state = setLoadingState(false);
+      return false;
     }
+  }
 
-    final historyBrand = RamenBrandEntity(
-      id: 0,
-      name: '나의 라면 기록',
-      ramens: ramenHistoryList,
-    );
+  Future<bool> loadBrands() async {
+    return await initialize();
+  }
 
-    return [historyBrand, ...brands];
+  Future<bool> loadRamens() async {
+    return await initialize();
   }
 
   void selectBrand(int index) {
     if (index < 0 || index >= state.brands.length) {
-      logger.w('유효하지 않은 브랜드 인덱스 접근: $index');
       return;
     }
 
@@ -107,7 +84,6 @@ class RamenViewModel extends BaseViewModel<RamenState> {
       clearSelectedRamen: true,
       clearTemporarySelected: true,
     );
-    logger.d('브랜드 선택: ${selected.name} (${selected.ramens.length}개 라면)');
   }
 
   void selectRamen(RamenEntity ramen) {
@@ -115,12 +91,10 @@ class RamenViewModel extends BaseViewModel<RamenState> {
     state = state.copyWith(
       temporarySelectedRamen: isAlreadySelected ? null : ramen,
     );
-    logger.d('라면 임시 선택: ${ramen.name}');
   }
 
   void confirmRamenSelection(RamenEntity ramen) {
     state = state.copyWith(selectedRamen: ramen, clearTemporarySelected: true);
-    logger.d('라면 선택 확정: ${ramen.name}, 조리시간: ${ramen.cookTime}초');
   }
 
   void handleRamenAction(RamenEntity ramen, RamenActionType actionType) {
@@ -132,29 +106,71 @@ class RamenViewModel extends BaseViewModel<RamenState> {
         confirmRamenSelection(ramen);
         break;
       case RamenActionType.detail:
-        logger.d("라면 상세 정보 보기: ${ramen.name}");
         break;
     }
   }
 
-  void updateSearchKeyword(String keyword) {
+  Future<void> updateSearchKeyword(String keyword) async {
     state = state.copyWith(searchKeyword: keyword);
     if (keyword.trim().isEmpty) {
       state = state.copyWith(searchResults: []);
     } else {
-      final results = _searchRamen(keyword.trim());
-      state = state.copyWith(searchResults: results);
+      try {
+        final results = await _ramenUseCase.searchRamen(
+          keyword.trim(),
+          state.allRamen,
+        );
+        state = state.copyWith(searchResults: results);
+      } catch (e) {
+        state = setErrorState(e.toString());
+      }
     }
   }
 
-  List<RamenEntity> _searchRamen(String keyword) {
-    final lowerKeyword = keyword.toLowerCase();
-    return state.allRamen
-        .where(
-          (ramen) =>
-              ramen.name.toLowerCase().contains(lowerKeyword) ||
-              HangulUtils.matchesChoSung(ramen.name, lowerKeyword),
-        )
-        .toList();
+  void removeHistoryRamen(String historyId) {
+    if (state.brands.isEmpty) return;
+
+    final ramenHistoryList = _cookHistoryUseCase.getRamenHistoryList();
+    ramenHistoryList.then((updatedRamens) {
+      final updatedHistoryBrand = RamenBrandEntity(
+        id: 0,
+        name: '나의 라면 기록',
+        ramens: updatedRamens,
+      );
+
+      final updatedBrands = [...state.brands];
+      updatedBrands[0] = updatedHistoryBrand;
+
+      state = state.copyWith(
+        brands: updatedBrands,
+        currentRamenList:
+            state.selectedBrandIndex == 0
+                ? updatedRamens
+                : state.currentRamenList,
+      );
+    });
+  }
+
+  Future<void> addHistoryRamen(RamenEntity ramen) async {
+    final ramenHistoryList = await _cookHistoryUseCase.getRamenHistoryList();
+
+    if (state.brands.isNotEmpty) {
+      final updatedHistoryBrand = RamenBrandEntity(
+        id: 0,
+        name: '나의 라면 기록',
+        ramens: ramenHistoryList,
+      );
+
+      final updatedBrands = [...state.brands];
+      updatedBrands[0] = updatedHistoryBrand;
+
+      state = state.copyWith(
+        brands: updatedBrands,
+        currentRamenList:
+            state.selectedBrandIndex == 0
+                ? ramenHistoryList
+                : state.currentRamenList,
+      );
+    }
   }
 }

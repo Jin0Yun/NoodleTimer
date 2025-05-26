@@ -22,7 +22,17 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isDialogShowing = false; // 다이얼로그 표시 상태 추적
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(authViewModelProvider.notifier).resetForm();
+      ref
+          .read(authViewModelProvider.notifier)
+          .setCurrentScreen(AuthScreenType.login);
+    });
+  }
 
   @override
   void dispose() {
@@ -36,15 +46,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(authViewModelProvider);
 
     ref.listen<AuthState>(authViewModelProvider, (previous, current) {
+      if (current.currentScreen != AuthScreenType.login) return;
+
       final error = current.error;
-      // 다이얼로그가 이미 표시 중이면 무시
-      if (error != null && previous?.error != error && !_isDialogShowing) {
-        _isDialogShowing = true;
+      if (error != null &&
+          previous?.error != error &&
+          !current.isDialogShowing) {
+        ref.read(authViewModelProvider.notifier).setDialogShowing(true);
         DialogUtils.showError(
           context,
           error,
           onConfirm: () {
-            _isDialogShowing = false; // 다이얼로그 닫힘 상태로 변경
+            ref.read(authViewModelProvider.notifier).setDialogShowing(false);
             ref.read(authViewModelProvider.notifier).resetError();
             _passwordController.clear();
           },

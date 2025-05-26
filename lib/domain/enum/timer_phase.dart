@@ -10,7 +10,6 @@ enum TimerPhase {
 extension TimerPhaseResolver on TimerState {
   TimerPhase get phase {
     if (isInitial) return TimerPhase.initial;
-    if (isEggTime) return TimerPhase.egg;
     if (isCompleted) return TimerPhase.completed;
     return TimerPhase.cooking;
   }

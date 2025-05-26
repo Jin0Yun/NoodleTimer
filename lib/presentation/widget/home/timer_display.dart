@@ -6,6 +6,8 @@ import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/viewmodel/timer_view_model.dart';
 
 class TimerDisplay extends ConsumerWidget {
+  const TimerDisplay({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timerState = ref.watch(timerViewModelProvider);

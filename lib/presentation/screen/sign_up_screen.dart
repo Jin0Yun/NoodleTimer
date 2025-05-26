@@ -6,8 +6,6 @@ import 'package:noodle_timer/presentation/common/widget/custom_app_bar.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_text_field.dart';
 import 'package:noodle_timer/presentation/common/utils/dialog_utils.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
-import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
-import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/state/auth_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,17 +22,30 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _confirmPasswordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(signUpViewModelProvider);
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(authViewModelProvider.notifier).resetForm();
+      ref
+          .read(authViewModelProvider.notifier)
+          .setCurrentScreen(AuthScreenType.signup);
+    });
+  }
 
-    ref.listen<AuthState>(signUpViewModelProvider, (previous, current) {
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(authViewModelProvider);
+
+    ref.listen<AuthState>(authViewModelProvider, (previous, current) {
+      if (current.currentScreen != AuthScreenType.signup) return;
+
       final error = current.error;
       if (error != null && previous?.error != error) {
         DialogUtils.showError(
           context,
           error,
           onConfirm: () {
-            ref.read(signUpViewModelProvider.notifier).resetError();
+            ref.read(authViewModelProvider.notifier).resetError();
           },
         );
       }
@@ -54,7 +65,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 errorMessage: state.emailError,
                 onChanged: (value) {
                   ref
-                      .read(signUpViewModelProvider.notifier)
+                      .read(authViewModelProvider.notifier)
                       .updateEmailWithValidation(value);
                 },
               ),
@@ -67,7 +78,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 errorMessage: state.passwordError,
                 onChanged: (value) {
                   ref
-                      .read(signUpViewModelProvider.notifier)
+                      .read(authViewModelProvider.notifier)
                       .updatePasswordWithValidation(value);
                 },
               ),
@@ -80,7 +91,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 errorMessage: state.confirmError,
                 onChanged: (value) {
                   ref
-                      .read(signUpViewModelProvider.notifier)
+                      .read(authViewModelProvider.notifier)
                       .updateConfirmPassword(value);
                 },
               ),
@@ -98,7 +109,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   void _onSignUpPressed() async {
-    final success = await ref.read(signUpViewModelProvider.notifier).signUp();
+    final success = await ref.read(authViewModelProvider.notifier).signUp();
 
     if (success) {
       final prefs = await SharedPreferences.getInstance();

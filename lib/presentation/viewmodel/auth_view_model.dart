@@ -1,20 +1,14 @@
-import 'package:noodle_timer/core/exceptions/auth_exception.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
-import 'package:noodle_timer/domain/entity/egg_preference.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
-import 'package:noodle_timer/domain/entity/user_entity.dart';
-import 'package:noodle_timer/domain/repository/auth_repository.dart';
-import 'package:noodle_timer/domain/repository/user_repository.dart';
+import 'package:noodle_timer/domain/usecase/auth_usecase.dart';
 import 'package:noodle_timer/presentation/common/utils/input_validator.dart';
 import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/state/auth_state.dart';
 
 class AuthViewModel extends BaseViewModel<AuthState> {
-  final AuthRepository _authRepository;
-  final UserRepository _userRepository;
+  final AuthUseCase _authUseCase;
 
-  AuthViewModel(this._authRepository, this._userRepository, AppLogger logger)
-      : super(logger, const AuthState());
+  AuthViewModel(this._authUseCase, AppLogger logger)
+    : super(logger, const AuthState());
 
   @override
   AuthState setLoadingState(bool isLoading) {
@@ -28,7 +22,19 @@ class AuthViewModel extends BaseViewModel<AuthState> {
 
   @override
   AuthState clearErrorState() {
-    return state.copyWith(error: null);
+    return state.copyWith(error: null, isDialogShowing: false);
+  }
+
+  void setDialogShowing(bool showing) {
+    state = state.copyWith(isDialogShowing: showing);
+  }
+
+  void setCurrentScreen(AuthScreenType screenType) {
+    state = state.copyWith(currentScreen: screenType);
+  }
+
+  void resetForm() {
+    state = const AuthState();
   }
 
   void updateEmail(String email) {
@@ -71,17 +77,11 @@ class AuthViewModel extends BaseViewModel<AuthState> {
 
     state = setLoadingState(true);
     try {
-      await _authRepository.signIn(state.email, state.password);
-      logger.i('로그인 성공: ${state.email}');
+      await _authUseCase.login(state.email, state.password);
       state = setLoadingState(false);
       return true;
     } catch (e) {
-      String errorMessage = '로그인에 실패했습니다.';
-      if (e is AuthException) {
-        errorMessage = e.toString();
-      }
-      logger.e('로그인 실패: ${state.email}', e);
-      state = setErrorState(errorMessage);
+      state = setErrorState(e.toString());
       state = setLoadingState(false);
       return false;
     }
@@ -92,34 +92,11 @@ class AuthViewModel extends BaseViewModel<AuthState> {
 
     state = setLoadingState(true);
     try {
-      final userCredential = await _authRepository.signUp(
-        state.email.trim(),
-        state.password,
-      );
-
-      if (userCredential.user != null) {
-        final user = UserEntity(
-          uid: userCredential.user!.uid,
-          email: state.email.trim(),
-          favoriteRamenIds: [],
-          noodlePreference: NoodlePreference.none,
-          eggPreference: EggPreference.none,
-          createdAt: DateTime.now(),
-        );
-
-        await _userRepository.saveUser(user);
-      }
-
-      logger.i('회원가입 성공: ${state.email}');
+      await _authUseCase.signUp(state.email.trim(), state.password);
       state = setLoadingState(false);
       return true;
     } catch (e) {
-      String errorMessage = '회원가입에 실패했습니다.';
-      if (e is AuthException) {
-        errorMessage = e.toString();
-      }
-      logger.e('회원가입 실패: ${state.email}', e);
-      state = setErrorState(errorMessage);
+      state = setErrorState(e.toString());
       state = setLoadingState(false);
       return false;
     }
@@ -127,8 +104,7 @@ class AuthViewModel extends BaseViewModel<AuthState> {
 
   Future<void> logout() async {
     await runWithLoading(() async {
-      await _authRepository.signOut();
-      logger.i('로그아웃 성공');
+      await _authUseCase.logout();
     }, showLoading: false);
   }
 }

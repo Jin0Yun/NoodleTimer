@@ -16,7 +16,8 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 
 final ramenRepositoryProvider = Provider<RamenRepository>((ref) {
   final dataLoader = DataLoader();
-  return RamenRepositoryImpl(dataLoader);
+  final logger = ref.read(loggerProvider);
+  return RamenRepositoryImpl(dataLoader: dataLoader, logger: logger);
 });
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
