@@ -127,40 +127,30 @@ class RamenViewModel extends BaseViewModel<RamenState> {
     }
   }
 
-  void removeHistoryRamen(String historyId) {
+  void removeHistoryRamen(String historyId) async {
     if (state.brands.isEmpty) return;
 
-    final ramenHistoryList = _cookHistoryUseCase.getRamenHistoryList();
-    ramenHistoryList.then((updatedRamens) {
-      final updatedHistoryBrand = RamenBrandEntity(
-        id: 0,
-        name: '나의 라면 기록',
-        ramens: updatedRamens,
-      );
+    final updatedRamens = await _cookHistoryUseCase.getRamenHistoryList();
+    final updatedHistoryBrand = state.brands[0].copyWith(ramens: updatedRamens);
+    final updatedBrands = [...state.brands];
+    updatedBrands[0] = updatedHistoryBrand;
 
-      final updatedBrands = [...state.brands];
-      updatedBrands[0] = updatedHistoryBrand;
-
-      state = state.copyWith(
-        brands: updatedBrands,
-        currentRamenList:
-            state.selectedBrandIndex == 0
-                ? updatedRamens
-                : state.currentRamenList,
-      );
-    });
+    state = state.copyWith(
+      brands: updatedBrands,
+      currentRamenList:
+          state.selectedBrandIndex == 0
+              ? updatedRamens
+              : state.currentRamenList,
+    );
   }
 
   Future<void> addHistoryRamen(RamenEntity ramen) async {
     final ramenHistoryList = await _cookHistoryUseCase.getRamenHistoryList();
 
     if (state.brands.isNotEmpty) {
-      final updatedHistoryBrand = RamenBrandEntity(
-        id: 0,
-        name: '나의 라면 기록',
+      final updatedHistoryBrand = state.brands[0].copyWith(
         ramens: ramenHistoryList,
       );
-
       final updatedBrands = [...state.brands];
       updatedBrands[0] = updatedHistoryBrand;
 

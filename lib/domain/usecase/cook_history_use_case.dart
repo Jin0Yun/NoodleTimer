@@ -18,38 +18,26 @@ class CookHistoryUseCase {
     }
 
     final cookHistories = await _userRepository.getCookHistories(userId);
-    final updatedHistories = await Future.wait(
-      cookHistories.map((history) async {
-        if (history.ramenId.isNotEmpty) {
-          final ramenId = int.tryParse(history.ramenId) ?? 0;
-          try {
-            final ramen = await _ramenRepository.findRamenById(ramenId);
-            if (ramen != null) {
-              return history.withRamenInfo(ramen.name, ramen.imageUrl);
-            }
-            return history;
-          } catch (e) {
-            return history;
-          }
-        }
-        return history;
-      }).toList(),
-    );
-
-    return updatedHistories;
+    return cookHistories;
   }
 
-  Future<void> saveCookHistory(RamenEntity ramen) async {
+  Future<void> saveCookHistory(
+    RamenEntity ramen, {
+    NoodlePreference? noodleState,
+    EggPreference? eggState,
+  }) async {
     final userId = _userRepository.getCurrentUserId();
     if (userId == null) {
       throw Exception('조리 기록 저장 실패: 유저 정보 없음');
     }
 
     final history = CookHistoryEntity(
-      ramenId: ramen.id.toString(),
+      ramenId: ramen.id,
+      ramenName: ramen.name,
+      ramenImageUrl: ramen.imageUrl,
       cookedAt: DateTime.now(),
-      noodleState: NoodlePreference.kodul,
-      eggPreference: EggPreference.none,
+      noodleState: noodleState ?? NoodlePreference.none,
+      eggPreference: eggState ?? EggPreference.none,
       cookTime: Duration(seconds: ramen.cookTime),
     );
 
@@ -74,10 +62,7 @@ class CookHistoryUseCase {
     final ramenHistoryList = <RamenEntity>[];
 
     for (final history in histories) {
-      final ramenId = int.tryParse(history.ramenId.trim());
-      if (ramenId == null) continue;
-
-      final ramen = await _ramenRepository.findRamenById(ramenId);
+      final ramen = await _ramenRepository.findRamenById(history.ramenId);
       if (ramen != null) {
         ramenHistoryList.add(ramen);
       }

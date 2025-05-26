@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
+import 'package:noodle_timer/domain/entity/egg_preference.dart';
+import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/presentation/state/history_state.dart';
 import 'package:noodle_timer/presentation/widget/card/recipe_history_card.dart';
 
@@ -30,12 +32,11 @@ class HistoryListView extends ConsumerWidget {
             ...historyItems.map(
               (history) => RecipeHistoryCard(
                 date: date,
-                image: history.ramenImage ?? '',
-                name: history.ramenName ?? '알 수 없는 라면',
-                cookedTime:
-                    '${history.cookTime.inMinutes}분 ${history.cookTime.inSeconds % 60}초 간 조리',
-                noodleState: history.noodleState.name,
-                eggState: history.eggPreference.name,
+                image: history.ramenImageUrl,
+                name: history.ramenName,
+                cookedTime: history.formattedCookTime,
+                noodleState: history.noodleState.displayText,
+                eggState: history.eggPreference.displayText,
                 onCookAgain: () async {
                   final viewModel = ref.read(historyViewModelProvider.notifier);
                   await viewModel.replayRecipe(history);

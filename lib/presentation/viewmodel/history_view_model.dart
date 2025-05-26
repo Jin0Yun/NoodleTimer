@@ -79,14 +79,9 @@ class HistoryViewModel extends BaseViewModel<HistoryState> {
 
   Future<bool> replayRecipe(CookHistoryEntity item) async {
     try {
-      final ramenId = int.tryParse(item.ramenId);
-      if (ramenId == null) {
-        throw Exception('유효하지 않은 라면 ID: ${item.ramenId}');
-      }
-
-      final ramen = await _ramenUseCase.getRamenById(ramenId);
+      final ramen = await _ramenUseCase.getRamenById(item.ramenId);
       if (ramen == null) {
-        throw Exception('라면 정보를 찾을 수 없습니다: $ramenId');
+        throw Exception('라면 정보를 찾을 수 없습니다: ${item.ramenId}');
       }
 
       _ref.read(ramenViewModelProvider.notifier).confirmRamenSelection(ramen);

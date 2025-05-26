@@ -60,6 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ref.read(authViewModelProvider.notifier).setDialogShowing(false);
             ref.read(authViewModelProvider.notifier).resetError();
             _passwordController.clear();
+            ref.read(authViewModelProvider.notifier).updatePassword('');
           },
         );
       }
@@ -107,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               CustomButton(
                 buttonText: state.isLoading ? '로그인 중...' : '로그인',
                 onPressed: _login,
-                isEnabled: state.canLogin && !state.isLoading,
+                isEnabled: state.canLogin,
               ),
               const SizedBox(height: 4),
               TextButton(
