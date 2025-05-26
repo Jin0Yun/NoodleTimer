@@ -17,6 +17,7 @@ void main() {
         'ramenDescription': '한국을 대표하는 매운 라면',
         'ramenRecipe': '1. 물 550ml에...',
         'afterSeasoning': false,
+        'cookTime': 270,
       };
 
       // when
@@ -30,6 +31,7 @@ void main() {
       expect(ramen.description, '한국을 대표하는 매운 라면');
       expect(ramen.recipe, '1. 물 550ml에...');
       expect(ramen.afterSeasoning, false);
+      expect(ramen.cookTime, 270);
     });
 
     test('RamenBrand 모델에서 라면 리스트를 포함한 JSON을 파싱할 수 있어야 한다', () {
@@ -46,6 +48,7 @@ void main() {
             'ramenDescription': '한국을 대표하는 매운 라면',
             'ramenRecipe': '1. 물 550ml에...',
             'afterSeasoning': false,
+            'cookTime': 270,
           },
         ],
       };
@@ -76,6 +79,7 @@ void main() {
                 'ramenDescription': '한국을 대표하는 매운 라면',
                 'ramenRecipe': '1. 물 550ml에...',
                 'afterSeasoning': false,
+                'cookTime': 270,
               },
             ],
           },
@@ -108,11 +112,11 @@ void main() {
       final brokenJson = {
         'ramenIndex': 101,
         'ramenName': '라면왕김통깨',
-        // 'ramenImage' 누락
         'ramenSpicy': '중간맛',
         'ramenDescription': '간장베이스의 라면',
         'ramenRecipe': '1. 물 500ml에...',
         'afterSeasoning': true,
+        'cookTime': 240,
       };
 
       // when & then
@@ -131,6 +135,7 @@ void main() {
         'ramenDescription': '한국을 대표하는 매운 라면',
         'ramenRecipe': '1. 물 550ml에...',
         'afterSeasoning': false,
+        'cookTime': 270,
       };
       final ramen = Ramen.fromJson(ramenJson);
 
@@ -140,6 +145,7 @@ void main() {
       // then
       expect(entity.name, '신라면');
       expect(entity.afterSeasoning, false);
+      expect(entity.cookTime, 270);
     });
 
     test('RamenBrand 모델에서 Entity로 정상적으로 변환되어야 한다', () {
@@ -156,6 +162,7 @@ void main() {
             'ramenDescription': '한국을 대표하는 매운 라면',
             'ramenRecipe': '1. 물 550ml에...',
             'afterSeasoning': false,
+            'cookTime': 270,
           },
         ],
       };
@@ -186,6 +193,7 @@ void main() {
                 'ramenDescription': '한국을 대표하는 매운 라면',
                 'ramenRecipe': '1. 물 550ml에...',
                 'afterSeasoning': false,
+                'cookTime': 270,
               },
             ],
           },

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 enum RamenErrorType {
@@ -25,7 +26,7 @@ class RamenException implements Exception {
       details != null ? "${type.message} $details" : type.message;
 
   factory RamenException.fromException(dynamic e) {
-    if (e is PlatformException) {
+    if (e is PlatformException || e is FlutterError) {
       return RamenException(RamenErrorType.assetNotFound);
     } else if (e is FormatException) {
       return RamenException(RamenErrorType.parsingError);

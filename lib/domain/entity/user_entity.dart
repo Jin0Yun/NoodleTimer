@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
 import 'package:noodle_timer/domain/entity/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 

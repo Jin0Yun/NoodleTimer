@@ -6,9 +6,14 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i8;
+import 'package:noodle_timer/domain/entity/cook_history_entity.dart' as _i10;
+import 'package:noodle_timer/domain/entity/noodle_preference.dart' as _i9;
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart' as _i4;
 import 'package:noodle_timer/domain/entity/ramen_entity.dart' as _i5;
+import 'package:noodle_timer/domain/entity/user_entity.dart' as _i7;
 import 'package:noodle_timer/domain/repository/ramen_repository.dart' as _i2;
+import 'package:noodle_timer/domain/repository/user_repository.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -51,4 +56,120 @@ class MockRamenRepository extends _i1.Mock implements _i2.RamenRepository {
             ),
           )
           as _i3.Future<List<_i5.RamenEntity>>);
+
+  @override
+  _i3.Future<_i5.RamenEntity?> findRamenById(int? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#findRamenById, [id]),
+            returnValue: _i3.Future<_i5.RamenEntity?>.value(),
+          )
+          as _i3.Future<_i5.RamenEntity?>);
+
+  @override
+  _i3.Future<List<_i5.RamenEntity>> findRamensByIds(List<int>? ids) =>
+      (super.noSuchMethod(
+            Invocation.method(#findRamensByIds, [ids]),
+            returnValue: _i3.Future<List<_i5.RamenEntity>>.value(
+              <_i5.RamenEntity>[],
+            ),
+          )
+          as _i3.Future<List<_i5.RamenEntity>>);
+}
+
+/// A class which mocks [UserRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserRepository extends _i1.Mock implements _i6.UserRepository {
+  MockUserRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<_i7.UserEntity?> getUserById(String? uid) =>
+      (super.noSuchMethod(
+            Invocation.method(#getUserById, [uid]),
+            returnValue: _i3.Future<_i7.UserEntity?>.value(),
+          )
+          as _i3.Future<_i7.UserEntity?>);
+
+  @override
+  _i3.Stream<_i7.UserEntity?> getUserStream(String? uid) =>
+      (super.noSuchMethod(
+            Invocation.method(#getUserStream, [uid]),
+            returnValue: _i3.Stream<_i7.UserEntity?>.empty(),
+          )
+          as _i3.Stream<_i7.UserEntity?>);
+
+  @override
+  _i3.Future<String> saveUser(_i7.UserEntity? user) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveUser, [user]),
+            returnValue: _i3.Future<String>.value(
+              _i8.dummyValue<String>(
+                this,
+                Invocation.method(#saveUser, [user]),
+              ),
+            ),
+          )
+          as _i3.Future<String>);
+
+  @override
+  _i3.Future<void> updateNoodlePreference(
+    String? uid,
+    _i9.NoodlePreference? preference,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateNoodlePreference, [uid, preference]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> saveCookHistory(
+    String? uid,
+    _i10.CookHistoryEntity? history,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveCookHistory, [uid, history]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<List<_i10.CookHistoryEntity>> getCookHistories(String? uid) =>
+      (super.noSuchMethod(
+            Invocation.method(#getCookHistories, [uid]),
+            returnValue: _i3.Future<List<_i10.CookHistoryEntity>>.value(
+              <_i10.CookHistoryEntity>[],
+            ),
+          )
+          as _i3.Future<List<_i10.CookHistoryEntity>>);
+
+  @override
+  _i3.Future<void> deleteCookHistory(String? uid, String? historyId) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteCookHistory, [uid, historyId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> setNeedsOnboarding(bool? needsOnboarding) =>
+      (super.noSuchMethod(
+            Invocation.method(#setNeedsOnboarding, [needsOnboarding]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<bool> getNeedsOnboarding() =>
+      (super.noSuchMethod(
+            Invocation.method(#getNeedsOnboarding, []),
+            returnValue: _i3.Future<bool>.value(false),
+          )
+          as _i3.Future<bool>);
 }
