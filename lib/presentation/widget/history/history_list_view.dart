@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:noodle_timer/app_routes.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
-import 'package:noodle_timer/presentation/viewmodel/history_state.dart';
+import 'package:noodle_timer/presentation/state/history_state.dart';
 import 'package:noodle_timer/presentation/widget/card/recipe_history_card.dart';
 
 class HistoryListView extends ConsumerWidget {

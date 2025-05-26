@@ -6,7 +6,7 @@ import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
 import 'package:noodle_timer/domain/enum/ramen_action_type.dart';
 import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
-import 'package:noodle_timer/presentation/viewmodel/ramen_state.dart';
+import 'package:noodle_timer/presentation/state/ramen_state.dart';
 
 class RamenViewModel extends BaseViewModel<RamenState> {
   final RamenRepository _repository;

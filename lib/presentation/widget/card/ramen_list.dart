@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
-import 'package:noodle_timer/presentation/viewmodel/ramen_state.dart';
+import 'package:noodle_timer/presentation/state/ramen_state.dart';
 import 'package:noodle_timer/presentation/widget/card/ramen_search_result_card.dart';
 
 class RamenList extends StatelessWidget {

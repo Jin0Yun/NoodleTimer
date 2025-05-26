@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/presentation/state/timer_state.dart';
 import 'package:noodle_timer/presentation/viewmodel/timer_view_model.dart';
-import 'package:noodle_timer/presentation/viewmodel/auth_state.dart';
+import 'package:noodle_timer/presentation/state/auth_state.dart';
 import 'package:noodle_timer/presentation/viewmodel/auth_view_model.dart';
-import 'package:noodle_timer/presentation/viewmodel/history_state.dart';
+import 'package:noodle_timer/presentation/state/history_state.dart';
 import 'package:noodle_timer/presentation/viewmodel/history_view_model.dart';
-import 'package:noodle_timer/presentation/viewmodel/ramen_state.dart';
+import 'package:noodle_timer/presentation/state/ramen_state.dart';
 import 'package:noodle_timer/presentation/viewmodel/ramen_view_model.dart';
 import 'core_providers.dart';
 import 'repository_providers.dart';

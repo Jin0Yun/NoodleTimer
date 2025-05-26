@@ -8,7 +8,7 @@ import 'package:noodle_timer/presentation/common/utils/dialog_utils.dart';
 import 'package:noodle_timer/presentation/common/widget/custom_button.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
-import 'package:noodle_timer/presentation/viewmodel/auth_state.dart';
+import 'package:noodle_timer/presentation/state/auth_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {

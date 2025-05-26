@@ -5,7 +5,7 @@ import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/widget/home/option_selector_container.dart';
 import 'package:noodle_timer/presentation/widget/home/timer_circle_box.dart';
-import 'package:noodle_timer/presentation/viewmodel/ramen_state.dart';
+import 'package:noodle_timer/presentation/state/ramen_state.dart';
 
 class TimerCardWithOptionSelectorContainer extends ConsumerWidget {
   final RamenEntity? selectedRamen;
