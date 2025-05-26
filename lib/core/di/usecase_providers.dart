@@ -6,6 +6,7 @@ import 'package:noodle_timer/domain/usecase/ramen_usecase.dart';
 import 'repository_providers.dart';
 
 final authUseCaseProvider = Provider<AuthUseCase>((ref) {
+  final authRepo = ref.watch(authRepositoryProvider);
   final userRepo = ref.watch(userRepositoryProvider);
   return AuthUseCase(authRepo, userRepo);
 });

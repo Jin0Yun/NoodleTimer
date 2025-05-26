@@ -7,6 +7,7 @@ import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i4;
+import 'package:noodle_timer/core/logger/app_logger.dart' as _i5;
 import 'package:noodle_timer/data/utils/data_loader.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -40,4 +41,38 @@ class MockIDataLoader extends _i1.Mock implements _i2.IDataLoader {
             ),
           )
           as _i3.Future<String>);
+}
+
+/// A class which mocks [AppLogger].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppLogger extends _i1.Mock implements _i5.AppLogger {
+  MockAppLogger() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void d(String? message) => super.noSuchMethod(
+    Invocation.method(#d, [message]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void i(String? message) => super.noSuchMethod(
+    Invocation.method(#i, [message]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void w(String? message) => super.noSuchMethod(
+    Invocation.method(#w, [message]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void e(String? message, [Object? error, StackTrace? stackTrace]) =>
+      super.noSuchMethod(
+        Invocation.method(#e, [message, error, stackTrace]),
+        returnValueForMissingStub: null,
+      );
 }

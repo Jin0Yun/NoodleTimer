@@ -4,18 +4,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:noodle_timer/core/exceptions/ramen_exception.dart';
+import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/data/utils/data_loader.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/data/repository/ramen_repository_impl.dart';
 import 'ramen_repository_test.mocks.dart';
 
-@GenerateMocks([IDataLoader])
+@GenerateMocks([IDataLoader, AppLogger])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final mockDataLoader = MockIDataLoader();
-  final repository = RamenRepositoryImpl(mockDataLoader);
+  late MockIDataLoader mockDataLoader;
+  late MockAppLogger mockLogger;
+  late RamenRepositoryImpl repository;
+
+  setUp(() {
+    mockDataLoader = MockIDataLoader();
+    mockLogger = MockAppLogger();
+    repository = RamenRepositoryImpl(
+      dataLoader: mockDataLoader,
+      logger: mockLogger,
+    );
+  });
 
   final ramenDataJson = {
     'ramenData': [
