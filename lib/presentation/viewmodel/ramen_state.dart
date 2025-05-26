@@ -1,6 +1,6 @@
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
-import 'package:noodle_timer/presentation/common/state/base_state.dart';
+import 'package:noodle_timer/presentation/state/base_state.dart';
 
 class RamenState implements BaseState {
   final List<RamenBrandEntity> brands;

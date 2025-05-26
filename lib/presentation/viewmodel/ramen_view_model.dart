@@ -4,8 +4,8 @@ import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
-import 'package:noodle_timer/presentation/home/viewmodel/ramen_action_type.dart';
-import 'package:noodle_timer/presentation/common/viewmodel/base_view_model.dart';
+import 'package:noodle_timer/domain/enum/ramen_action_type.dart';
+import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/viewmodel/ramen_state.dart';
 
 class RamenViewModel extends BaseViewModel<RamenState> {

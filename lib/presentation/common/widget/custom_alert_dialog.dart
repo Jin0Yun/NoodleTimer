@@ -49,7 +49,7 @@ class CustomAlertDialog extends StatelessWidget {
                     text: cancelText ?? '취소',
                     backgroundColor: NoodleColors.neutral200,
                     textColor: NoodleColors.neutral1000,
-                    onPressed: onCancel!,
+                    onPressed: onCancel ?? () => Navigator.of(context).pop(),
                   ),
                   const SizedBox(width: 16),
                   CustomDialogButton(

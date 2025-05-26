@@ -6,7 +6,7 @@ import 'package:noodle_timer/domain/entity/user_entity.dart';
 import 'package:noodle_timer/domain/repository/auth_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/common/utils/input_validator.dart';
-import 'package:noodle_timer/presentation/common/viewmodel/base_view_model.dart';
+import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/viewmodel/auth_state.dart';
 
 class AuthViewModel extends BaseViewModel<AuthState> {

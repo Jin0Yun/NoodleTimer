@@ -6,7 +6,7 @@ import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
-import 'package:noodle_timer/presentation/common/viewmodel/base_view_model.dart';
+import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/viewmodel/history_state.dart';
 
 class HistoryViewModel extends BaseViewModel<HistoryState> {

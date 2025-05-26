@@ -1,4 +1,4 @@
-import 'package:noodle_timer/presentation/common/state/base_state.dart';
+import 'package:noodle_timer/presentation/state/base_state.dart';
 
 class AuthState implements BaseState {
   final String email;
