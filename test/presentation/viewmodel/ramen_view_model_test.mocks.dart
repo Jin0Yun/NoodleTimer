@@ -6,9 +6,14 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:noodle_timer/core/logger/app_logger.dart' as _i10;
+import 'package:noodle_timer/domain/entity/cook_history_entity.dart' as _i9;
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart' as _i4;
 import 'package:noodle_timer/domain/entity/ramen_entity.dart' as _i5;
-import 'package:noodle_timer/domain/repository/ramen_repository.dart' as _i2;
+import 'package:noodle_timer/domain/enum/egg_preference.dart' as _i8;
+import 'package:noodle_timer/domain/enum/noodle_preference.dart' as _i7;
+import 'package:noodle_timer/domain/usecase/cook_history_use_case.dart' as _i6;
+import 'package:noodle_timer/domain/usecase/ramen_use_case.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -24,11 +29,11 @@ import 'package:noodle_timer/domain/repository/ramen_repository.dart' as _i2;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-/// A class which mocks [RamenRepository].
+/// A class which mocks [RamenUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRamenRepository extends _i1.Mock implements _i2.RamenRepository {
-  MockRamenRepository() {
+class MockRamenUseCase extends _i1.Mock implements _i2.RamenUseCase {
+  MockRamenUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -51,4 +56,126 @@ class MockRamenRepository extends _i1.Mock implements _i2.RamenRepository {
             ),
           )
           as _i3.Future<List<_i5.RamenEntity>>);
+
+  @override
+  _i3.Future<_i5.RamenEntity?> getRamenById(int? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#getRamenById, [id]),
+            returnValue: _i3.Future<_i5.RamenEntity?>.value(),
+          )
+          as _i3.Future<_i5.RamenEntity?>);
+
+  @override
+  _i3.Future<List<_i5.RamenEntity>> searchRamen(
+    String? keyword,
+    List<_i5.RamenEntity>? allRamen,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#searchRamen, [keyword, allRamen]),
+            returnValue: _i3.Future<List<_i5.RamenEntity>>.value(
+              <_i5.RamenEntity>[],
+            ),
+          )
+          as _i3.Future<List<_i5.RamenEntity>>);
+}
+
+/// A class which mocks [CookHistoryUseCase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCookHistoryUseCase extends _i1.Mock
+    implements _i6.CookHistoryUseCase {
+  MockCookHistoryUseCase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<void> saveCookHistoryWithPreferences(
+    _i5.RamenEntity? ramen,
+    _i7.NoodlePreference? noodlePreference,
+    _i8.EggPreference? eggPreference,
+    Duration? cookTime,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveCookHistoryWithPreferences, [
+              ramen,
+              noodlePreference,
+              eggPreference,
+              cookTime,
+            ]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> saveCookHistory(_i5.RamenEntity? ramen) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveCookHistory, [ramen]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<List<_i9.CookHistoryEntity>> getCookHistoriesWithRamenInfo() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCookHistoriesWithRamenInfo, []),
+            returnValue: _i3.Future<List<_i9.CookHistoryEntity>>.value(
+              <_i9.CookHistoryEntity>[],
+            ),
+          )
+          as _i3.Future<List<_i9.CookHistoryEntity>>);
+
+  @override
+  _i3.Future<void> deleteCookHistory(String? historyId) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteCookHistory, [historyId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<List<_i5.RamenEntity>> getRamenHistoryList() =>
+      (super.noSuchMethod(
+            Invocation.method(#getRamenHistoryList, []),
+            returnValue: _i3.Future<List<_i5.RamenEntity>>.value(
+              <_i5.RamenEntity>[],
+            ),
+          )
+          as _i3.Future<List<_i5.RamenEntity>>);
+}
+
+/// A class which mocks [AppLogger].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppLogger extends _i1.Mock implements _i10.AppLogger {
+  MockAppLogger() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void d(String? message) => super.noSuchMethod(
+    Invocation.method(#d, [message]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void i(String? message) => super.noSuchMethod(
+    Invocation.method(#i, [message]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void w(String? message) => super.noSuchMethod(
+    Invocation.method(#w, [message]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void e(String? message, [Object? error, StackTrace? stackTrace]) =>
+      super.noSuchMethod(
+        Invocation.method(#e, [message, error, stackTrace]),
+        returnValueForMissingStub: null,
+      );
 }

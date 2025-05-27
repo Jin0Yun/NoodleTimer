@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:noodle_timer/data/dto/ramen.dart';
-import 'package:noodle_timer/data/dto/ramen_brand.dart';
-import 'package:noodle_timer/data/dto/ramen_data.dart';
+import 'package:noodle_timer/data/dto/ramen_dto.dart';
+import 'package:noodle_timer/data/dto/ramen_brand_dto.dart';
+import 'package:noodle_timer/data/dto/ramen_data_dto.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +17,11 @@ void main() {
         'ramenDescription': '한국을 대표하는 매운 라면',
         'ramenRecipe': '1. 물 550ml에...',
         'afterSeasoning': false,
+        'cookTime': 270,
       };
 
       // when
-      final ramen = Ramen.fromJson(ramenJson);
+      final ramen = RamenDTO.fromJson(ramenJson);
 
       // then
       expect(ramen.id, 100);
@@ -30,6 +31,7 @@ void main() {
       expect(ramen.description, '한국을 대표하는 매운 라면');
       expect(ramen.recipe, '1. 물 550ml에...');
       expect(ramen.afterSeasoning, false);
+      expect(ramen.cookTime, 270);
     });
 
     test('RamenBrand 모델에서 라면 리스트를 포함한 JSON을 파싱할 수 있어야 한다', () {
@@ -46,12 +48,13 @@ void main() {
             'ramenDescription': '한국을 대표하는 매운 라면',
             'ramenRecipe': '1. 물 550ml에...',
             'afterSeasoning': false,
+            'cookTime': 270,
           },
         ],
       };
 
       // when
-      final brand = RamenBrand.fromJson(brandJson);
+      final brand = RamenBrandDTO.fromJson(brandJson);
 
       // then
       expect(brand.id, 1);
@@ -76,6 +79,7 @@ void main() {
                 'ramenDescription': '한국을 대표하는 매운 라면',
                 'ramenRecipe': '1. 물 550ml에...',
                 'afterSeasoning': false,
+                'cookTime': 270,
               },
             ],
           },
@@ -83,7 +87,7 @@ void main() {
       };
 
       // when
-      final data = RamenData.fromJson(dataJson);
+      final data = RamenDataDTO.fromJson(dataJson);
 
       // then
       expect(data.brands.length, 1);
@@ -97,7 +101,7 @@ void main() {
       final emptyDataJson = {'ramenData': []};
 
       // when
-      final data = RamenData.fromJson(emptyDataJson);
+      final data = RamenDataDTO.fromJson(emptyDataJson);
 
       // then
       expect(data.brands, isEmpty);
@@ -108,15 +112,15 @@ void main() {
       final brokenJson = {
         'ramenIndex': 101,
         'ramenName': '라면왕김통깨',
-        // 'ramenImage' 누락
         'ramenSpicy': '중간맛',
         'ramenDescription': '간장베이스의 라면',
         'ramenRecipe': '1. 물 500ml에...',
         'afterSeasoning': true,
+        'cookTime': 240,
       };
 
       // when & then
-      expect(() => Ramen.fromJson(brokenJson), throwsA(isA<TypeError>()));
+      expect(() => RamenDTO.fromJson(brokenJson), throwsA(isA<TypeError>()));
     });
   });
 
@@ -131,8 +135,9 @@ void main() {
         'ramenDescription': '한국을 대표하는 매운 라면',
         'ramenRecipe': '1. 물 550ml에...',
         'afterSeasoning': false,
+        'cookTime': 270,
       };
-      final ramen = Ramen.fromJson(ramenJson);
+      final ramen = RamenDTO.fromJson(ramenJson);
 
       // when
       final entity = ramen.toEntity();
@@ -140,6 +145,7 @@ void main() {
       // then
       expect(entity.name, '신라면');
       expect(entity.afterSeasoning, false);
+      expect(entity.cookTime, 270);
     });
 
     test('RamenBrand 모델에서 Entity로 정상적으로 변환되어야 한다', () {
@@ -156,10 +162,11 @@ void main() {
             'ramenDescription': '한국을 대표하는 매운 라면',
             'ramenRecipe': '1. 물 550ml에...',
             'afterSeasoning': false,
+            'cookTime': 270,
           },
         ],
       };
-      final brand = RamenBrand.fromJson(brandJson);
+      final brand = RamenBrandDTO.fromJson(brandJson);
 
       // when
       final entity = brand.toEntity();
@@ -186,12 +193,13 @@ void main() {
                 'ramenDescription': '한국을 대표하는 매운 라면',
                 'ramenRecipe': '1. 물 550ml에...',
                 'afterSeasoning': false,
+                'cookTime': 270,
               },
             ],
           },
         ],
       };
-      final data = RamenData.fromJson(dataJson);
+      final data = RamenDataDTO.fromJson(dataJson);
 
       // when
       final entity = data.toEntity();

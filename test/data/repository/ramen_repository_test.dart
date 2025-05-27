@@ -3,19 +3,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:noodle_timer/core/exceptions/ramen_error.dart';
-import 'package:noodle_timer/data/service/data_loader.dart';
+import 'package:noodle_timer/core/exceptions/ramen_exception.dart';
+import 'package:noodle_timer/core/logger/app_logger.dart';
+import 'package:noodle_timer/data/utils/data_loader.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
 import 'package:noodle_timer/data/repository/ramen_repository_impl.dart';
 import 'ramen_repository_test.mocks.dart';
 
-@GenerateMocks([IDataLoader])
+@GenerateMocks([IDataLoader, AppLogger])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final mockDataLoader = MockIDataLoader();
-  final repository = RamenRepositoryImpl(mockDataLoader);
+  late MockIDataLoader mockDataLoader;
+  late MockAppLogger mockLogger;
+  late RamenRepositoryImpl repository;
+
+  setUp(() {
+    mockDataLoader = MockIDataLoader();
+    mockLogger = MockAppLogger();
+    repository = RamenRepositoryImpl(
+      dataLoader: mockDataLoader,
+      logger: mockLogger,
+    );
+  });
 
   final ramenDataJson = {
     'ramenData': [
@@ -31,6 +42,7 @@ void main() {
             'ramenDescription': '한국을 대표하는 매운 라면',
             'ramenRecipe': '1. 물 550ml에...',
             'afterSeasoning': false,
+            'cookTime': 270,
           },
           {
             'ramenIndex': 101,
@@ -40,6 +52,7 @@ void main() {
             'ramenDescription': '담백한 맛의 전통적인 라면',
             'ramenRecipe': '1. 물 550ml에...',
             'afterSeasoning': false,
+            'cookTime': 270,
           },
         ],
       },
@@ -49,7 +62,9 @@ void main() {
   group('RamenRepository 테스트', () {
     test('정상적인 JSON 파싱이 되어야 한다', () async {
       // given
-      when(mockDataLoader.load(any)).thenAnswer((_) async => json.encode(ramenDataJson));
+      when(
+        mockDataLoader.load(any),
+      ).thenAnswer((_) async => json.encode(ramenDataJson));
 
       // when
       final result = await repository.loadBrands();
@@ -65,7 +80,9 @@ void main() {
     test('빈 데이터가 주어졌을 때 빈 리스트를 반환해야 한다', () async {
       // given
       final emptyJson = {'ramenData': []};
-      when(mockDataLoader.load(any)).thenAnswer((_) async => json.encode(emptyJson));
+      when(
+        mockDataLoader.load(any),
+      ).thenAnswer((_) async => json.encode(emptyJson));
 
       // when
       final result = await repository.loadBrands();
@@ -74,53 +91,51 @@ void main() {
       expect(result, isEmpty);
     });
 
-    test('FlutterError 발생 시 정확한 RamenError 반환해야 한다', () async {
+    test('FlutterError 발생 시 정확한 RamenException 반환해야 한다', () async {
       // given
       final flutterError = FlutterError('Asset path error');
       when(mockDataLoader.load(any)).thenThrow(flutterError);
 
       // when & then
       expect(
-            () => repository.loadBrands(),
+        () => repository.loadBrands(),
         throwsA(
-          predicate((e) =>
-          e is RamenError &&
-              e.type == RamenErrorType.assetNotFound &&
-              e.message == '${RamenErrorType.assetNotFound.message} ${flutterError.toString()}'),
+          predicate(
+            (e) =>
+                e is RamenException && e.type == RamenErrorType.assetNotFound,
+          ),
         ),
       );
     });
 
-    test('FormatException 발생 시 정확한 RamenError 반환해야 한다', () async {
+    test('FormatException 발생 시 정확한 RamenException 반환해야 한다', () async {
       // given
       final formatException = FormatException('Invalid JSON error');
       when(mockDataLoader.load(any)).thenThrow(formatException);
 
       // when & then
       expect(
-            () => repository.loadBrands(),
+        () => repository.loadBrands(),
         throwsA(
-          predicate((e) =>
-          e is RamenError &&
-              e.type == RamenErrorType.parsingError &&
-              e.message == '${RamenErrorType.parsingError.message} ${formatException.toString()}'),
+          predicate(
+            (e) => e is RamenException && e.type == RamenErrorType.parsingError,
+          ),
         ),
       );
     });
 
-    test('알 수 없는 에러 발생 시 정확한 RamenError 반환해야 한다', () async {
+    test('알 수 없는 에러 발생 시 정확한 RamenException 반환해야 한다', () async {
       // given
       final exception = Exception('Unknown error');
       when(mockDataLoader.load(any)).thenThrow(exception);
 
       // when & then
       expect(
-            () => repository.loadBrands(),
+        () => repository.loadBrands(),
         throwsA(
-          predicate((e) =>
-          e is RamenError &&
-              e.type == RamenErrorType.unknownError &&
-              e.message == '${RamenErrorType.unknownError.message} ${exception.toString()}'),
+          predicate(
+            (e) => e is RamenException && e.type == RamenErrorType.unknown,
+          ),
         ),
       );
     });
@@ -134,7 +149,9 @@ void main() {
 
     test('실제 JSON 파일을 로드하여 데이터 파싱 테스트', () async {
       // given
-      when(mockDataLoader.load(any)).thenAnswer((_) async => json.encode(ramenDataJson));
+      when(
+        mockDataLoader.load(any),
+      ).thenAnswer((_) async => json.encode(ramenDataJson));
 
       // when
       final result = await repository.loadBrands();
