@@ -3,21 +3,27 @@ import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String label;
+  final String? label;
   final String hint;
   final TextEditingController controller;
   final bool obscureText;
   final String? errorMessage;
   final void Function(String)? onChanged;
+  final bool isCompact;
+  final bool isPassword;
+  final VoidCallback? onToggleVisibility;
 
   const CustomTextField({
     super.key,
-    required this.label,
+    this.label,
     required this.hint,
     required this.controller,
     this.obscureText = false,
     this.errorMessage,
     this.onChanged,
+    this.isCompact = false,
+    this.isPassword = false,
+    this.onToggleVisibility,
   });
 
   @override
@@ -27,13 +33,15 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: NoodleTextStyles.titleXSmBold.copyWith(
-            color: NoodleColors.neutral1000,
+        if (label != null) ...[
+          Text(
+            label ?? '',
+            style: NoodleTextStyles.titleXSmBold.copyWith(
+              color: NoodleColors.neutral1000,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
+          const SizedBox(height: 8),
+        ],
         TextField(
           controller: controller,
           obscureText: obscureText,
@@ -43,14 +51,22 @@ class CustomTextField extends StatelessWidget {
             filled: true,
             fillColor: NoodleColors.neutral200,
             hintStyle: const TextStyle(color: NoodleColors.neutral800),
-            contentPadding: const EdgeInsets.symmetric(
+            contentPadding: EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 10,
+              vertical: isCompact ? 8 : 10,
             ),
             suffixIcon:
-                hasError
-                    ? const Icon(Icons.error, color: NoodleColors.error)
-                    : null,
+                isPassword
+                    ? IconButton(
+                      icon: Icon(
+                        obscureText ? Icons.visibility : Icons.visibility_off,
+                        color: NoodleColors.neutral600,
+                      ),
+                      onPressed: onToggleVisibility,
+                    )
+                    : (hasError
+                        ? const Icon(Icons.error, color: NoodleColors.error)
+                        : null),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
@@ -72,11 +88,11 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
         ),
-        if (hasError)
+        if (hasError && errorMessage != null)
           Padding(
             padding: const EdgeInsets.only(top: 4.0, left: 4),
             child: Text(
-              errorMessage!,
+              errorMessage ?? '',
               style: NoodleTextStyles.titleXsm.copyWith(
                 color: NoodleColors.error,
               ),
