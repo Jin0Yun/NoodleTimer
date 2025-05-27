@@ -31,6 +31,7 @@ class RamenList extends StatelessWidget {
       itemBuilder: (context, index) {
         final ramen = ramens[index];
         return RamenSearchResultCard(
+          key: Key('ramen_${ramen.id}'),
           ramen: ramen,
           onTap: (selected) => onTap?.call(context, selected),
         );

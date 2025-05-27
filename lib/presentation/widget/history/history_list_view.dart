@@ -31,6 +31,7 @@ class HistoryListView extends ConsumerWidget {
           children: [
             ...historyItems.map(
               (history) => RecipeHistoryCard(
+                key: Key('history_${history.id}'),
                 date: date,
                 image: history.ramenImageUrl,
                 name: history.ramenName,
@@ -38,10 +39,29 @@ class HistoryListView extends ConsumerWidget {
                 noodleState: history.noodleState.displayText,
                 eggState: history.eggPreference.displayText,
                 onCookAgain: () async {
-                  final viewModel = ref.read(historyViewModelProvider.notifier);
-                  await viewModel.replayRecipe(history);
-                  if (context.mounted) {
-                    Navigator.pushReplacementNamed(context, AppRoutes.home);
+                  final historyViewModel = ref.read(
+                    historyViewModelProvider.notifier,
+                  );
+                  final replayData = await historyViewModel.getReplayData(
+                    history,
+                  );
+
+                  if (replayData != null && context.mounted) {
+                    final ramenViewModel = ref.read(
+                      ramenViewModelProvider.notifier,
+                    );
+                    final timerViewModel = ref.read(
+                      timerViewModelProvider.notifier,
+                    );
+
+                    final ramen = await ref
+                        .read(ramenUseCaseProvider)
+                        .getRamenById(history.ramenId);
+                    if (ramen != null) {
+                      ramenViewModel.confirmRamenSelection(ramen);
+                      timerViewModel.updateRamen(ramen);
+                      Navigator.pushReplacementNamed(context, AppRoutes.home);
+                    }
                   }
                 },
                 onDelete: () {

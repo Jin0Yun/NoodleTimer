@@ -47,7 +47,7 @@ class RamenCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           child: Stack(
             children: [
-              RamenCardImage(image: ramen.imageUrl),
+              RamenCardImage(image: ramen.imageUrl, width: 150, height: 150),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 200),
                 crossFadeState:
@@ -119,9 +119,7 @@ class RamenCard extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: NoodleTextStyles.titleXSmBold.copyWith(
-            color: textColor
-          )
+          style: NoodleTextStyles.titleXSmBold.copyWith(color: textColor),
         ),
       ),
     );

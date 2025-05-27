@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
+import 'package:noodle_timer/domain/enum/timer_phase.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
+import 'package:noodle_timer/presentation/state/option_state.dart';
 import 'package:noodle_timer/presentation/widget/home/option_selector_container.dart';
 import 'package:noodle_timer/presentation/widget/home/timer_circle_box.dart';
 import 'package:noodle_timer/presentation/state/ramen_state.dart';
+import 'package:noodle_timer/presentation/state/timer_state.dart';
 
 class TimerCardWithOptionSelectorContainer extends ConsumerWidget {
   final RamenEntity? selectedRamen;
@@ -25,6 +28,22 @@ class TimerCardWithOptionSelectorContainer extends ConsumerWidget {
         ref
             .read(timerViewModelProvider.notifier)
             .updateRamen(next.selectedRamen!);
+      }
+    });
+
+    ref.listen<OptionState>(optionViewModelProvider, (previous, next) {
+      if (previous?.eggPreference != next.eggPreference ||
+          previous?.noodlePreference != next.noodlePreference) {
+        ref
+            .read(timerViewModelProvider.notifier)
+            .updatePreferences(next.eggPreference, next.noodlePreference);
+      }
+    });
+
+    ref.listen<TimerState>(timerViewModelProvider, (previous, next) {
+      if (previous?.phase != TimerPhase.completed &&
+          next.phase == TimerPhase.completed) {
+        ref.read(ramenViewModelProvider.notifier).refreshHistoryBrand();
       }
     });
 

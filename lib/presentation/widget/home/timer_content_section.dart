@@ -10,13 +10,13 @@ class TimerContentSection extends StatelessWidget {
   final VoidCallback? onStop;
   final VoidCallback? onRestart;
 
-  TimerContentSection({
+  const TimerContentSection({
     required this.timerState,
     this.onStart,
     this.onStop,
     this.onRestart,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,28 +40,32 @@ class TimerContentSection extends StatelessWidget {
   }
 
   Widget _buildStatusText() {
-    final Map<TimerPhase, Widget Function()> builders = {
-      TimerPhase.egg: () => _buildStyledText(
-        '계란을 넣어주세요!',
-        NoodleTextStyles.titleSmBold.copyWith(color: NoodleColors.primary),
-      ),
-      TimerPhase.completed: () => _buildStyledText(
-        '조리가 끝났습니다.',
-        NoodleTextStyles.titleSmBold.copyWith(
-          color: NoodleColors.neutral1000,
-        ),
-      ),
-      TimerPhase.cooking: () => _buildStyledText(
-        timerState.ramenName!,
-        NoodleTextStyles.titleSm.copyWith(color: NoodleColors.neutral800),
-      ),
-    };
+    final ramenName = timerState.ramenName ?? '라면';
 
-    return builders[timerState.phase]?.call() ?? const SizedBox();
-  }
-
-  Widget _buildStyledText(String text, TextStyle style) {
-    return Text(text, style: style, textAlign: TextAlign.center);
+    switch (timerState.phase) {
+      case TimerPhase.completed:
+        return _buildStyledText(
+          '조리가 끝났습니다.',
+          NoodleTextStyles.titleSmBold.copyWith(
+            color: NoodleColors.neutral1000,
+          ),
+        );
+      case TimerPhase.cooking:
+        if (timerState.isRunning) {
+          return _buildStyledText(
+            '$ramenName 조리 중..',
+            NoodleTextStyles.titleSm.copyWith(color: NoodleColors.neutral800),
+          );
+        } else {
+          return _buildStyledText(
+            ramenName,
+            NoodleTextStyles.titleSm.copyWith(color: NoodleColors.neutral800),
+          );
+        }
+      case TimerPhase.initial:
+      case TimerPhase.egg:
+        return const SizedBox();
+    }
   }
 
   Widget _buildActionButton() {
@@ -74,16 +78,20 @@ class TimerContentSection extends StatelessWidget {
           onPressed: onRestart,
         );
       case TimerPhase.cooking:
-        final isRunning = timerState.isRunning;
         return _buildActionButtonCommon(
-          label: isRunning ? 'STOP!' : 'START!',
+          label: timerState.isRunning ? 'STOP!' : 'START!',
           backgroundColor:
-          isRunning ? NoodleColors.neutral100 : NoodleColors.orange,
+              timerState.isRunning
+                  ? NoodleColors.neutral100
+                  : NoodleColors.orange,
           foregroundColor:
-          isRunning ? NoodleColors.accent : NoodleColors.neutral100,
-          onPressed: isRunning ? onStop : onStart,
+              timerState.isRunning
+                  ? NoodleColors.accent
+                  : NoodleColors.neutral100,
+          onPressed: timerState.isRunning ? onStop : onStart,
         );
-      default:
+      case TimerPhase.initial:
+      case TimerPhase.egg:
         return const SizedBox();
     }
   }
@@ -102,13 +110,18 @@ class TimerContentSection extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 1,
       ),
-      child: _buildStyledText(
+      child: Text(
         label,
-        NoodleTextStyles.titleSmBold.copyWith(
+        style: NoodleTextStyles.titleSmBold.copyWith(
           color: foregroundColor,
           letterSpacing: 1.0,
         ),
+        textAlign: TextAlign.center,
       ),
     );
+  }
+
+  Widget _buildStyledText(String text, TextStyle style) {
+    return Text(text, style: style, textAlign: TextAlign.center);
   }
 }
