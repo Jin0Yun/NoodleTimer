@@ -33,10 +33,11 @@ class AccountSettingsSection extends ConsumerWidget {
           title: '회원 탈퇴',
           textColor: NoodleColors.error,
           onTap: () {
-            DialogUtils.showConfirm(
+            DialogUtils.showPasswordConfirm(
               context,
-              '정말 회원 탈퇴 하시겠습니까?',
-              onConfirm: () => _deleteAccount(context),
+              '회원 탈퇴 시 모든 데이터가 삭제됩니다.\n보안을 위해 비밀번호를 입력해주세요.',
+              onConfirm:
+                  (password) => _confirmDeleteAccount(context, ref, password),
             );
           },
         ),
@@ -52,9 +53,38 @@ class AccountSettingsSection extends ConsumerWidget {
     }
   }
 
-  Future<void> _deleteAccount(BuildContext context) async {
-    if (context.mounted) {
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
+  Future<void> _confirmDeleteAccount(
+    BuildContext context,
+    WidgetRef ref,
+    String password,
+  ) async {
+    if (password.isEmpty) {
+      DialogUtils.showError(context, '비밀번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      final success = await ref
+          .read(authViewModelProvider.notifier)
+          .deleteAccountWithPassword(password);
+
+      if (success && context.mounted) {
+        DialogUtils.showSuccess(
+          context,
+          '회원탈퇴가 완료되었습니다.',
+          onConfirm: () {
+            Navigator.pushReplacementNamed(context, AppRoutes.login);
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        String errorMessage = '회원탈퇴에 실패했습니다.';
+        if (e.toString().contains('wrong-password')) {
+          errorMessage = '비밀번호가 올바르지 않습니다.';
+        }
+        DialogUtils.showError(context, errorMessage);
+      }
     }
   }
 }
