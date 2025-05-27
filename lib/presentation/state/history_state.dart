@@ -8,6 +8,7 @@ class HistoryState implements BaseState {
   final NoodlePreference noodlePreference;
   final bool _isLoading;
   final String? _error;
+  final bool historyDeleted;
 
   const HistoryState({
     this.histories = const [],
@@ -15,6 +16,7 @@ class HistoryState implements BaseState {
     this.noodlePreference = NoodlePreference.none,
     bool isLoading = false,
     String? error,
+    this.historyDeleted = false,
   }) : _isLoading = isLoading,
        _error = error;
 
@@ -37,6 +39,7 @@ class HistoryState implements BaseState {
     NoodlePreference? noodlePreference,
     bool? isLoading,
     String? error,
+    bool? historyDeleted,
   }) {
     return HistoryState(
       histories: histories ?? this.histories,
@@ -44,6 +47,7 @@ class HistoryState implements BaseState {
       noodlePreference: noodlePreference ?? this.noodlePreference,
       isLoading: isLoading ?? _isLoading,
       error: error,
+      historyDeleted: historyDeleted ?? false,
     );
   }
 }

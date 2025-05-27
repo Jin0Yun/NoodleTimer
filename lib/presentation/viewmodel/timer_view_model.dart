@@ -1,19 +1,21 @@
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
+import 'package:noodle_timer/domain/entity/egg_preference.dart';
+import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/usecase/cook_history_use_case.dart';
 import 'package:noodle_timer/presentation/state/timer_state.dart';
 import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
+import 'package:noodle_timer/domain/enum/timer_phase.dart';
 
 class TimerViewModel extends BaseViewModel<TimerState> {
   final CookHistoryUseCase _cookHistoryUseCase;
-  final Ref _ref;
   Timer? _timer;
   RamenEntity? _currentRamen;
+  EggPreference _eggPreference = EggPreference.none;
+  NoodlePreference _noodlePreference = NoodlePreference.kodul;
 
-  TimerViewModel(this._cookHistoryUseCase, AppLogger logger, this._ref)
+  TimerViewModel(this._cookHistoryUseCase, AppLogger logger)
     : super(logger, TimerState.initial());
 
   @override
@@ -31,41 +33,46 @@ class TimerViewModel extends BaseViewModel<TimerState> {
     return state.copyWith(error: null);
   }
 
-  void initialize({int? cookingTimeInSeconds, String? ramenName}) {
+  void updateRamen(RamenEntity ramen) {
+    _currentRamen = ramen;
     _cancelTimer();
-    final seconds = cookingTimeInSeconds ?? 0;
+
     state = TimerState(
-      totalSeconds: seconds,
-      remainingSeconds: seconds,
+      phase: TimerPhase.cooking,
+      totalSeconds: ramen.cookTime,
+      remainingSeconds: ramen.cookTime,
+      ramenName: ramen.name,
       isRunning: false,
-      ramenName: ramenName,
-      isCompleted: false,
     );
   }
 
-  void updateRamen(RamenEntity? ramen) {
-    if (ramen == null) return;
-    _currentRamen = ramen;
-    _cancelTimer();
-    state = TimerState(
-      totalSeconds: ramen.cookTime,
-      remainingSeconds: ramen.cookTime,
-      isRunning: false,
-      ramenName: ramen.name,
-      isCompleted: false,
-    );
+  void updatePreferences(
+    EggPreference eggPreference,
+    NoodlePreference noodlePreference,
+  ) {
+    _eggPreference = eggPreference;
+    _noodlePreference = noodlePreference;
   }
 
   void start() {
-    if (state.remainingSeconds <= 0 || state.isRunning) return;
+    if (state.remainingSeconds <= 0 ||
+        state.isRunning ||
+        state.phase == TimerPhase.initial) {
+      return;
+    }
+
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (state.remainingSeconds > 1) {
-        state = state.copyWith(remainingSeconds: state.remainingSeconds - 1);
-      } else {
-        complete();
+      final newRemaining = state.remainingSeconds - 1;
+
+      if (newRemaining <= 0) {
+        _completeTimer();
+        return;
       }
+
+      state = state.copyWith(remainingSeconds: newRemaining);
     });
-    state = state.copyWith(isRunning: true, isCompleted: false);
+
+    state = state.copyWith(isRunning: true);
   }
 
   void stop() {
@@ -73,38 +80,37 @@ class TimerViewModel extends BaseViewModel<TimerState> {
     state = state.copyWith(isRunning: false);
   }
 
-  Future<void> complete() async {
+  void restart() {
+    _cancelTimer();
+    if (_currentRamen != null) {
+      updateRamen(_currentRamen!);
+    }
+  }
+
+  Future<void> _completeTimer() async {
     _cancelTimer();
     state = state.copyWith(
       remainingSeconds: 0,
       isRunning: false,
-      isCompleted: true,
+      phase: TimerPhase.completed,
     );
 
-    final ramen = _currentRamen;
-    if (ramen == null) {
-      return;
-    }
-
-    state = setLoadingState(true);
-    try {
-      await _cookHistoryUseCase.saveCookHistory(ramen);
-      await _ref.read(ramenViewModelProvider.notifier).addHistoryRamen(ramen);
-      state = setLoadingState(false);
-    } catch (e) {
-      state = setErrorState(e.toString());
-      state = setLoadingState(false);
+    if (_currentRamen != null) {
+      await _saveCookHistoryWithOptions();
     }
   }
 
-  void restart() {
-    if (state.remainingSeconds <= 0 || state.isRunning) return;
-    stop();
-    state = state.copyWith(
-      remainingSeconds: state.totalSeconds,
-      isCompleted: false,
-    );
-    start();
+  Future<void> _saveCookHistoryWithOptions() async {
+    if (_currentRamen == null) return;
+
+    await runWithLoading(() async {
+      await _cookHistoryUseCase.saveCookHistoryWithPreferences(
+        _currentRamen!,
+        _noodlePreference,
+        _eggPreference,
+        Duration(seconds: state.totalSeconds),
+      );
+    });
   }
 
   void _cancelTimer() {

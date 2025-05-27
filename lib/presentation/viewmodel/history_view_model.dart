@@ -1,29 +1,19 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:noodle_timer/core/di/app_providers.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/usecase/cook_history_use_case.dart';
-import 'package:noodle_timer/domain/usecase/user_usecase.dart';
 import 'package:noodle_timer/domain/usecase/ramen_usecase.dart';
 import 'package:noodle_timer/presentation/common/utils/hangul_utils.dart';
 import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/state/history_state.dart';
 
 class HistoryViewModel extends BaseViewModel<HistoryState> {
-  final UserUseCase _userUseCase;
   final RamenUseCase _ramenUseCase;
   final CookHistoryUseCase _cookHistoryUseCase;
-  final String _userId;
-  final Ref _ref;
 
   HistoryViewModel(
-    this._userUseCase,
     this._ramenUseCase,
     this._cookHistoryUseCase,
-    this._userId,
     AppLogger logger,
-    this._ref,
   ) : super(logger, HistoryState.initial());
 
   @override
@@ -77,19 +67,16 @@ class HistoryViewModel extends BaseViewModel<HistoryState> {
     state = state.copyWith(filteredHistories: filtered);
   }
 
-  Future<bool> replayRecipe(CookHistoryEntity item) async {
+  Future<CookHistoryEntity?> getReplayData(CookHistoryEntity item) async {
     try {
       final ramen = await _ramenUseCase.getRamenById(item.ramenId);
       if (ramen == null) {
         throw Exception('라면 정보를 찾을 수 없습니다: ${item.ramenId}');
       }
-
-      _ref.read(ramenViewModelProvider.notifier).confirmRamenSelection(ramen);
-      _ref.read(timerViewModelProvider.notifier).updateRamen(ramen);
-      return true;
+      return item.copyWith(ramenName: ramen.name);
     } catch (e) {
       state = setErrorState('다시 조리하기에 실패했습니다.');
-      return false;
+      return null;
     }
   }
 
@@ -106,27 +93,13 @@ class HistoryViewModel extends BaseViewModel<HistoryState> {
                 .where((item) => item.id != historyId)
                 .toList(),
         isLoading: false,
+        historyDeleted: true,
       );
 
-      _ref.read(ramenViewModelProvider.notifier).removeHistoryRamen(historyId);
+      Future.microtask(() {
+        state = state.copyWith(historyDeleted: false);
+      });
 
-      return true;
-    } catch (e) {
-      state = setErrorState(e.toString());
-      state = setLoadingState(false);
-      return false;
-    }
-  }
-
-  void selectPreference(NoodlePreference preference) {
-    state = state.copyWith(noodlePreference: preference);
-  }
-
-  Future<bool> updateNoodlePreference(NoodlePreference preference) async {
-    state = setLoadingState(true);
-    try {
-      await _userUseCase.updateNoodlePreference(_userId, preference);
-      state = state.copyWith(noodlePreference: preference, isLoading: false);
       return true;
     } catch (e) {
       state = setErrorState(e.toString());
