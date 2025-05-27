@@ -20,7 +20,7 @@ class NoodlePreferenceScreen extends ConsumerStatefulWidget {
 
 class _NoodlePreferenceScreenState
     extends ConsumerState<NoodlePreferenceScreen> {
-  bool? isKkodulSelected;
+  NoodlePreference? selectedPreference;
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +64,10 @@ class _NoodlePreferenceScreenState
                     PreferenceOptionCard(
                       imagePath: 'assets/image/kodul.png',
                       label: '꼬들면',
-                      isSelected: isKkodulSelected == true,
+                      isSelected: selectedPreference == NoodlePreference.kodul,
                       onTap: () {
                         setState(() {
-                          isKkodulSelected = true;
+                          selectedPreference = NoodlePreference.kodul;
                         });
                       },
                     ),
@@ -75,10 +75,10 @@ class _NoodlePreferenceScreenState
                     PreferenceOptionCard(
                       imagePath: 'assets/image/peojin.png',
                       label: '퍼진면',
-                      isSelected: isKkodulSelected == false,
+                      isSelected: selectedPreference == NoodlePreference.peojin,
                       onTap: () {
                         setState(() {
-                          isKkodulSelected = false;
+                          selectedPreference = NoodlePreference.peojin;
                         });
                       },
                     ),
@@ -111,22 +111,19 @@ class _NoodlePreferenceScreenState
         minimum: const EdgeInsets.all(16),
         child: CustomButton(
           buttonText: '다음',
-          isEnabled: isKkodulSelected != null,
-          onPressed: isKkodulSelected == null ? null : _onNextPressed,
+          isEnabled: selectedPreference != null,
+          onPressed: selectedPreference == null ? null : _onNextPressed,
         ),
       ),
     );
   }
 
   Future<void> _onNextPressed() async {
-    final noodlePreference =
-        isKkodulSelected == true
-            ? NoodlePreference.kodul
-            : NoodlePreference.peojin;
+    if (selectedPreference == null) return;
 
-    await ref
-        .read(historyViewModelProvider.notifier)
-        .updateNoodlePreference(noodlePreference);
+    final preferenceViewModel = ref.read(preferenceViewModelProvider.notifier);
+    preferenceViewModel.updateNoodlePreference(selectedPreference!);
+    await preferenceViewModel.savePreferences();
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isFirstLaunch', false);
