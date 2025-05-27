@@ -1,4 +1,5 @@
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/domain/entity/user_entity.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 
 class UserUseCase {
@@ -8,6 +9,12 @@ class UserUseCase {
 
   String? getCurrentUserId() {
     return _userRepository.getCurrentUserId();
+  }
+
+  Future<UserEntity?> getCurrentUser() async {
+    final userId = getCurrentUserId();
+    if (userId == null) return null;
+    return await _userRepository.getUserById(userId);
   }
 
   Future<bool> getNeedsOnboarding() async {

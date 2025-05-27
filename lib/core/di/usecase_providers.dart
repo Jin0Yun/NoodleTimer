@@ -22,7 +22,7 @@ final ramenUseCaseProvider = Provider<RamenUseCase>((ref) {
 });
 
 final cookHistoryUseCaseProvider = Provider<CookHistoryUseCase>((ref) {
+  final cookHistoryRepo = ref.watch(cookHistoryRepositoryProvider);
   final userRepo = ref.watch(userRepositoryProvider);
-  final ramenRepo = ref.watch(ramenRepositoryProvider);
-  return CookHistoryUseCase(userRepo, ramenRepo);
+  return CookHistoryUseCase(cookHistoryRepo, userRepo);
 });

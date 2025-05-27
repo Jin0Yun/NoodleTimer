@@ -2,71 +2,76 @@ import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
 import 'package:noodle_timer/domain/entity/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
-import 'package:noodle_timer/domain/repository/ramen_repository.dart';
+import 'package:noodle_timer/domain/repository/cook_history_repository.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 
 class CookHistoryUseCase {
+  final CookHistoryRepository _cookHistoryRepository;
   final UserRepository _userRepository;
-  final RamenRepository _ramenRepository;
 
-  CookHistoryUseCase(this._userRepository, this._ramenRepository);
+  CookHistoryUseCase(this._cookHistoryRepository, this._userRepository);
 
-  Future<List<CookHistoryEntity>> getCookHistoriesWithRamenInfo() async {
+  Future<void> saveCookHistoryWithPreferences(
+    RamenEntity ramen,
+    NoodlePreference noodlePreference,
+    EggPreference eggPreference,
+    Duration cookTime,
+  ) async {
     final userId = _userRepository.getCurrentUserId();
     if (userId == null) {
-      throw Exception('로그인이 필요합니다.');
+      throw Exception('사용자가 로그인되어 있지 않습니다.');
     }
 
-    final cookHistories = await _userRepository.getCookHistories(userId);
-    return cookHistories;
-  }
-
-  Future<void> saveCookHistory(
-    RamenEntity ramen, {
-    NoodlePreference? noodleState,
-    EggPreference? eggState,
-  }) async {
-    final userId = _userRepository.getCurrentUserId();
-    if (userId == null) {
-      throw Exception('조리 기록 저장 실패: 유저 정보 없음');
-    }
-
-    final history = CookHistoryEntity(
+    final cookHistory = CookHistoryEntity(
       ramenId: ramen.id,
       ramenName: ramen.name,
       ramenImageUrl: ramen.imageUrl,
       cookedAt: DateTime.now(),
-      noodleState: noodleState ?? NoodlePreference.none,
-      eggPreference: eggState ?? EggPreference.none,
+      noodleState: noodlePreference,
+      eggPreference: eggPreference,
+      cookTime: cookTime,
+    );
+
+    await _cookHistoryRepository.saveCookHistory(userId, cookHistory);
+  }
+
+  Future<void> saveCookHistory(RamenEntity ramen) async {
+    final userId = _userRepository.getCurrentUserId();
+    if (userId == null) {
+      throw Exception('사용자가 로그인되어 있지 않습니다.');
+    }
+
+    final cookHistory = CookHistoryEntity(
+      ramenId: ramen.id,
+      ramenName: ramen.name,
+      ramenImageUrl: ramen.imageUrl,
+      cookedAt: DateTime.now(),
+      noodleState: NoodlePreference.kodul,
+      eggPreference: EggPreference.none,
       cookTime: Duration(seconds: ramen.cookTime),
     );
 
-    await _userRepository.saveCookHistory(userId, history);
+    await _cookHistoryRepository.saveCookHistory(userId, cookHistory);
+  }
+
+  Future<List<CookHistoryEntity>> getCookHistoriesWithRamenInfo() async {
+    final userId = _userRepository.getCurrentUserId();
+    if (userId == null) return [];
+
+    return await _cookHistoryRepository.getCookHistories(userId);
   }
 
   Future<void> deleteCookHistory(String historyId) async {
     final userId = _userRepository.getCurrentUserId();
-    if (userId == null) {
-      throw Exception('사용자 인증 실패');
-    }
-    await _userRepository.deleteCookHistory(userId, historyId);
+    if (userId == null) return;
+
+    await _cookHistoryRepository.deleteCookHistory(userId, historyId);
   }
 
   Future<List<RamenEntity>> getRamenHistoryList() async {
     final userId = _userRepository.getCurrentUserId();
-    if (userId == null) {
-      return [];
-    }
+    if (userId == null) return [];
 
-    final histories = await _userRepository.getCookHistories(userId);
-    final ramenHistoryList = <RamenEntity>[];
-
-    for (final history in histories) {
-      final ramen = await _ramenRepository.findRamenById(history.ramenId);
-      if (ramen != null) {
-        ramenHistoryList.add(ramen);
-      }
-    }
-    return ramenHistoryList;
+    return await _cookHistoryRepository.getRamenHistoryList(userId);
   }
 }
