@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/presentation/screen/home_screen.dart';
-import 'package:noodle_timer/presentation/screen/recipe_history.dart';
+import 'package:noodle_timer/presentation/screen/recipe_history_screen.dart';
 import 'package:noodle_timer/presentation/screen/search_screen.dart';
 import 'package:noodle_timer/presentation/widget/home/custom_tab_bar.dart';
 

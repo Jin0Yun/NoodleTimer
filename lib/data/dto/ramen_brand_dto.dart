@@ -1,20 +1,20 @@
-import 'package:noodle_timer/data/dto/ramen.dart';
+import 'package:noodle_timer/data/dto/ramen_dto.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 
-class RamenBrand {
+class RamenBrandDTO {
   final int id;
   final String name;
-  final List<Ramen> ramens;
+  final List<RamenDTO> ramens;
 
-  RamenBrand({required this.id, required this.name, required this.ramens});
+  RamenBrandDTO({required this.id, required this.name, required this.ramens});
 
-  factory RamenBrand.fromJson(Map<String, dynamic> json) {
+  factory RamenBrandDTO.fromJson(Map<String, dynamic> json) {
     final ramenList =
         (json['ramens'] as List)
-            .map((ramenJson) => Ramen.fromJson(ramenJson))
+            .map((ramenJson) => RamenDTO.fromJson(ramenJson))
             .toList();
 
-    return RamenBrand(
+    return RamenBrandDTO(
       id: json['brandId'],
       name: json['brandName'],
       ramens: ramenList,

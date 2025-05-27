@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/screen/home_screen.dart';
-import 'package:noodle_timer/presentation/screen/tabbar_controller.dart';
+import 'package:noodle_timer/presentation/screen/tab_bar_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingGuideScreen extends StatefulWidget {

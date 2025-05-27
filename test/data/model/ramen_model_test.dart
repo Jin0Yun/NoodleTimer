@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:noodle_timer/data/dto/ramen.dart';
-import 'package:noodle_timer/data/dto/ramen_brand.dart';
-import 'package:noodle_timer/data/dto/ramen_data.dart';
+import 'package:noodle_timer/data/dto/ramen_dto.dart';
+import 'package:noodle_timer/data/dto/ramen_brand_dto.dart';
+import 'package:noodle_timer/data/dto/ramen_data_dto.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +21,7 @@ void main() {
       };
 
       // when
-      final ramen = Ramen.fromJson(ramenJson);
+      final ramen = RamenDTO.fromJson(ramenJson);
 
       // then
       expect(ramen.id, 100);
@@ -54,7 +54,7 @@ void main() {
       };
 
       // when
-      final brand = RamenBrand.fromJson(brandJson);
+      final brand = RamenBrandDTO.fromJson(brandJson);
 
       // then
       expect(brand.id, 1);
@@ -87,7 +87,7 @@ void main() {
       };
 
       // when
-      final data = RamenData.fromJson(dataJson);
+      final data = RamenDataDTO.fromJson(dataJson);
 
       // then
       expect(data.brands.length, 1);
@@ -101,7 +101,7 @@ void main() {
       final emptyDataJson = {'ramenData': []};
 
       // when
-      final data = RamenData.fromJson(emptyDataJson);
+      final data = RamenDataDTO.fromJson(emptyDataJson);
 
       // then
       expect(data.brands, isEmpty);
@@ -120,7 +120,7 @@ void main() {
       };
 
       // when & then
-      expect(() => Ramen.fromJson(brokenJson), throwsA(isA<TypeError>()));
+      expect(() => RamenDTO.fromJson(brokenJson), throwsA(isA<TypeError>()));
     });
   });
 
@@ -137,7 +137,7 @@ void main() {
         'afterSeasoning': false,
         'cookTime': 270,
       };
-      final ramen = Ramen.fromJson(ramenJson);
+      final ramen = RamenDTO.fromJson(ramenJson);
 
       // when
       final entity = ramen.toEntity();
@@ -166,7 +166,7 @@ void main() {
           },
         ],
       };
-      final brand = RamenBrand.fromJson(brandJson);
+      final brand = RamenBrandDTO.fromJson(brandJson);
 
       // when
       final entity = brand.toEntity();
@@ -199,7 +199,7 @@ void main() {
           },
         ],
       };
-      final data = RamenData.fromJson(dataJson);
+      final data = RamenDataDTO.fromJson(dataJson);
 
       // when
       final entity = data.toEntity();

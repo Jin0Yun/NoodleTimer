@@ -1,5 +1,5 @@
 import 'package:noodle_timer/core/logger/app_logger.dart';
-import 'package:noodle_timer/domain/usecase/auth_usecase.dart';
+import 'package:noodle_timer/domain/usecase/auth_use_case.dart';
 import 'package:noodle_timer/presentation/common/utils/input_validator.dart';
 import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/state/auth_state.dart';

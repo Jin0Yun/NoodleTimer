@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:noodle_timer/domain/entity/egg_preference.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/domain/enum/egg_preference.dart';
+import 'package:noodle_timer/domain/enum/noodle_preference.dart';
 
 class CookHistoryEntity {
   final String id;

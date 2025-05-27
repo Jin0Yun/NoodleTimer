@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:noodle_timer/domain/enum/noodle_preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:noodle_timer/core/exceptions/user_exception.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/entity/user_entity.dart';
 import 'package:noodle_timer/domain/repository/user_repository.dart';
 

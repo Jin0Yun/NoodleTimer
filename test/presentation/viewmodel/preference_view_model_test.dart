@@ -2,10 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
-import 'package:noodle_timer/domain/entity/egg_preference.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/domain/enum/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/user_entity.dart';
-import 'package:noodle_timer/domain/usecase/user_usecase.dart';
+import 'package:noodle_timer/domain/enum/noodle_preference.dart';
+import 'package:noodle_timer/domain/usecase/user_use_case.dart';
 import 'package:noodle_timer/presentation/viewmodel/preference_view_model.dart';
 import 'preference_view_model_test.mocks.dart';
 

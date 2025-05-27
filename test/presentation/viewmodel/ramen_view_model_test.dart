@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
-import 'package:noodle_timer/data/dto/ramen_data.dart';
+import 'package:noodle_timer/data/dto/ramen_data_dto.dart';
 import 'package:noodle_timer/domain/usecase/cook_history_use_case.dart';
-import 'package:noodle_timer/domain/usecase/ramen_usecase.dart';
+import 'package:noodle_timer/domain/usecase/ramen_use_case.dart';
 import 'package:noodle_timer/presentation/viewmodel/ramen_view_model.dart';
 
 import 'ramen_view_model_test.mocks.dart';
@@ -44,7 +44,7 @@ void main() {
     ],
   };
 
-  final testBrands = RamenData.fromJson(ramenDataJson).toEntity().brands;
+  final testBrands = RamenDataDTO.fromJson(ramenDataJson).toEntity().brands;
   final testRamenList = testBrands.expand((brand) => brand.ramens).toList();
 
   group('RamenViewModel 브랜드 관리 테스트', () {

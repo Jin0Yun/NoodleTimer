@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:noodle_timer/core/exceptions/ramen_exception.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/data/utils/data_loader.dart';
-import 'package:noodle_timer/data/dto/ramen_data.dart';
+import 'package:noodle_timer/data/dto/ramen_data_dto.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/repository/ramen_repository.dart';
@@ -29,7 +29,7 @@ class RamenRepositoryImpl implements RamenRepository {
     try {
       final jsonString = await _dataLoader.load(_ramenDataPath);
       final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-      _cachedBrands = RamenData.fromJson(jsonData).toEntity().brands;
+      _cachedBrands = RamenDataDTO.fromJson(jsonData).toEntity().brands;
       _logger.i('라면 브랜드 로딩 성공: ${_cachedBrands!.length}개 브랜드');
       return _cachedBrands!;
     } catch (e) {

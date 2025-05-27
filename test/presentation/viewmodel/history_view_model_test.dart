@@ -3,11 +3,11 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
-import 'package:noodle_timer/domain/entity/egg_preference.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/domain/enum/egg_preference.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
+import 'package:noodle_timer/domain/enum/noodle_preference.dart';
 import 'package:noodle_timer/domain/usecase/cook_history_use_case.dart';
-import 'package:noodle_timer/domain/usecase/ramen_usecase.dart';
+import 'package:noodle_timer/domain/usecase/ramen_use_case.dart';
 import 'package:noodle_timer/presentation/viewmodel/history_view_model.dart';
 import 'history_view_model_test.mocks.dart';
 

@@ -3,8 +3,10 @@ enum NoodlePreference { kodul, peojin, none }
 extension NoodlePreferenceX on NoodlePreference {
   static NoodlePreference from(String? value) {
     final parsed = value?.split('.').last;
-    return NoodlePreference.values.firstWhere((e) => e.name == parsed,
-        orElse: () => NoodlePreference.none);
+    return NoodlePreference.values.firstWhere(
+      (e) => e.name == parsed,
+      orElse: () => NoodlePreference.kodul,
+    );
   }
 
   String get short => name;
@@ -16,7 +18,7 @@ extension NoodlePreferenceX on NoodlePreference {
       case NoodlePreference.peojin:
         return '퍼진면';
       case NoodlePreference.none:
-        return '기본';
+        return '없음';
     }
   }
 }

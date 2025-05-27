@@ -10,7 +10,7 @@ import 'package:noodle_timer/presentation/screen/noodle_preference_screen.dart';
 import 'package:noodle_timer/presentation/screen/onboarding_guide_screen.dart';
 import 'package:noodle_timer/presentation/screen/sign_up_screen.dart';
 import 'package:noodle_timer/presentation/screen/setting_screen.dart';
-import 'package:noodle_timer/presentation/screen/tabbar_controller.dart';
+import 'package:noodle_timer/presentation/screen/tab_bar_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

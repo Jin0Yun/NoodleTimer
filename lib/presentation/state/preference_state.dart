@@ -1,4 +1,4 @@
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/domain/enum/noodle_preference.dart';
 import 'package:noodle_timer/presentation/state/base_state.dart';
 
 class PreferenceState implements BaseState {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noodle_timer/core/di/app_providers.dart';
-import 'package:noodle_timer/domain/entity/egg_preference.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
+import 'package:noodle_timer/domain/enum/egg_preference.dart';
+import 'package:noodle_timer/domain/enum/noodle_preference.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_colors.dart';
 import 'package:noodle_timer/presentation/common/theme/noodle_text_styles.dart';
 import 'package:noodle_timer/presentation/common/model/option_selector_item.dart';

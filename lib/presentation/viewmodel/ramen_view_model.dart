@@ -2,7 +2,7 @@ import 'package:noodle_timer/core/logger/app_logger.dart';
 import 'package:noodle_timer/domain/entity/ramen_brand_entity.dart';
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 import 'package:noodle_timer/domain/usecase/cook_history_use_case.dart';
-import 'package:noodle_timer/domain/usecase/ramen_usecase.dart';
+import 'package:noodle_timer/domain/usecase/ramen_use_case.dart';
 import 'package:noodle_timer/domain/enum/ramen_action_type.dart';
 import 'package:noodle_timer/presentation/viewmodel/base_view_model.dart';
 import 'package:noodle_timer/presentation/state/ramen_state.dart';

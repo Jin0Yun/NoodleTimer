@@ -7,9 +7,9 @@ import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:noodle_timer/core/logger/app_logger.dart' as _i6;
-import 'package:noodle_timer/domain/entity/noodle_preference.dart' as _i5;
 import 'package:noodle_timer/domain/entity/user_entity.dart' as _i4;
-import 'package:noodle_timer/domain/usecase/user_usecase.dart' as _i2;
+import 'package:noodle_timer/domain/enum/noodle_preference.dart' as _i5;
+import 'package:noodle_timer/domain/usecase/user_use_case.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

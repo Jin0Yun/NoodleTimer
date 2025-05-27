@@ -1,6 +1,6 @@
 import 'package:noodle_timer/domain/entity/cook_history_entity.dart';
-import 'package:noodle_timer/domain/entity/noodle_preference.dart';
 import 'package:noodle_timer/domain/entity/user_entity.dart';
+import 'package:noodle_timer/domain/enum/noodle_preference.dart';
 
 abstract class UserRepository {
   String? getCurrentUserId();

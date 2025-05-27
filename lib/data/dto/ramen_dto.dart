@@ -1,6 +1,6 @@
 import 'package:noodle_timer/domain/entity/ramen_entity.dart';
 
-class Ramen {
+class RamenDTO {
   final int id;
   final String name;
   final String imageUrl;
@@ -10,7 +10,7 @@ class Ramen {
   final bool afterSeasoning;
   final int cookTime;
 
-  Ramen({
+  RamenDTO({
     required this.id,
     required this.name,
     required this.imageUrl,
@@ -21,8 +21,8 @@ class Ramen {
     required this.cookTime,
   });
 
-  factory Ramen.fromJson(Map<String, dynamic> json) {
-    return Ramen(
+  factory RamenDTO.fromJson(Map<String, dynamic> json) {
+    return RamenDTO(
       id: json['ramenIndex'],
       name: json['ramenName'],
       imageUrl: json['ramenImage'],
