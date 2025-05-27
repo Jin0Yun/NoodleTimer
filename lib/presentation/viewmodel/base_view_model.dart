@@ -12,23 +12,26 @@ abstract class BaseViewModel<T extends BaseState> extends StateNotifier<T> {
   T clearErrorState();
 
   Future<R> runWithLoading<R>(
-      Future<R> Function() action, {
-        bool showLoading = true,
-      }) async {
+    Future<R> Function() action, {
+    bool showLoading = true,
+  }) async {
     if (showLoading) {
       state = setLoadingState(true);
     }
 
     try {
       final result = await action();
-      return result;
-    } catch (e) {
-      state = setErrorState(e.toString());
-      rethrow;
-    } finally {
       if (showLoading) {
         state = setLoadingState(false);
       }
+      return result;
+    } catch (e) {
+      logger.e('Error in $runtimeType', e);
+      state = setErrorState(e.toString());
+      if (showLoading) {
+        state = setLoadingState(false);
+      }
+      rethrow;
     }
   }
 
