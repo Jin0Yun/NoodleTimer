@@ -107,4 +107,18 @@ class AuthViewModel extends BaseViewModel<AuthState> {
       await _authUseCase.logout();
     }, showLoading: false);
   }
+
+  Future<bool> deleteAccount() async {
+    return await runWithLoading(() async {
+      await _authUseCase.deleteAccount();
+      return true;
+    });
+  }
+
+  Future<bool> deleteAccountWithPassword(String password) async {
+    return await runWithLoading(() async {
+      await _authUseCase.deleteAccountWithPassword(password);
+      return true;
+    });
+  }
 }

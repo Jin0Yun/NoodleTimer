@@ -59,4 +59,53 @@ class AuthRepositoryImpl implements AuthRepository {
       throw AuthException(AuthErrorType.signOutFailed, e.toString());
     }
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) {
+        throw AuthException(AuthErrorType.userNotFound, '로그인된 사용자가 없습니다');
+      }
+
+      await user.delete();
+      _logger.i('계정 삭제 성공: ${user.email}');
+    } on FirebaseAuthException catch (e) {
+      _logger.e('계정 삭제 실패', e);
+      throw AuthException.fromFirebaseException(e);
+    } catch (e) {
+      _logger.e('계정 삭제 중 알 수 없는 오류 발생', e);
+      throw AuthException(AuthErrorType.unknown, e.toString());
+    }
+  }
+
+  @override
+  Future<void> reauthenticateWithPassword(String password) async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null || user.email == null) {
+        throw AuthException(AuthErrorType.userNotFound, '로그인된 사용자가 없습니다');
+      }
+
+      final credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      _logger.i('재인증 성공: ${user.email}');
+    } on FirebaseAuthException catch (e) {
+      _logger.e('재인증 실패', e);
+      throw AuthException.fromFirebaseException(e);
+    } catch (e) {
+      _logger.e('재인증 중 알 수 없는 오류 발생', e);
+      throw AuthException(AuthErrorType.unknown, e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteAccountWithReauth(String password) async {
+    await reauthenticateWithPassword(password);
+    await deleteAccount();
+  }
 }
