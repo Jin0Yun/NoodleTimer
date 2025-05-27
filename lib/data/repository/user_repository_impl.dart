@@ -183,4 +183,49 @@ class UserRepositoryImpl implements UserRepository {
       return false;
     }
   }
+
+  @override
+  Future<void> deleteUser(String uid) async {
+    try {
+      await _firestore.collection('users').doc(uid).delete();
+      _logger.i('사용자 정보 삭제 성공: $uid');
+    } catch (e) {
+      _logger.e('사용자 정보 삭제 실패: $uid', e);
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.deleteFailed, e.toString());
+      }
+    }
+  }
+
+  @override
+  Future<void> deleteAllUserData(String uid) async {
+    try {
+      final batch = _firestore.batch();
+
+      final cookHistoriesSnapshot =
+          await _firestore
+              .collection('users')
+              .doc(uid)
+              .collection('cookHistories')
+              .get();
+
+      for (final doc in cookHistoriesSnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      batch.delete(_firestore.collection('users').doc(uid));
+
+      await batch.commit();
+      _logger.i('사용자 모든 데이터 삭제 성공: $uid');
+    } catch (e) {
+      _logger.e('사용자 데이터 삭제 실패: $uid', e);
+      if (e is FirebaseException) {
+        throw UserException.fromFirebaseException(e);
+      } else {
+        throw UserException(UserErrorType.deleteFailed, e.toString());
+      }
+    }
+  }
 }

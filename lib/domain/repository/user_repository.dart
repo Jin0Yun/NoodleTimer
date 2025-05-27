@@ -13,4 +13,6 @@ abstract class UserRepository {
   Future<void> deleteCookHistory(String uid, String historyId);
   Future<void> setNeedsOnboarding(bool needsOnboarding);
   Future<bool> getNeedsOnboarding();
+  Future<void> deleteUser(String uid);
+  Future<void> deleteAllUserData(String uid);
 }
