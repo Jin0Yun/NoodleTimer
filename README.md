@@ -18,13 +18,13 @@
 - **인증 시스템**: Firebase Auth 기반 회원가입/로그인/로그아웃/계정삭제
 - **실시간 데이터 동기화**: Firestore 기반 실시간 데이터 연동
   
-| 스플래시+회원가입 | 로그인+온보딩 | 홈+타이머 |
-| --- | --- | --- |
-| <img src="https://github.com/user-attachments/assets/5a03b405-c6e3-494c-b74e-ee4ba9251fc4" width="300"> | <img src="https://github.com/user-attachments/assets/d346f492-33e4-4dfb-bc1e-0781fcf91c0c" width="300"> | <img src="https://github.com/user-attachments/assets/85ac16b3-c4b4-47f8-8216-b56e02700fd0" width="300"> |
+|스플래시+회원가입 | 로그인+온보딩 | 홈+타이머 |
+|---|---|---|
+| <img src="https://github.com/user-attachments/assets/5a03b405-c6e3-494c-b74e-ee4ba9251fc4" width="280" height="520"> | <img src="https://github.com/user-attachments/assets/d346f492-33e4-4dfb-bc1e-0781fcf91c0c" width="280" height="520"> | <img src="https://github.com/user-attachments/assets/85ac16b3-c4b4-47f8-8216-b56e02700fd0" width="280" height="520"> |
 
 | 검색+상세정보 | 조리내역+재실행 | 조리내역+삭제 |
-| --- | --- | --- |
-| <img src="https://github.com/user-attachments/assets/0e8bb458-cb5f-42fc-a5fc-4cb92bf6511f" width="300"> | <img src="https://github.com/user-attachments/assets/c6fd2c16-83d3-482b-99eb-bf0e45d67e53" width="300"> | <img src="https://github.com/user-attachments/assets/46a64b0d-a9ed-4592-9b14-043a5f3f8a91" width="300"> |
+|---|---|---|
+| <img src="https://github.com/user-attachments/assets/0e8bb458-cb5f-42fc-a5fc-4cb92bf6511f" width="280" height="520"> | <img src="https://github.com/user-attachments/assets/c6fd2c16-83d3-482b-99eb-bf0e45d67e53" width="280" height="520"> | <img src="https://github.com/user-attachments/assets/46a64b0d-a9ed-4592-9b14-043a5f3f8a91" width="280" height="520"> |
 
 ## 🍜 개발 환경 및 라이브러리
 
