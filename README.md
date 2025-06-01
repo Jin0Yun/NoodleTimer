@@ -1,3 +1,4 @@
+# 🍜 NoodleTimer - 라면 타이머 앱
 > **팀 정보**: 개인 프로젝트
 > 
 >**프로젝트 기간**: 2025.04 ~ 2025.05 (4주)
@@ -42,19 +43,19 @@
 
 ## 🍜 프레임워크 및 아키텍처
 
-> ### **Clean Architecture**
+> **Clean Architecture**
 
 - **Data Layer**: Repository 구현체, DTO, 외부 데이터 소스 연동
 - **Domain Layer**: 비즈니스 로직, Entity, UseCase, Repository 인터페이스
 - **Presentation Layer**: UI 로직, ViewModel, State 관리
 
-> ### **MVVM + Riverpod**
+> **MVVM + Riverpod**
 
 - Presentation, Domain, Data 전반의 상태 관리를 Riverpod으로 구현
 - ViewModel에서 바뀌는 데이터에 따라 UI가 반응하도록 Reactive Programming 구현
 - 의존성 주입을 통한 테스트 가능한 코드 작성
 
-> ### **프로젝트 구조**
+> **프로젝트 구조**
 
 ```
 lib/
@@ -84,7 +85,7 @@ lib/
 
 ## 🍜 개발 과정에서 해결한 문제들
 
-> ### **Firestore 문서 삭제 불일치 해결**
+> **Firestore 문서 삭제 불일치 해결**
 
 **문제**: UI에서는 삭제되지만 Firestore에는 데이터가 남아있어 앱 재실행 시 다시 나타나는 현상
 
@@ -105,7 +106,7 @@ await _firestore.collection('cookHistories').doc(historyId).delete();
 
 ---
 
-> ### **이미지 로딩 뒤섞임 현상 해결**
+> **이미지 로딩 뒤섞임 현상 해결**
 
 **문제**: 브랜드 탭 변경 시 이전 브랜드의 이미지가 잠깐 보이는 시각적 혼란 발생
 
@@ -124,7 +125,7 @@ RamenCard(
 
 ---
 
-> ### **아키텍처 구조 개선**
+> **아키텍처 구조 개선**
 
 **문제**: 초기 Repository-Service-ViewModel 구조에서 계층 간 책임 분리 모호
 
