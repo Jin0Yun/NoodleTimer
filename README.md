@@ -82,7 +82,6 @@ lib/
 ```
 
 ---
-
 ## 🍜 개발 과정에서 해결한 문제들
 
 > **Firestore 문서 삭제 불일치 해결**
@@ -99,10 +98,18 @@ class CookHistoryEntity {
   final int ramenId; // 라면 고유 ID와 분리
 }
 
-await _firestore.collection('cookHistories').doc(historyId).delete();
+// Before: 잘못된 ID 사용
+await _db.collection('users').doc(uid).collection('cookHistories')
+    .doc(ramenId) // 라면 ID를 문서 ID로 잘못 사용
+    .delete();
+
+// After: 실제 문서 ID 사용
+await _db.collection('users').doc(uid).collection('cookHistories')
+    .doc(historyId) // 실제 Firestore 문서 ID 사용
+    .delete();
 ```
 
-**결과**: 데이터 일관성 완전 확보, 조리내역 삭제 기능 정상 작동
+**결과**: 데이터 일관성 확보, 조리내역 삭제 기능 정상 작동
 
 ---
 
@@ -115,33 +122,44 @@ await _firestore.collection('cookHistories').doc(historyId).delete();
 **해결**: ValueKey를 활용하여 각 라면별 고유한 위젯 인스턴스 생성
 
 ```dart
-RamenCard(
+// Before: 위젯 재사용으로 인한 문제
+return RamenCard(ramen: ramen);
+
+// After: 고유 키로 위젯 분리
+return RamenCard(
   key: ValueKey('ramen_${ramen.id}'),  // 라면별 고유 키 설정
   ramen: ramen,
-)
+);
 ```
 
-**결과**: 브랜드 변경 시 부드러운 UI 전환, 이미지 뒤섞임 완전 해결
+**결과**: 브랜드 변경 시 부드러운 UI 전환, 이미지 뒤섞임 문제 해결
 
 ---
 
-> **아키텍처 구조 개선**
+> **StateNotifier dispose 후 예외 해결**
 
-**문제**: 초기 Repository-Service-ViewModel 구조에서 계층 간 책임 분리 모호
+**문제**: 온보딩 화면에서 면발 취향 선택 후 `Bad state: Tried to use NoodlePreferenceViewModel after 'dispose' was called` 예외 발생
 
-**원인**: Service Layer와 Repository가 유사한 역할로 인한 코드 중복 및 Clean Architecture 원칙 위반
+**원인**: 비동기 Firestore 업데이트 중 화면 전환으로 StateNotifier가 dispose된 후 상태 업데이트 시도
 
-**해결**: Service Layer 제거 후 UseCase 계층 도입, BaseViewModel/BaseState로 공통 로직 추상화
+**해결**: StateNotifier의 `mounted` 속성을 활용한 dispose 상태 체크 추가
 
 ```dart
-// 기존: Repository → Service → ViewModel
-// 개선: Repository → UseCase → ViewModel
-final authUseCaseProvider = Provider<AuthUseCase>((ref) {
-  final authRepo = ref.watch(authRepositoryProvider);
-  return AuthUseCase(authRepo);
-});
+// Before: dispose 후 상태 업데이트 시도
+Future updateNoodlePreference(NoodlePreference preference) async {
+  await _firestoreService.updateUserNoodlePreference(_userId, preference);
+  state = state.copyWith(status: const AsyncValue.data(null)); // 예외 발생
+}
+
+// After: mounted 체크로 안전한 상태 업데이트
+Future updateNoodlePreference(NoodlePreference preference) async {
+  await _firestoreService.updateUserNoodlePreference(_userId, preference);
+  
+  if (!mounted) return; // dispose 상태 체크
+  state = state.copyWith(status: const AsyncValue.data(null));
+}
 ```
 
-**결과**: Clean Architecture 적용, BaseState/BaseViewModel 도입으로 공통 로직 분리
+**결과**: dispose 후 상태 업데이트 예외 완전 해결, 화면 전환 시 안정적인 동작
 
 ---
